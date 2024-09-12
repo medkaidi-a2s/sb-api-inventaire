@@ -1,0 +1,43 @@
+<configuration>
+    <!-- Define a pattern for log messages similar to the default Spring Boot style -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n" />
+
+    <!-- Console Appender: Logs to the console -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File Appender: Logs to a file with rotation and size limitations -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Log file name -->
+        <file>logs/a2s-preparation-out.log</file>
+
+        <!-- Rolling policy to manage log files size and count -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- File name pattern for rolled-over logs -->
+            <fileNamePattern>logs/application.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!-- Maximum file size (suggested: 10MB) -->
+            <maxFileSize>10MB</maxFileSize>
+
+            <!-- Maximum number of backup files -->
+            <maxHistory>10</maxHistory>
+
+            <!-- Total size cap for all log files -->
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+
+        <!-- Encoder for file logging -->
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root logger configuration: Logs to both console and file -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
