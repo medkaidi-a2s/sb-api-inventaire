@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface UserEntityRepository extends JpaRepository<UserEntity, UserEntityId> {
 
-    @Query(value = "SELECT USR_CODE, USR_CMP_ID, USR_NOM_LOC, USR_PASSWORD FROM STP_USERS WHERE USR_CODE = :username", nativeQuery = true)
-    Optional<UserEntity> findByUsername(@Param("username") String username);
+    @Query(value = "SELECT USR_CODE, USR_CMP_ID, USR_NOM_LOC, USR_PASSWORD FROM STP_USERS WHERE USR_CODE = :username AND USR_CMP_ID = :companyId", nativeQuery = true)
+    Optional<UserEntity> findByUsernameAndCompanyId(@Param("username") String username, @Param("companyId") int companyId);
 
 }

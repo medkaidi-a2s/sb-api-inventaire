@@ -27,8 +27,8 @@ public class UserEntity {
         return this.id.getUsername();
     }
 
-    public void setUsername(String username) {
-        this.id.setUsername(username);
+    public int getCompanyId() {
+        return this.id.getUsrCmpId();
     }
 
 }

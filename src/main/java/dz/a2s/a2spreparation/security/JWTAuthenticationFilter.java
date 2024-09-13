@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @NoArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
@@ -27,11 +29,17 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("Entering the JWTAuthenticationFilter");
+
         String token = getJWTFromRequest(request);
+
+        log.info("JWTAuthenticationFilter recieving the token {}", token);
+
         if(StringUtils.hasText(token) && this.jwtGenerator.validateToken(token)) {
             String username = this.jwtGenerator.getUsernameFromJWT(token);
+            log.info("Parsed the username from the token {}", username);
 
-            UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
+            AppUserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);

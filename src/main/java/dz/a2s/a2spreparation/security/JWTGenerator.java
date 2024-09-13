@@ -11,25 +11,36 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
 public class JWTGenerator {
 
     public String generateToken(Authentication authentication) {
+        log.info("Generating token with authentication object {}", authentication);
+        AppUserDetails user = (AppUserDetails) authentication.getPrincipal();
+
         log.info("Generating token for {}", authentication.getName());
-        String username = authentication.getName();
+//        String username = authentication.getName();
+        String username = user.getUsername();
+        Map<String, String> claims = Map.of(
+                "username", username,
+                "companyId", Integer.toString(user.getCompanyId()),
+                "name", user.getName()
+        );
         Date currentDate = new Date();
         Timestamp exp = new Timestamp(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
 
         String token = Jwts.builder()
-                .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(currentDate)
                 .setExpiration(exp)
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SECRET)
                 .compact();
 
-        log.info("Token generated inside JWTGenerator");
+        log.info("Token generated inside JWTGenerator {}", token);
 
         return token;
     }
@@ -41,7 +52,10 @@ public class JWTGenerator {
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject();
+        String usercode = (String) claims.get("username");
+        String companyId = (String) claims.get("companyId");
+
+        return companyId + ":" + usercode;
     }
 
     public boolean validateToken(String token) {

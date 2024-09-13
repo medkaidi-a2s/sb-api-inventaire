@@ -32,9 +32,13 @@ public class AuthController {
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
         log.info("Entering login method from AuthController with {}", loginDto);
 
+        String username = loginDto.getCompanyId() + ":" + loginDto.getUsername();
+        log.info("Getting the custom username from the loginDto inside the authController {}", username);
+
         Authentication authentication = this.authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
-                  loginDto.getUsername(),
+//                  loginDto.getUsername(),
+                  username,
                   loginDto.getPassword()
           )
         );
