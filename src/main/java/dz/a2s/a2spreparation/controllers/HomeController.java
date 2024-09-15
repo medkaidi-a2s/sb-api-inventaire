@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @GetMapping("")
-    public ResponseEntity<String> home() {
-        return ResponseEntity.ok("Welcome home");
+    public ResponseEntity<String> home() throws Exception {
+        throw new RuntimeException("hello there");
+//        return ResponseEntity.ok("Welcome home");
     }
 
 }

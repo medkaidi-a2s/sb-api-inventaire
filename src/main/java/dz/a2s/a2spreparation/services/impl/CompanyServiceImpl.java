@@ -18,6 +18,6 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<Company> findAll() {
         log.info("findAll method from companyService");
-        return this.companyRepository.findAll();
+        return this.companyRepository.findAllCompanies();
     }
 }

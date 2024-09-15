@@ -54,4 +54,13 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+    //ajouter la méthode suivante pour exclure /auth/login de la vérification (filtre) du token, elle va s'exécuter alors dans les deux cas :
+    // lorsque il n'y a pas de token et le lorsque le token est présent mais qu'il est invalide
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request)
+            throws ServletException {
+        String path = request.getRequestURI();
+        return "/auth/login".equals(path);
+    }
 }

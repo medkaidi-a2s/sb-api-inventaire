@@ -4,6 +4,7 @@ import dz.a2s.a2spreparation.dto.auth.AuthResponseDto;
 import dz.a2s.a2spreparation.dto.auth.LoginDto;
 import dz.a2s.a2spreparation.repositories.UserEntityRepository;
 import dz.a2s.a2spreparation.security.JWTGenerator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class AuthController {
     private final JWTGenerator jwtGenerator;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<AuthResponseDto> login(@RequestBody @Valid LoginDto loginDto) {
         log.info("Entering login method from AuthController with {}", loginDto);
 
         String username = loginDto.getCompanyId() + ":" + loginDto.getUsername();
