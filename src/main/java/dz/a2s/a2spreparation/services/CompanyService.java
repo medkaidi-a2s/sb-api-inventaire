@@ -8,4 +8,6 @@ public interface CompanyService {
 
     List<Company> findAll();
 
+    Integer getMethod();
+
 }

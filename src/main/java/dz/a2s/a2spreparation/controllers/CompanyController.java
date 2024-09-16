@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.Company;
 import dz.a2s.a2spreparation.services.CompanyService;
 import lombok.RequiredArgsConstructor;
@@ -15,18 +16,39 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RestController
-@RequestMapping("/auth/companies")
+//@RequestMapping("/auth/companies")
 public class CompanyController {
 
     private final CompanyService companyService;
 
-    @GetMapping("")
-    public ResponseEntity<Object> findAllCompanies() {
+    @GetMapping("/auth/companies")
+    public ResponseEntity<SuccessResponseDto<List<Company>>> findAllCompanies() {
         log.info("findAllCompanies from the CompanyController");
         List<Company> companies = this.companyService.findAll();
         log.info("Companies fetched from the service {}", companies);
 
-        return new ResponseEntity<>(companies, HttpStatus.OK);
+        SuccessResponseDto<List<Company>> successResponseDto = new SuccessResponseDto<List<Company>>(
+                HttpStatus.OK.value(),
+                "Liste des compagnies",
+                companies
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @GetMapping("/api/company/method")
+    public ResponseEntity<SuccessResponseDto<Integer>> getMethod() {
+        log.info("Entering getMethod method from CompanyController");
+
+        Integer method = this.companyService.getMethod();
+        SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<Integer>(
+                HttpStatus.OK.value(),
+                "Méthode d'affectation",
+                method
+        );
+        log.info("Returning the value of the method {}", method);
+
+        return ResponseEntity.ok(successResponseDto);
     }
 
 }

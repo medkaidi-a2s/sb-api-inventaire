@@ -21,6 +21,6 @@ public class LoginDto {
 
     @NotNull(message = "La compagnie est obligatoire")
     @NotEmpty(message = "La compagnie est obligatoire")
-    private Integer companyId;
+    private String companyId;
 
 }
