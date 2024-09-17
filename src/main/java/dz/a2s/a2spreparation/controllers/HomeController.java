@@ -11,8 +11,7 @@ public class HomeController {
 
     @GetMapping("")
     public ResponseEntity<String> home() throws Exception {
-        throw new RuntimeException("hello there");
-//        return ResponseEntity.ok("Welcome home");
+        return ResponseEntity.ok("Welcome home");
     }
 
 }

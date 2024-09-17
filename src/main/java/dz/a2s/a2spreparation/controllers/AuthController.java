@@ -2,6 +2,7 @@ package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.dto.auth.AuthResponseDto;
 import dz.a2s.a2spreparation.dto.auth.LoginDto;
+import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.repositories.UserEntityRepository;
 import dz.a2s.a2spreparation.security.JWTGenerator;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class AuthController {
     private final JWTGenerator jwtGenerator;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody @Valid LoginDto loginDto) {
+    public ResponseEntity<SuccessResponseDto<AuthResponseDto>> login(@RequestBody @Valid LoginDto loginDto) {
         log.info("Entering login method from AuthController with {}", loginDto);
 
         String username = loginDto.getCompanyId() + ":" + loginDto.getUsername();
@@ -38,7 +39,6 @@ public class AuthController {
 
         Authentication authentication = this.authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
-//                  loginDto.getUsername(),
                   username,
                   loginDto.getPassword()
           )
@@ -49,7 +49,8 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = this.jwtGenerator.generateToken(authentication);
         AuthResponseDto authResponseDto = new AuthResponseDto(token);
-        return ResponseEntity.ok(authResponseDto);
+        SuccessResponseDto<AuthResponseDto> successResponseDto = new SuccessResponseDto<AuthResponseDto>(200, "Authentification réussie", authResponseDto);
+        return ResponseEntity.ok(successResponseDto);
     }
 
 }
