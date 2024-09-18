@@ -4,12 +4,10 @@ import dz.a2s.a2spreparation.entities.Company;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.repositories.CompanyRepository;
 import dz.a2s.a2spreparation.repositories.ParamsRepository;
-import dz.a2s.a2spreparation.security.AppUserDetails;
 import dz.a2s.a2spreparation.services.CompanyService;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Integer getMethod() {
-        int companyId = this.customUserDetailsService.GetCurrentCompanyId();
-        return this.paramsRepository.getMethod(companyId).orElseThrow(() -> new RessourceNotFoundException("Méthode introuvable"));
+        int companyId = this.customUserDetailsService.getCurrentCompanyId();
+        return this.paramsRepository.getMethod(companyId).orElseThrow(() -> new RessourceNotFoundException("Méthode non initialisée"));
     }
 }

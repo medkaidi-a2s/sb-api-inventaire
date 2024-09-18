@@ -5,10 +5,7 @@ import dz.a2s.a2spreparation.repositories.UserEntityRepository;
 import dz.a2s.a2spreparation.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -37,15 +34,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new AppUserDetails(userEntity.getUsername(), userEntity.getPassword(), userEntity.getNom(), Collections.emptyList(), userEntity.getCompanyId());
     }
 
-    public Integer GetCurrentCompanyId() {
+    public Integer getCurrentCompanyId() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String[] split = username.split(":");
         return Integer.parseInt(split[0]);
     }
 
-    public Integer GetCurrentUserCode() {
+    public String getCurrentUserCode() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String[] split = username.split(":");
-        return Integer.parseInt(split[1]);
+        return split[1];
     }
 }
