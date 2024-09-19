@@ -13,3 +13,6 @@ spring:
 #                dialect: org.hibernate.dialect.Oracle10gDialect
         #hibernate:
             #ddl-auto: none
+params:
+    authorizations:
+        affectation: 480

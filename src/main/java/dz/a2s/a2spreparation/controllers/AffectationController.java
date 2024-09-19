@@ -25,7 +25,7 @@ public class AffectationController {
 
         log.info("Fetching liste des commandes from the service");
         List<PrpListeCdeZones> listeCommandes = this.affectationService.getAll();
-        log.info("Data fetched from the service {}", listeCommandes);
+        log.info("Data fetched from the service length = {}", listeCommandes.size());
 
         SuccessResponseDto<List<PrpListeCdeZones>> successResponseDto = new SuccessResponseDto<List<PrpListeCdeZones>>(
                 200,
