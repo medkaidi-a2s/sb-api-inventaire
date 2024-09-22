@@ -15,8 +15,8 @@ import java.util.Date;
 @Data
 @Entity
 @Immutable
-@Table(name = "PRP_LISTE_CDE_ZONES")
-public class PrpListeCdeZones {
+@Table(name = "PRP_LISTE_CDES")
+public class PrpCommande {
 
     @Id
     @EmbeddedId
@@ -66,8 +66,5 @@ public class PrpListeCdeZones {
 
     @Column(name = "STATUT")
     private String statut;
-
-    @Column(name = "ZONE")
-    private String zone;
 
 }
