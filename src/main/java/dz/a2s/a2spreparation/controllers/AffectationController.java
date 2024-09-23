@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.dto.affectation.AffectCmdRequestDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
@@ -8,10 +9,9 @@ import dz.a2s.a2spreparation.services.AffectationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -38,12 +38,12 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("listCmdPrp")
-    public ResponseEntity<SuccessResponseDto<List<PrpCommande>>> getListeCmdPrp() {
-        log.info("Entering the getListeCmdPrp from the AffectationController");
+    @GetMapping("listCmdPrp/{status}")
+    public ResponseEntity<SuccessResponseDto<List<PrpCommande>>> getListeCmdPrp(@PathVariable int status) {
+        log.info("Entering the getListeCmdPrp from the AffectationController with status {}", status);
 
         log.info("Fetching liste des commandes from the service");
-        List<PrpCommande> listeCommandes = this.affectationService.getListCommande();
+        List<PrpCommande> listeCommandes = this.affectationService.getListCommande(status);
         log.info("Data fetched from the service length = {}", listeCommandes.size());
 
         SuccessResponseDto<List<PrpCommande>> successResponseDto = new SuccessResponseDto<>(
@@ -52,6 +52,27 @@ public class AffectationController {
                 listeCommandes
         );
 
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @PostMapping("/affectCommande")
+    public ResponseEntity<SuccessResponseDto<ArrayList<Integer>>> affectCommandePrp(@RequestBody List<AffectCmdRequestDto> commandes) {
+        log.info("Entering the affectation method with {}", commandes);
+        ArrayList<Integer> tableau = new ArrayList<>();
+        commandes.forEach(commande -> {
+            Integer response = this.affectationService.affectCommandePrp(
+                commande.getP_cmp(),
+                commande.getP_vnt(),
+                commande.getP_stk(),
+                commande.getP_type(),
+                commande.getP_prp(),
+                commande.getP_cnt1(),
+                commande.getP_cnt2(),
+                commande.getP_user()
+            );
+            tableau.add(response);
+        });
+        SuccessResponseDto<ArrayList<Integer>> successResponseDto = new SuccessResponseDto<>(200, "essai d'une procédure", tableau);
         return ResponseEntity.ok(successResponseDto);
     }
 

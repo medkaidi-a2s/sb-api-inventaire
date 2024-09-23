@@ -10,10 +10,19 @@ public interface AffectationService {
 
     List<PrpCdeZone> getListCmdZones();
 
-    List<PrpCommande> getListCommande();
+    List<PrpCommande> getListCommande(Integer status);
 
     List<PrpPrepareControle> getAllPreparateurs();
 
     List<PrpPrepareControle> getAllControleurs();
+
+    Integer affectCommandePrp(int p_cmp,
+                              int p_vnt,
+                              int p_stk,
+                              int p_type,
+                              int p_prp,
+                              int p_cnt1,
+                              int p_cnt2,
+                              String p_user);
 
 }

@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.services.impl;
 
+import dz.a2s.a2spreparation.entities.enums.CommandeStatus;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
 import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
@@ -43,14 +44,16 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public List<PrpCommande> getListCommande() {
+    public List<PrpCommande> getListCommande(Integer status) {
         log.info("Entering getListCommande method from the AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Fetching orders for the company {}", companyId);
 
-        log.info("Fetching data from the repo");
-        List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommande(companyId);
+        String statut = CommandeStatus.getStatus(status);
+
+        log.info("Fetching data from the repo with the following status '{}'", statut);
+        List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommande(companyId, statut);
         log.info("Data fetched from the repo length = {}", listeCommandes.size());
 
         if(listeCommandes.isEmpty())
@@ -85,5 +88,20 @@ public class AffectationServiceImpl implements AffectationService {
             throw new RessourceNotFoundException(("Liste des contrôleurs vide"));
 
         return controleurs;
+    }
+
+    @Override
+    public Integer affectCommandePrp(int p_cmp, int p_vnt, int p_stk, int p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user) {
+        int response = this.prpCommandeRepository.affectCommandePrp(
+                p_cmp,
+            p_vnt,
+            p_stk,
+            p_type,
+            p_prp,
+            p_cnt1,
+            p_cnt2,
+            p_user
+        );
+        return response;
     }
 }
