@@ -1,0 +1,18 @@
+spring:
+    application:
+        name: a2spreparation
+    datasource:
+        url: jdbc:oracle:thin:@141.94.250.58:1521/xe
+        username: PHARM2021
+        password: xeon
+        driver-class-name: oracle.jdbc.OracleDriver
+    jpa:
+        database-platform: org.hibernate.dialect.OracleDialect
+#        properties:
+#            hibernate:
+#                dialect: org.hibernate.dialect.Oracle10gDialect
+        #hibernate:
+            #ddl-auto: none
+params:
+    authorizations:
+        affectation: 480

@@ -4,13 +4,14 @@ import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
 import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
 
+import java.util.Date;
 import java.util.List;
 
 public interface AffectationService {
 
     List<PrpCdeZone> getListCmdZones();
 
-    List<PrpCommande> getListCommande(Integer status);
+    List<PrpCommande> getListCommande(Integer status, String date);
 
     List<PrpPrepareControle> getAllPreparateurs();
 

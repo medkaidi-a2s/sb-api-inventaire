@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -44,7 +46,7 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public List<PrpCommande> getListCommande(Integer status) {
+    public List<PrpCommande> getListCommande(Integer status, String date) {
         log.info("Entering getListCommande method from the AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
@@ -53,11 +55,8 @@ public class AffectationServiceImpl implements AffectationService {
         String statut = CommandeStatus.getStatus(status);
 
         log.info("Fetching data from the repo with the following status '{}'", statut);
-        List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommande(companyId, statut);
+        List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommande(companyId, statut, date);
         log.info("Data fetched from the repo length = {}", listeCommandes.size());
-
-        if(listeCommandes.isEmpty())
-            throw new RessourceNotFoundException("Liste des commandes vide");
 
         return listeCommandes;
     }

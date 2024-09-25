@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -21,7 +22,7 @@ import java.util.List;
 public class AffectationController {
     private final AffectationService affectationService;
 
-    @GetMapping("listeCmdPrpZone")
+    @GetMapping("liste-cmd-prp-zone")
     public ResponseEntity<SuccessResponseDto<List<PrpCdeZone>>> getListeCmdPrpZone() {
         log.info("Entering the getListeCmdPrpZone from the AffectationController");
 
@@ -38,12 +39,12 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("listCmdPrp/{status}")
-    public ResponseEntity<SuccessResponseDto<List<PrpCommande>>> getListeCmdPrp(@PathVariable int status) {
-        log.info("Entering the getListeCmdPrp from the AffectationController with status {}", status);
+    @GetMapping("list-cmd-prp/{status}")
+    public ResponseEntity<SuccessResponseDto<List<PrpCommande>>> getListeCmdPrp(@PathVariable int status, @RequestParam String date) {
+        log.info("Entering the getListeCmdPrp from the AffectationController with status {} and date {}", status, date);
 
         log.info("Fetching liste des commandes from the service");
-        List<PrpCommande> listeCommandes = this.affectationService.getListCommande(status);
+        List<PrpCommande> listeCommandes = this.affectationService.getListCommande(status, date);
         log.info("Data fetched from the service length = {}", listeCommandes.size());
 
         SuccessResponseDto<List<PrpCommande>> successResponseDto = new SuccessResponseDto<>(
@@ -55,7 +56,7 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PostMapping("/affectCommande")
+    @PostMapping("/affect-commande")
     public ResponseEntity<SuccessResponseDto<ArrayList<Integer>>> affectCommandePrp(@RequestBody List<AffectCmdRequestDto> commandes) {
         log.info("Entering the affectation method with {}", commandes);
         ArrayList<Integer> tableau = new ArrayList<>();
@@ -70,6 +71,7 @@ public class AffectationController {
                 commande.getP_cnt2(),
                 commande.getP_user()
             );
+            log.info("La réponse de la procédure stockée {}", response);
             tableau.add(response);
         });
         SuccessResponseDto<ArrayList<Integer>> successResponseDto = new SuccessResponseDto<>(200, "essai d'une procédure", tableau);

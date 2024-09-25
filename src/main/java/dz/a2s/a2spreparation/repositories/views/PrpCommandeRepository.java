@@ -7,23 +7,24 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface PrpCommandeRepository extends JpaRepository<PrpCommande, VenteId> {
 
-    @Query(value = "SELECT * FROM PRP_LISTE_CDES WHERE VNT_CMP_ID = :companyId AND STATUT = :status", nativeQuery = true)
-    List<PrpCommande> getListCommande(@Param("companyId") Integer companyId, @Param("status") String status);
+    @Query(value = "SELECT * FROM PRP_LISTE_CDES WHERE VNT_CMP_ID = :companyId AND STATUT = :status AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))", nativeQuery = true)
+    List<PrpCommande> getListCommande(@Param("companyId") Integer companyId, @Param("status") String status, @Param("date") String date);
 
-    @Procedure("logistiques.p_affcte_cde_prepare")
+    @Procedure(procedureName = "logistiques.p_affcte_cde_prepare", outputParameterName = "p_msg")
     Integer affectCommandePrp(
-            int p_cmp,
-            int p_vnt,
-            int p_stk,
-            int p_type,
-            int p_prp,
-            int p_cnt1,
-            int p_cnt2,
-            String p_user
+            @Param("p_cmp") int p_cmp,
+            @Param("p_vnt") int p_vnt,
+            @Param("p_stk") int p_stk,
+            @Param("p_type") int p_type,
+            @Param("p_prp") int p_prp,
+            @Param("p_cnt1") int p_cnt1,
+            @Param("p_cnt2") int p_cnt2,
+            @Param("p_user") String p_user
     );
 
 }
