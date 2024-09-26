@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.services;
 
+import dz.a2s.a2spreparation.dto.affectation.AffectCmdResultDto;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
 import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
@@ -17,13 +18,14 @@ public interface AffectationService {
 
     List<PrpPrepareControle> getAllControleurs();
 
-    Integer affectCommandePrp(int p_cmp,
-                              int p_vnt,
-                              int p_stk,
-                              int p_type,
-                              int p_prp,
-                              int p_cnt1,
-                              int p_cnt2,
-                              String p_user);
+    AffectCmdResultDto affectCommandePrp(int p_cmp,
+                                         int p_vnt,
+                                         int p_stk,
+                                         int p_type,
+                                         int p_prp,
+                                         int p_cnt1,
+                                         int p_cnt2,
+                                         String p_user,
+                                         String reference);
 
 }

@@ -1,6 +1,7 @@
 package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.dto.affectation.AffectCmdRequestDto;
+import dz.a2s.a2spreparation.dto.affectation.AffectCmdResultDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
@@ -57,11 +58,11 @@ public class AffectationController {
     }
 
     @PostMapping("/affect-commande")
-    public ResponseEntity<SuccessResponseDto<ArrayList<Integer>>> affectCommandePrp(@RequestBody List<AffectCmdRequestDto> commandes) {
+    public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrp(@RequestBody List<AffectCmdRequestDto> commandes) {
         log.info("Entering the affectation method with {}", commandes);
-        ArrayList<Integer> tableau = new ArrayList<>();
+        ArrayList<AffectCmdResultDto> tableau = new ArrayList<>();
         commandes.forEach(commande -> {
-            Integer response = this.affectationService.affectCommandePrp(
+            AffectCmdResultDto response = this.affectationService.affectCommandePrp(
                 commande.getP_cmp(),
                 commande.getP_vnt(),
                 commande.getP_stk(),
@@ -69,12 +70,12 @@ public class AffectationController {
                 commande.getP_prp(),
                 commande.getP_cnt1(),
                 commande.getP_cnt2(),
-                commande.getP_user()
+                commande.getP_user(),
+                commande.getReference()
             );
-            log.info("La réponse de la procédure stockée {}", response);
             tableau.add(response);
         });
-        SuccessResponseDto<ArrayList<Integer>> successResponseDto = new SuccessResponseDto<>(200, "essai d'une procédure", tableau);
+        SuccessResponseDto<ArrayList<AffectCmdResultDto>> successResponseDto = new SuccessResponseDto<>(200, "Résultat de l'affectation des commandes", tableau);
         return ResponseEntity.ok(successResponseDto);
     }
 

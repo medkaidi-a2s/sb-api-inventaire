@@ -1,10 +1,13 @@
 package dz.a2s.a2spreparation.services.impl;
 
+import dz.a2s.a2spreparation.dto.affectation.AffectCmdResultDto;
 import dz.a2s.a2spreparation.entities.enums.CommandeStatus;
+import dz.a2s.a2spreparation.entities.keys.DiMessagesId;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
 import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
+import dz.a2s.a2spreparation.repositories.DiMessagesRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpCommandeRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpListeCdeZonesRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpPrepareControleRepository;
@@ -27,6 +30,7 @@ public class AffectationServiceImpl implements AffectationService {
     private final PrpCommandeRepository prpCommandeRepository;
     private final PrpPrepareControleRepository prpPrepareControleRepository;
     private final CustomUserDetailsService customUserDetailsService;
+    private final DiMessagesRepository diMessagesRepository;
 
     @Override
     public List<PrpCdeZone> getListCmdZones() throws RessourceNotFoundException {
@@ -90,7 +94,8 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public Integer affectCommandePrp(int p_cmp, int p_vnt, int p_stk, int p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user) {
+    public AffectCmdResultDto affectCommandePrp(int p_cmp, int p_vnt, int p_stk, int p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
+        AffectCmdResultDto result;
         int response = this.prpCommandeRepository.affectCommandePrp(
                 p_cmp,
             p_vnt,
@@ -101,6 +106,16 @@ public class AffectationServiceImpl implements AffectationService {
             p_cnt2,
             p_user
         );
-        return response;
+
+        log.info("La réponse de la procédure stockée {}", response);
+
+        if(response == 0)
+            result = AffectCmdResultDto.builder().messageId(0).message("Affectation réussie").venteRef(reference).build();
+        else {
+            String message = this.diMessagesRepository.getMsgDescLocById(response);
+            result = AffectCmdResultDto.builder().messageId(response).message(message == null ? "Une erreur inconnue s'est produite" : message).venteRef(reference).build();
+        }
+
+        return result;
     }
 }

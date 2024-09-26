@@ -17,5 +17,6 @@ public class AffectCmdRequestDto {
     private int p_cnt1;
     private int p_cnt2;
     private String p_user;
+    private String reference;
 
 }
