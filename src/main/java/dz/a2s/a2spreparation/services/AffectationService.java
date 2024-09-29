@@ -12,7 +12,9 @@ public interface AffectationService {
 
     List<PrpCdeZone> getListCmdZones();
 
-    List<PrpCommande> getListCommande(Integer status, String date);
+    List<PrpCommande> getListCommande(String date);
+
+    List<PrpCommande> getListCommandeAssigned(String date);
 
     List<PrpPrepareControle> getAllPreparateurs();
 

@@ -12,8 +12,11 @@ import java.util.List;
 
 public interface PrpCommandeRepository extends JpaRepository<PrpCommande, VenteId> {
 
-    @Query(value = "SELECT * FROM PRP_LISTE_CDES WHERE VNT_CMP_ID = :companyId AND STATUT = :status AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))", nativeQuery = true)
-    List<PrpCommande> getListCommande(@Param("companyId") Integer companyId, @Param("status") String status, @Param("date") String date);
+    @Query(value = "SELECT * FROM PRP_LISTE_CDES WHERE VNT_CMP_ID = :companyId AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))", nativeQuery = true)
+    List<PrpCommande> getListCommande(@Param("companyId") Integer companyId, @Param("date") String date);
+
+    @Query(value = "SELECT * FROM PRP_LISTE_CDE_AFFECTES WHERE VNT_CMP_ID = :companyId AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))", nativeQuery = true)
+    List<PrpCommande> getListCommandeAssigned(@Param("companyId") Integer companyId, @Param("date") String date);
 
     @Procedure(procedureName = "logistiques.p_affcte_cde_prepare", outputParameterName = "p_msg")
     Integer affectCommandePrp(

@@ -50,16 +50,29 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public List<PrpCommande> getListCommande(Integer status, String date) {
+    public List<PrpCommande> getListCommande(String date) {
         log.info("Entering getListCommande method from the AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Fetching orders for the company {}", companyId);
 
-        String statut = CommandeStatus.getStatus(status);
+//        String statut = CommandeStatus.getStatus(status);
 
-        log.info("Fetching data from the repo with the following status '{}'", statut);
-        List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommande(companyId, statut, date);
+//        log.info("Fetching data from the repo with the following status '{}'", statut);
+        List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommande(companyId, date);
+        log.info("Data fetched from the repo length = {}", listeCommandes.size());
+
+        return listeCommandes;
+    }
+
+    @Override
+    public List<PrpCommande> getListCommandeAssigned(String date) {
+        log.info("Entering getListCommandeAssigned method from the AffectationService");
+
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        log.info("Fetching assigned orders for the company {}", companyId);
+
+        List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommandeAssigned(companyId, date);
         log.info("Data fetched from the repo length = {}", listeCommandes.size());
 
         return listeCommandes;

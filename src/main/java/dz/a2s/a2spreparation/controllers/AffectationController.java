@@ -23,7 +23,7 @@ import java.util.List;
 public class AffectationController {
     private final AffectationService affectationService;
 
-    @GetMapping("liste-cmd-prp-zone")
+    @GetMapping("commandes-zones")
     public ResponseEntity<SuccessResponseDto<List<PrpCdeZone>>> getListeCmdPrpZone() {
         log.info("Entering the getListeCmdPrpZone from the AffectationController");
 
@@ -40,17 +40,34 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("list-cmd-prp/{status}")
-    public ResponseEntity<SuccessResponseDto<List<PrpCommande>>> getListeCmdPrp(@PathVariable int status, @RequestParam String date) {
-        log.info("Entering the getListeCmdPrp from the AffectationController with status {} and date {}", status, date);
+    @GetMapping("commandes")
+    public ResponseEntity<SuccessResponseDto<List<PrpCommande>>> getListeCmdPrp(@RequestParam String date) {
+        log.info("Entering the getListeCmdPrp from the AffectationController date {}", date);
 
         log.info("Fetching liste des commandes from the service");
-        List<PrpCommande> listeCommandes = this.affectationService.getListCommande(status, date);
+        List<PrpCommande> listeCommandes = this.affectationService.getListCommande(date);
         log.info("Data fetched from the service length = {}", listeCommandes.size());
 
         SuccessResponseDto<List<PrpCommande>> successResponseDto = new SuccessResponseDto<>(
                 200,
                 "Liste des commandes à affecter",
+                listeCommandes
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @GetMapping("commandes/assigned")
+    public ResponseEntity<SuccessResponseDto<List<PrpCommande>>> getListeCmdAssigned(@RequestParam String date) {
+        log.info("Entering the getListeCmdAssigned from the AffectationController date {}", date);
+
+        log.info("Fetching liste des commandes affectées from the service");
+        List<PrpCommande> listeCommandes = this.affectationService.getListCommandeAssigned(date);
+        log.info("Data fetched from the service length = {}", listeCommandes.size());
+
+        SuccessResponseDto<List<PrpCommande>> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Liste des commandes déjà affectées",
                 listeCommandes
         );
 
