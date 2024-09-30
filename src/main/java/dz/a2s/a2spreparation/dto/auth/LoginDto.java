@@ -19,8 +19,8 @@ public class LoginDto {
     @NotEmpty(message = "Le mot de passe est obligatoire")
     private String password;
 
-    @NotNull(message = "La compagnie est obligatoire")
-    @NotEmpty(message = "La compagnie est obligatoire")
+    @NotNull(message = "Le site est obligatoire")
+    @NotEmpty(message = "Le site est obligatoire")
     private String companyId;
 
 }

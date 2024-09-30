@@ -1,8 +1,10 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.dto.affectation.AffectCmdPrlvReqDto;
 import dz.a2s.a2spreparation.dto.affectation.AffectCmdRequestDto;
 import dz.a2s.a2spreparation.dto.affectation.AffectCmdResultDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
+import dz.a2s.a2spreparation.entities.views.PrpCdePrlv;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
 import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
@@ -74,6 +76,23 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
+    @GetMapping("commandes-preleve")
+    public ResponseEntity<SuccessResponseDto<List<PrpCdePrlv>>> getListeCmdPrlv(@RequestParam String date) {
+        log.info("Entering the getListeCmdPrlv method from the AffectationController with date {}", date);
+
+        log.info("Fetching data from the service");
+        List<PrpCdePrlv> listeCommandes = this.affectationService.getListeCommandesPrlv(date);
+        log.info("Fetched data from the service with length {}", listeCommandes.size());
+
+        SuccessResponseDto<List<PrpCdePrlv>> successResponseDto = new SuccessResponseDto<>(
+          200,
+          "Liste des commandes à affecter par prélévement",
+          listeCommandes
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
     @PostMapping("/affect-commande")
     public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrp(@RequestBody List<AffectCmdRequestDto> commandes) {
         log.info("Entering the affectation method with {}", commandes);
@@ -89,6 +108,28 @@ public class AffectationController {
                 commande.getP_cnt2(),
                 commande.getP_user(),
                 commande.getReference()
+            );
+            tableau.add(response);
+        });
+        SuccessResponseDto<ArrayList<AffectCmdResultDto>> successResponseDto = new SuccessResponseDto<>(200, "Résultat de l'affectation des commandes", tableau);
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @PostMapping("/affect-preleve")
+    public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrlv(@RequestBody List<AffectCmdPrlvReqDto> commandes) {
+        log.info("Entering method affectCommandePrlv from the AffectatinController with {}", commandes);
+        ArrayList<AffectCmdResultDto> tableau = new ArrayList<>();
+        commandes.forEach(commande -> {
+            AffectCmdResultDto response = this.affectationService.affectCommandePrpPrlv(
+                    commande.getP_cmp(),
+                    commande.getP_slt_id(),
+                    commande.getP_slt_type(),
+                    commande.getP_slt_annee(),
+                    commande.getP_prp(),
+                    commande.getP_cnt1(),
+                    commande.getP_cnt2(),
+                    commande.getP_user(),
+                    commande.getReference()
             );
             tableau.add(response);
         });

@@ -1,13 +1,13 @@
 package dz.a2s.a2spreparation.services.impl;
 
 import dz.a2s.a2spreparation.dto.affectation.AffectCmdResultDto;
-import dz.a2s.a2spreparation.entities.enums.CommandeStatus;
-import dz.a2s.a2spreparation.entities.keys.DiMessagesId;
+import dz.a2s.a2spreparation.entities.views.PrpCdePrlv;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
 import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.repositories.DiMessagesRepository;
+import dz.a2s.a2spreparation.repositories.views.PrpCdePrlvRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpCommandeRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpListeCdeZonesRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpPrepareControleRepository;
@@ -17,8 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -31,6 +29,7 @@ public class AffectationServiceImpl implements AffectationService {
     private final PrpPrepareControleRepository prpPrepareControleRepository;
     private final CustomUserDetailsService customUserDetailsService;
     private final DiMessagesRepository diMessagesRepository;
+    private final PrpCdePrlvRepository prpCdePrlvRepository;
 
     @Override
     public List<PrpCdeZone> getListCmdZones() throws RessourceNotFoundException {
@@ -74,6 +73,17 @@ public class AffectationServiceImpl implements AffectationService {
 
         List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommandeAssigned(companyId, date);
         log.info("Data fetched from the repo length = {}", listeCommandes.size());
+
+        return listeCommandes;
+    }
+
+    @Override
+    public List<PrpCdePrlv> getListeCommandesPrlv(String date) {
+        log.info("Entering the getListeCommandesPrlv from the AffectationService with date {}", date);
+
+        log.info("Fetching liste des commandes from the repo");
+        List<PrpCdePrlv> listeCommandes = this.prpCdePrlvRepository.getListeCommandesPrlv(date);
+        log.info("Data fetched from the repo with length {}", listeCommandes.size());
 
         return listeCommandes;
     }
@@ -129,6 +139,29 @@ public class AffectationServiceImpl implements AffectationService {
             result = AffectCmdResultDto.builder().messageId(response).message(message == null ? "Une erreur inconnue s'est produite" : message).venteRef(reference).build();
         }
 
+        return result;
+    }
+
+    @Override
+    public AffectCmdResultDto affectCommandePrpPrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
+        AffectCmdResultDto result;
+        int response = this.prpCdePrlvRepository.affectCommandePrpPrlv(
+            p_cmp,
+            p_slt_id,
+            p_slt_type,
+            p_slt_annee,
+            p_prp,
+            p_cnt1,
+            p_cnt2,
+            p_user
+        );
+
+        if(response == 0)
+            result = AffectCmdResultDto.builder().messageId(0).message("Affectation réussie").venteRef(reference).build();
+        else {
+            String message = this.diMessagesRepository.getMsgDescLocById(response);
+            result = AffectCmdResultDto.builder().messageId(response).message(message == null ? "Une erreur inconnue s'est produite" : message).venteRef(reference).build();
+        }
         return result;
     }
 }
