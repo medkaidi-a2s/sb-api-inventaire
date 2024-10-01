@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         String userCode = split[1];
         log.info("The userCode is {}", userCode);
 
-        UserEntity userEntity = this.userEntityRepository.findByUsernameAndCompanyId(userCode, companyId).orElseThrow();
+        UserEntity userEntity = this.userEntityRepository.findByUsernameAndCompanyId(userCode, companyId).orElseThrow(() -> new UsernameNotFoundException("Nom d'utilisateur ou mot de passe incorrecte"));
         return new AppUserDetails(userEntity.getUsername(), userEntity.getPassword(), userEntity.getNom(), Collections.emptyList(), userEntity.getCompanyId());
     }
 

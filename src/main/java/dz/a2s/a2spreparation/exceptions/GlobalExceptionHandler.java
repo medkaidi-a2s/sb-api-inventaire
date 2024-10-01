@@ -20,13 +20,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RessourceNotFoundException.class)
     public ResponseEntity<ErrorObject> handleNotFoundException(RessourceNotFoundException ex) {
-        log.info("Entering notFoundExceptionHandler from the GlobalExceptionsHandler");
+        log.info("Entering notFoundExceptionHandler from the GlobalExceptionsHandler with message {}", ex.getMessage());
 
         ErrorObject errorObject = new ErrorObject();
 
         errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
         errorObject.setMessage(ex.getMessage());
         errorObject.setTimestamp(new Date());
+//        errorObject.setError(ex);
 
         log.info("Returning the following error {}", errorObject.getMessage());
         return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
@@ -34,38 +35,48 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorObject> handleBadCredentialsException(BadCredentialsException ex) {
-        log.info("Entering handleBadCredentialsException from the GloablHandleExceptions");
+        log.info("Entering handleBadCredentialsException from the GloablHandleExceptions with message {}", ex.getMessage());
 
         ErrorObject errorObject = new ErrorObject();
 
         errorObject.setMessage("Nom d'utilisateur ou mot de passe incorrecte");
         errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
         errorObject.setTimestamp(new Date());
+//        errorObject.setError(ex);
 
         log.info("Returning the following error {}", errorObject.getMessage());
         return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        log.info("Entering handleValidationErrors method from GlobalErrorHandler");
+    public ResponseEntity<ErrorObject> handleValidationErrors(MethodArgumentNotValidException ex) {
+        log.info("Entering handleValidationErrors method from GlobalErrorHandler with message {}", ex.getMessage());
 
         List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(fieldError -> {
            return fieldError.getField() + " : " + fieldError.getDefaultMessage();
         }).toList();
 
-        return new ResponseEntity<>(getErrorsMap(errors), HttpStatus.BAD_REQUEST);
+        ErrorObject errorObject =  ErrorObject
+                .builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .timestamp(new Date())
+                .message("Erreur de validation des paramètres")
+//                .error(getErrorsMap(errors))
+                .build();
+
+        return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorObject> handleException(Exception ex) {
-        log.info("Entering handleException from the GlobalHandleException");
+        log.info("Entering handleException from the GlobalHandleException with message {}", ex.getMessage());
 
         ErrorObject errorObject = new ErrorObject();
 
         errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
         errorObject.setMessage(ex.getMessage());
         errorObject.setTimestamp(new Date());
+//        errorObject.setError(ex);
 
         log.info("Returning the following error {}", errorObject.getMessage());
 
@@ -73,12 +84,13 @@ public class GlobalExceptionHandler {
     }
 
     public ResponseEntity<ErrorObject> handleRuntimeException(RuntimeException ex) {
-        log.info("Entering handleRuntimeException from the GlobalHandleException");
+        log.info("Entering handleRuntimeException from the GlobalHandleException with message {}", ex.getMessage());
 
         ErrorObject errorObject = new ErrorObject();
         errorObject.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorObject.setMessage(ex.getMessage());
         errorObject.setTimestamp(new Date());
+//        errorObject.setError(ex);
 
         log.info("Returning the following error {}", ex.getMessage());
 

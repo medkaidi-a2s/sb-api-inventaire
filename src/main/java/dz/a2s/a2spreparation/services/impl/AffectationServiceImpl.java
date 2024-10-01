@@ -130,7 +130,7 @@ public class AffectationServiceImpl implements AffectationService {
             p_user
         );
 
-        log.info("La réponse de la procédure stockée {}", response);
+        log.info("La réponse de la procédure stockée affectatin des commandes {}", response);
 
         if(response == 0)
             result = AffectCmdResultDto.builder().messageId(0).message("Affectation réussie").venteRef(reference).build();
@@ -155,6 +155,8 @@ public class AffectationServiceImpl implements AffectationService {
             p_cnt2,
             p_user
         );
+
+        log.info("La réponse de la procédure stockée affectation des commandes par prélévement {}", response);
 
         if(response == 0)
             result = AffectCmdResultDto.builder().messageId(0).message("Affectation réussie").venteRef(reference).build();
