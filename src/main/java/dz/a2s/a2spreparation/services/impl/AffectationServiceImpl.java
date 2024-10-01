@@ -49,7 +49,7 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public List<PrpCommande> getListCommande(String date) {
+    public List<PrpCommande> getListCmd(String date) {
         log.info("Entering getListCommande method from the AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
@@ -65,7 +65,7 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public List<PrpCommande> getListCommandeAssigned(String date) {
+    public List<PrpCommande> getListCmdAssigned(String date) {
         log.info("Entering getListCommandeAssigned method from the AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
@@ -78,11 +78,22 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public List<PrpCdePrlv> getListeCommandesPrlv(String date) {
+    public List<PrpCdePrlv> getListCmdPrlv(String date) {
         log.info("Entering the getListeCommandesPrlv from the AffectationService with date {}", date);
 
         log.info("Fetching liste des commandes from the repo");
         List<PrpCdePrlv> listeCommandes = this.prpCdePrlvRepository.getListeCommandesPrlv(date);
+        log.info("Data fetched from the repo with length {}", listeCommandes.size());
+
+        return listeCommandes;
+    }
+
+    @Override
+    public List<PrpCdePrlv> getListCmdPrlvAssigned(String date) {
+        log.info("Entering the getListeCommandesPrlvAssigned from the AffectationService with date {}", date);
+
+        log.info("Fetching liste des commandes par prélévement déjà affectées from the repo");
+        List<PrpCdePrlv> listeCommandes = this.prpCdePrlvRepository.getListCmdPrlvAssigned(date);
         log.info("Data fetched from the repo with length {}", listeCommandes.size());
 
         return listeCommandes;
@@ -117,7 +128,7 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public AffectCmdResultDto affectCommandePrp(int p_cmp, int p_vnt, int p_stk, int p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
+    public AffectCmdResultDto affectCmdPrp(int p_cmp, int p_vnt, int p_stk, int p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
         AffectCmdResultDto result;
         int response = this.prpCommandeRepository.affectCommandePrp(
                 p_cmp,
@@ -143,7 +154,7 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public AffectCmdResultDto affectCommandePrpPrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
+    public AffectCmdResultDto affectCmdPrpPrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
         AffectCmdResultDto result;
         int response = this.prpCdePrlvRepository.affectCommandePrpPrlv(
             p_cmp,

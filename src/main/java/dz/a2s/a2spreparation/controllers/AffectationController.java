@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -47,7 +46,7 @@ public class AffectationController {
         log.info("Entering the getListeCmdPrp from the AffectationController date {}", date);
 
         log.info("Fetching liste des commandes from the service");
-        List<PrpCommande> listeCommandes = this.affectationService.getListCommande(date);
+        List<PrpCommande> listeCommandes = this.affectationService.getListCmd(date);
         log.info("Data fetched from the service length = {}", listeCommandes.size());
 
         SuccessResponseDto<List<PrpCommande>> successResponseDto = new SuccessResponseDto<>(
@@ -64,7 +63,7 @@ public class AffectationController {
         log.info("Entering the getListeCmdAssigned from the AffectationController date {}", date);
 
         log.info("Fetching liste des commandes affectées from the service");
-        List<PrpCommande> listeCommandes = this.affectationService.getListCommandeAssigned(date);
+        List<PrpCommande> listeCommandes = this.affectationService.getListCmdAssigned(date);
         log.info("Data fetched from the service length = {}", listeCommandes.size());
 
         SuccessResponseDto<List<PrpCommande>> successResponseDto = new SuccessResponseDto<>(
@@ -81,7 +80,7 @@ public class AffectationController {
         log.info("Entering the getListeCmdPrlv method from the AffectationController with date {}", date);
 
         log.info("Fetching data from the service");
-        List<PrpCdePrlv> listeCommandes = this.affectationService.getListeCommandesPrlv(date);
+        List<PrpCdePrlv> listeCommandes = this.affectationService.getListCmdPrlv(date);
         log.info("Fetched data from the service with length {}", listeCommandes.size());
 
         SuccessResponseDto<List<PrpCdePrlv>> successResponseDto = new SuccessResponseDto<>(
@@ -93,12 +92,29 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
+    @GetMapping("commandes-preleve/assigned")
+    public ResponseEntity<SuccessResponseDto<List<PrpCdePrlv>>> getListCmdPrlvAssigned(@RequestParam String date) {
+        log.info("Entering the getListCmdPrlvAssigned method from the AffectationController with date {}", date);
+
+        log.info("Fetching data from the service with date {}", date);
+        List<PrpCdePrlv> listeCommandes = this.affectationService.getListCmdPrlvAssigned(date);
+        log.info("Fetched data from the service with length {}", listeCommandes.size());
+
+        SuccessResponseDto<List<PrpCdePrlv>> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Liste des commandes par prélévement déjà affectées",
+                listeCommandes
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
     @PostMapping("/affect-commande")
     public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrp(@RequestBody List<AffectCmdRequestDto> commandes) {
         log.info("Entering the affectation method with {}", commandes);
         ArrayList<AffectCmdResultDto> tableau = new ArrayList<>();
         commandes.forEach(commande -> {
-            AffectCmdResultDto response = this.affectationService.affectCommandePrp(
+            AffectCmdResultDto response = this.affectationService.affectCmdPrp(
                 commande.getP_cmp(),
                 commande.getP_vnt(),
                 commande.getP_stk(),
@@ -120,7 +136,7 @@ public class AffectationController {
         log.info("Entering method affectCommandePrlv from the AffectatinController with {}", commandes);
         ArrayList<AffectCmdResultDto> tableau = new ArrayList<>();
         commandes.forEach(commande -> {
-            AffectCmdResultDto response = this.affectationService.affectCommandePrpPrlv(
+            AffectCmdResultDto response = this.affectationService.affectCmdPrpPrlv(
                     commande.getP_cmp(),
                     commande.getP_slt_id(),
                     commande.getP_slt_type(),

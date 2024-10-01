@@ -14,6 +14,9 @@ public interface PrpCdePrlvRepository extends JpaRepository<PrpCdePrlv, StkListe
     @Query(value = "SELECT * FROM PRP_LISTE_PLVS WHERE (:date IS NULL OR TRUNC(SLT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))", nativeQuery = true)
     List<PrpCdePrlv> getListeCommandesPrlv(@Param("date") String date);
 
+    @Query(value = "SELECT * FROM PRP_LISTE_PLVS_AFFECTE WHERE (:date IS NULL OR TRUNC(SLT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))", nativeQuery = true)
+    List<PrpCdePrlv> getListCmdPrlvAssigned(@Param("date") String date);
+
     @Procedure(procedureName = "logistiques.p_affcte_plv_prepare", outputParameterName = "p_msg")
     Integer affectCommandePrpPrlv(
             @Param("p_cmp") int p_cmp,
