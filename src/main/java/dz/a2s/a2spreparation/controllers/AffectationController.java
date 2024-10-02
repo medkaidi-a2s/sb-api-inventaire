@@ -1,8 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
-import dz.a2s.a2spreparation.dto.affectation.AffectCmdPrlvReqDto;
-import dz.a2s.a2spreparation.dto.affectation.AffectCmdRequestDto;
-import dz.a2s.a2spreparation.dto.affectation.AffectCmdResultDto;
+import dz.a2s.a2spreparation.dto.affectation.*;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.views.PrpCdePrlv;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
@@ -42,68 +40,68 @@ public class AffectationController {
     }
 
     @GetMapping("commandes")
-    public ResponseEntity<SuccessResponseDto<List<PrpCommande>>> getListeCmdPrp(@RequestParam String date) {
+    public ResponseEntity<SuccessResponseDto<List<PrpCmdDto>>> getListeCmdPrp(@RequestParam String date) {
         log.info("Entering the getListeCmdPrp from the AffectationController date {}", date);
 
         log.info("Fetching liste des commandes from the service");
-        List<PrpCommande> listeCommandes = this.affectationService.getListCmd(date);
-        log.info("Data fetched from the service length = {}", listeCommandes.size());
+        List<PrpCmdDto> commandes = this.affectationService.getListCmd(date);
+        log.info("Data fetched from the service length = {}", commandes.size());
 
-        SuccessResponseDto<List<PrpCommande>> successResponseDto = new SuccessResponseDto<>(
+        SuccessResponseDto<List<PrpCmdDto>> successResponseDto = new SuccessResponseDto<>(
                 200,
                 "Liste des commandes à affecter",
-                listeCommandes
+                commandes
         );
 
         return ResponseEntity.ok(successResponseDto);
     }
 
     @GetMapping("commandes/assigned")
-    public ResponseEntity<SuccessResponseDto<List<PrpCommande>>> getListeCmdAssigned(@RequestParam String date) {
+    public ResponseEntity<SuccessResponseDto<List<AffCmdDto>>> getListeCmdAssigned(@RequestParam String date) {
         log.info("Entering the getListeCmdAssigned from the AffectationController date {}", date);
 
         log.info("Fetching liste des commandes affectées from the service");
-        List<PrpCommande> listeCommandes = this.affectationService.getListCmdAssigned(date);
-        log.info("Data fetched from the service length = {}", listeCommandes.size());
+        List<AffCmdDto> commandes = this.affectationService.getListCmdAssigned(date);
+        log.info("Data fetched from the service length = {}", commandes.size());
 
-        SuccessResponseDto<List<PrpCommande>> successResponseDto = new SuccessResponseDto<>(
+        SuccessResponseDto<List<AffCmdDto>> successResponseDto = new SuccessResponseDto<>(
                 200,
                 "Liste des commandes déjà affectées",
-                listeCommandes
+                commandes
         );
 
         return ResponseEntity.ok(successResponseDto);
     }
 
     @GetMapping("commandes-preleve")
-    public ResponseEntity<SuccessResponseDto<List<PrpCdePrlv>>> getListeCmdPrlv(@RequestParam String date) {
+    public ResponseEntity<SuccessResponseDto<List<PrpCmdPrlvDto>>> getListeCmdPrlv(@RequestParam String date) {
         log.info("Entering the getListeCmdPrlv method from the AffectationController with date {}", date);
 
         log.info("Fetching data from the service");
-        List<PrpCdePrlv> listeCommandes = this.affectationService.getListCmdPrlv(date);
-        log.info("Fetched data from the service with length {}", listeCommandes.size());
+        List<PrpCmdPrlvDto> commandes = this.affectationService.getListCmdPrlv(date);
+        log.info("Fetched data from the service with length {}", commandes.size());
 
-        SuccessResponseDto<List<PrpCdePrlv>> successResponseDto = new SuccessResponseDto<>(
+        SuccessResponseDto<List<PrpCmdPrlvDto>> successResponseDto = new SuccessResponseDto<>(
           200,
           "Liste des commandes à affecter par prélévement",
-          listeCommandes
+          commandes
         );
 
         return ResponseEntity.ok(successResponseDto);
     }
 
     @GetMapping("commandes-preleve/assigned")
-    public ResponseEntity<SuccessResponseDto<List<PrpCdePrlv>>> getListCmdPrlvAssigned(@RequestParam String date) {
+    public ResponseEntity<SuccessResponseDto<List<AffCmdPrlvDto>>> getListCmdPrlvAssigned(@RequestParam String date) {
         log.info("Entering the getListCmdPrlvAssigned method from the AffectationController with date {}", date);
 
         log.info("Fetching data from the service with date {}", date);
-        List<PrpCdePrlv> listeCommandes = this.affectationService.getListCmdPrlvAssigned(date);
-        log.info("Fetched data from the service with length {}", listeCommandes.size());
+        List<AffCmdPrlvDto> commandes = this.affectationService.getListCmdPrlvAssigned(date);
+        log.info("Fetched data from the service with length {}", commandes.size());
 
-        SuccessResponseDto<List<PrpCdePrlv>> successResponseDto = new SuccessResponseDto<>(
+        SuccessResponseDto<List<AffCmdPrlvDto>> successResponseDto = new SuccessResponseDto<>(
                 200,
                 "Liste des commandes par prélévement déjà affectées",
-                listeCommandes
+                commandes
         );
 
         return ResponseEntity.ok(successResponseDto);

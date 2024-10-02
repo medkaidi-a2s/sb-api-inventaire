@@ -1,6 +1,6 @@
 package dz.a2s.a2spreparation.services;
 
-import dz.a2s.a2spreparation.dto.affectation.AffectCmdResultDto;
+import dz.a2s.a2spreparation.dto.affectation.*;
 import dz.a2s.a2spreparation.entities.views.PrpCdePrlv;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
@@ -12,13 +12,13 @@ public interface AffectationService {
 
     List<PrpCdeZone> getListCmdZones();
 
-    List<PrpCommande> getListCmd(String date);
+    List<PrpCmdDto> getListCmd(String date);
 
-    List<PrpCommande> getListCmdAssigned(String date);
+    List<AffCmdDto> getListCmdAssigned(String date);
 
-    List<PrpCdePrlv> getListCmdPrlv(String date);
+    List<PrpCmdPrlvDto> getListCmdPrlv(String date);
 
-    List<PrpCdePrlv> getListCmdPrlvAssigned(String date);
+    List<AffCmdPrlvDto> getListCmdPrlvAssigned(String date);
 
     List<PrpPrepareControle> getAllPreparateurs();
 

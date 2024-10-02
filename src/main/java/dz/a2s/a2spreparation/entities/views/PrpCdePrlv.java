@@ -40,13 +40,13 @@ public class PrpCdePrlv {
     private Integer nbrLigne;
 
     @Column(name = "CONTROLEUR")
-    private String controleur;
+    private String preparateur;
 
     @Column(name = "VERIF1")
-    private String verif1;
+    private String verificateur;
 
     @Column(name = "VERIF2")
-    private String verif2;
+    private String verificateur2;
 
     @Column(name = "STATUT")
     private String statut;

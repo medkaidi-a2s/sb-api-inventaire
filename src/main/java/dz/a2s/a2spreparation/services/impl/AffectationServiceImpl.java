@@ -1,11 +1,13 @@
 package dz.a2s.a2spreparation.services.impl;
 
-import dz.a2s.a2spreparation.dto.affectation.AffectCmdResultDto;
+import dz.a2s.a2spreparation.dto.affectation.*;
 import dz.a2s.a2spreparation.entities.views.PrpCdePrlv;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
 import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
+import dz.a2s.a2spreparation.mappers.CmdPrlvMapper;
+import dz.a2s.a2spreparation.mappers.CommandeMapper;
 import dz.a2s.a2spreparation.repositories.DiMessagesRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpCdePrlvRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpCommandeRepository;
@@ -49,23 +51,23 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public List<PrpCommande> getListCmd(String date) {
+    public List<PrpCmdDto> getListCmd(String date) {
         log.info("Entering getListCommande method from the AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Fetching orders for the company {}", companyId);
-
-//        String statut = CommandeStatus.getStatus(status);
-
-//        log.info("Fetching data from the repo with the following status '{}'", statut);
         List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommande(companyId, date);
         log.info("Data fetched from the repo length = {}", listeCommandes.size());
 
-        return listeCommandes;
+        log.info("Mapping entity classes to DTOs");
+        List<PrpCmdDto> commandes = listeCommandes.stream().map(CommandeMapper::toPrpCmdDto).toList();
+        log.info("Entity classes mapped to DTOs with length {}", commandes.size());
+
+        return commandes;
     }
 
     @Override
-    public List<PrpCommande> getListCmdAssigned(String date) {
+    public List<AffCmdDto> getListCmdAssigned(String date) {
         log.info("Entering getListCommandeAssigned method from the AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
@@ -74,29 +76,41 @@ public class AffectationServiceImpl implements AffectationService {
         List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommandeAssigned(companyId, date);
         log.info("Data fetched from the repo length = {}", listeCommandes.size());
 
-        return listeCommandes;
+        log.info("Mapping entity classes to DTOs");
+        List<AffCmdDto> commandes = listeCommandes.stream().map(CommandeMapper::toAffCmdDto).toList();
+        log.info("Entity classes mapped to DTOs with length {}", commandes.size());
+
+        return commandes;
     }
 
     @Override
-    public List<PrpCdePrlv> getListCmdPrlv(String date) {
+    public List<PrpCmdPrlvDto> getListCmdPrlv(String date) {
         log.info("Entering the getListeCommandesPrlv from the AffectationService with date {}", date);
 
         log.info("Fetching liste des commandes from the repo");
         List<PrpCdePrlv> listeCommandes = this.prpCdePrlvRepository.getListeCommandesPrlv(date);
         log.info("Data fetched from the repo with length {}", listeCommandes.size());
 
-        return listeCommandes;
+        log.info("Mapping class entities to DTOs");
+        List<PrpCmdPrlvDto> commandes = listeCommandes.stream().map(CmdPrlvMapper::toPrpCommand).toList();
+        log.info("Entity classes mapped to DTOs with length {}", commandes.size());
+
+        return commandes;
     }
 
     @Override
-    public List<PrpCdePrlv> getListCmdPrlvAssigned(String date) {
+    public List<AffCmdPrlvDto> getListCmdPrlvAssigned(String date) {
         log.info("Entering the getListeCommandesPrlvAssigned from the AffectationService with date {}", date);
 
         log.info("Fetching liste des commandes par prélévement déjà affectées from the repo");
         List<PrpCdePrlv> listeCommandes = this.prpCdePrlvRepository.getListCmdPrlvAssigned(date);
         log.info("Data fetched from the repo with length {}", listeCommandes.size());
 
-        return listeCommandes;
+        log.info("Mapping class entities to DTOs");
+        List<AffCmdPrlvDto> commandes = listeCommandes.stream().map(CmdPrlvMapper::toAffCommand).toList();
+        log.info("Entity classes mapped to DTOs with length {}", commandes.size());
+
+        return commandes;
     }
 
     @Override
