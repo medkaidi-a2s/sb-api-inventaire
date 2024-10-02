@@ -34,7 +34,7 @@ public class AffectationServiceImpl implements AffectationService {
     private final PrpCdePrlvRepository prpCdePrlvRepository;
 
     @Override
-    public List<PrpCdeZone> getListCmdZones() throws RessourceNotFoundException {
+    public List<AffCmdDto> getListCmdZones() throws RessourceNotFoundException {
         log.info("Entering getListCmdZones method from the AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
@@ -44,10 +44,11 @@ public class AffectationServiceImpl implements AffectationService {
         List<PrpCdeZone> listeCommandes = this.prpListeCdeZonesRepository.getListCmdZones(companyId);
         log.info("Data fetched from the repo length = {}", listeCommandes.size());
 
-        if(listeCommandes.isEmpty())
-            throw new RessourceNotFoundException("Liste des commandes affectées par zone vide");
+        log.info("Mapping entity classes to DTOs");
+        List<AffCmdDto> commandes = listeCommandes.stream().map(CommandeMapper::toAffZoneCmdDto).toList();
+        log.info("Entity classes mapped to DTOs with length {}", commandes.size());
 
-        return listeCommandes;
+        return commandes;
     }
 
     @Override

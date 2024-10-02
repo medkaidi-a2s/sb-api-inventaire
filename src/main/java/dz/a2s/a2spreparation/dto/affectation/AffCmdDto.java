@@ -28,5 +28,6 @@ public class AffCmdDto {
     private String prepare;
     private String frigPsycho;
     private String status;
+    private String zone;
 
 }

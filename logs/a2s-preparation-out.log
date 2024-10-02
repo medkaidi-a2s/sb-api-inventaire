@@ -1904,3 +1904,220 @@ java.lang.IllegalArgumentException: Invalid character found in the HTTP protocol
 2024-10-02 12:15:28 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Mapping entity classes to DTOs
 2024-10-02 12:15:28 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Entity classes mapped to DTOs with length 11
 2024-10-02 12:15:28 INFO  [http-nio-8080-exec-2] d.a.a.c.AffectationController - Data fetched from the service length = 11
+2024-10-02 12:35:55 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-10-02 12:35:55 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-10-02 12:35:58 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-10-02 12:36:02 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-10-02 12:36:02 INFO  [restartedMain] d.a.a.A2spreparationApplication - Starting A2spreparationApplication using Java 17.0.11 with PID 26632 (C:\Projects\Spring Boot\sb-api-preparation\target\classes started by Mohamed in C:\Projects\Spring Boot\sb-api-preparation)
+2024-10-02 12:36:02 INFO  [restartedMain] d.a.a.A2spreparationApplication - No active profile set, falling back to 1 default profile: "default"
+2024-10-02 12:36:02 INFO  [restartedMain] o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in C:\Users\Mohamed\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.2.0.0\ojdbc8-23.2.0.0.jar referenced one or more files that do not exist: file:/C:/Users/Mohamed/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.2.0.0/oraclepki.jar
+2024-10-02 12:36:02 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-10-02 12:36:02 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface dz.a2s.a2spreparation.repositories.CompanyRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface dz.a2s.a2spreparation.repositories.DiMessagesRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface dz.a2s.a2spreparation.repositories.ParamsRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface dz.a2s.a2spreparation.repositories.StpUserRolesRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface dz.a2s.a2spreparation.repositories.UserEntityRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface dz.a2s.a2spreparation.repositories.views.PrpCdePrlvRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface dz.a2s.a2spreparation.repositories.views.PrpCommandeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface dz.a2s.a2spreparation.repositories.views.PrpListeCdeZonesRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface dz.a2s.a2spreparation.repositories.views.PrpPrepareControleRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 39 ms. Found 0 JDBC repository interfaces.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-02 12:36:04 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 43 ms. Found 9 JPA repository interfaces.
+2024-10-02 12:36:05 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-10-02 12:36:05 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-10-02 12:36:05 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-10-02 12:36:05 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-02 12:36:05 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-10-02 12:36:05 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2592 ms
+2024-10-02 12:36:06 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-10-02 12:36:07 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@5406ba3b
+2024-10-02 12:36:07 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-10-02 12:36:08 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-02 12:36:08 INFO  [restartedMain] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.2.0.Final
+2024-10-02 12:36:08 INFO  [restartedMain] org.hibernate.cfg.Environment - HHH000406: Using bytecode reflection optimizer
+2024-10-02 12:36:08 INFO  [restartedMain] o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-10-02 12:36:08 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-02 12:36:08 INFO  [restartedMain] SQL dialect - HHH000400: Using dialect: org.hibernate.dialect.OracleDialect
+2024-10-02 12:36:09 INFO  [restartedMain] o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-10-02 12:36:09 WARN  [restartedMain] org.hibernate.mapping.RootClass - HHH000038: Composite-id class does not override equals(): dz.a2s.a2spreparation.entities.keys.StpUserRolesId
+2024-10-02 12:36:09 WARN  [restartedMain] org.hibernate.mapping.RootClass - HHH000039: Composite-id class does not override hashCode(): dz.a2s.a2spreparation.entities.keys.StpUserRolesId
+2024-10-02 12:36:09 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-10-02 12:36:09 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-02 12:36:10 INFO  [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-02 12:36:10 INFO  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-10-02 12:36:10 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-02 12:36:12 INFO  [restartedMain] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2024-10-02 12:36:13 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-10-02 12:36:13 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-10-02 12:36:13 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-10-02 12:36:13 INFO  [restartedMain] d.a.a.A2spreparationApplication - Started A2spreparationApplication in 11.033 seconds (process running for 11.465)
+2024-10-02 12:37:01 INFO  [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-02 12:37:01 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-10-02 12:37:01 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2024-10-02 12:37:01 INFO  [http-nio-8080-exec-2] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:37:01 INFO  [http-nio-8080-exec-2] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2MzEzNywiZXhwIjoxNzI3OTQ5NTM3fQ.M411ydJe2kBR7mNfQZ6UEmWzECgFYgejoKgdoYwHLW6cleYHMl_XiExc5vBlkepzyar41RjDbJwcJP5EhUmg6A
+2024-10-02 12:37:01 INFO  [http-nio-8080-exec-2] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:37:01 INFO  [http-nio-8080-exec-2] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:37:01 INFO  [http-nio-8080-exec-2] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:37:01 INFO  [http-nio-8080-exec-2] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:37:02 INFO  [http-nio-8080-exec-2] d.a.a.c.AffectationController - Entering the getListeCmdPrpZone from the AffectationController
+2024-10-02 12:37:02 INFO  [http-nio-8080-exec-2] d.a.a.c.AffectationController - Fetching liste des commandes from the service
+2024-10-02 12:37:02 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Entering getListCmdZones method from the AffectationService
+2024-10-02 12:37:02 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Fetching orders for the company 1
+2024-10-02 12:37:02 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Fetching data from the repo
+2024-10-02 12:37:02 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Data fetched from the repo length = 38
+2024-10-02 12:37:02 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Mapping entity classes to DTOs
+2024-10-02 12:37:02 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Entity classes mapped to DTOs with length 38
+2024-10-02 12:37:02 INFO  [http-nio-8080-exec-2] d.a.a.c.AffectationController - Data fetched from the service length = 38
+2024-10-02 12:37:21 INFO  [http-nio-8080-exec-3] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:37:21 INFO  [http-nio-8080-exec-3] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token null
+2024-10-02 12:37:21 INFO  [http-nio-8080-exec-3] d.a.a.controllers.CompanyController - findAllCompanies from the CompanyController
+2024-10-02 12:37:21 INFO  [http-nio-8080-exec-3] d.a.a.s.impl.CompanyServiceImpl - findAll method from companyService
+2024-10-02 12:37:21 INFO  [http-nio-8080-exec-3] d.a.a.controllers.CompanyController - Companies fetched from the service [Company(id=1, label=A2S SARL, location=ALGER), Company(id=2, label=SARL ORAN, location=ORAN), Company(id=3, label=SETIF, location=SETIF), Company(id=4, label=COSMETIQUE, location=ALGER), Company(id=5, label=PARAPHARM, location=ALGER)]
+2024-10-02 12:39:27 INFO  [http-nio-8080-exec-6] d.a.a.controllers.AuthController - Entering login method from AuthController with LoginDto(username=ADMIN, password=123, companyId=1)
+2024-10-02 12:39:27 INFO  [http-nio-8080-exec-6] d.a.a.controllers.AuthController - Getting the custom username from the loginDto inside the authController 1:ADMIN
+2024-10-02 12:39:27 INFO  [http-nio-8080-exec-6] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:39:27 INFO  [http-nio-8080-exec-6] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:39:27 INFO  [http-nio-8080-exec-6] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:39:27 INFO  [http-nio-8080-exec-6] d.a.a.controllers.AuthController - Authentication object created UsernamePasswordAuthenticationToken [Principal=dz.a2s.a2spreparation.security.AppUserDetails@3c99f788, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[]]
+2024-10-02 12:39:27 INFO  [http-nio-8080-exec-6] d.a.a.security.JWTGenerator - Generating token with authentication object UsernamePasswordAuthenticationToken [Principal=dz.a2s.a2spreparation.security.AppUserDetails@3c99f788, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[]]
+2024-10-02 12:39:27 INFO  [http-nio-8080-exec-6] d.a.a.security.JWTGenerator - Generating token for ADMIN
+2024-10-02 12:39:27 INFO  [http-nio-8080-exec-6] d.a.a.security.JWTGenerator - Token generated inside JWTGenerator eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-9] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-9] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-10] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-10] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-9] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-9] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-9] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-9] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-10] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-10] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-10] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-10] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-10] d.a.a.controllers.CompanyController - Entering getMethod method from CompanyController
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-9] d.a.a.controllers.UserController - Entering getAffectationAuthorization from the UserController
+2024-10-02 12:39:28 INFO  [http-nio-8080-exec-9] d.a.a.s.i.AuthorizationServiceImpl - Entering the getAffectationAuthorization method from the AuthorizationService for formCode 480
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-10] d.a.a.controllers.CompanyController - Returning the value of the method 2
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-9] d.a.a.controllers.UserController - Authorization retrieved from the service : AuthorizationDto(code=480, value=1)
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-7] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-7] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-7] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-7] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-7] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-7] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-7] d.a.a.controllers.CompanyController - Entering getMethod method from CompanyController
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-7] d.a.a.controllers.CompanyController - Returning the value of the method 2
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.c.AffectationController - Entering the getListeCmdPrpZone from the AffectationController
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.c.AffectationController - Fetching liste des commandes from the service
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.s.impl.AffectationServiceImpl - Entering getListCmdZones method from the AffectationService
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.s.impl.AffectationServiceImpl - Fetching orders for the company 1
+2024-10-02 12:39:29 INFO  [http-nio-8080-exec-8] d.a.a.s.impl.AffectationServiceImpl - Fetching data from the repo
+2024-10-02 12:39:30 INFO  [http-nio-8080-exec-8] d.a.a.s.impl.AffectationServiceImpl - Data fetched from the repo length = 38
+2024-10-02 12:39:30 INFO  [http-nio-8080-exec-8] d.a.a.s.impl.AffectationServiceImpl - Mapping entity classes to DTOs
+2024-10-02 12:39:30 INFO  [http-nio-8080-exec-8] d.a.a.s.impl.AffectationServiceImpl - Entity classes mapped to DTOs with length 38
+2024-10-02 12:39:30 INFO  [http-nio-8080-exec-8] d.a.a.c.AffectationController - Data fetched from the service length = 38
+2024-10-02 12:39:40 INFO  [http-nio-8080-exec-2] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:39:40 INFO  [http-nio-8080-exec-2] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2MzEzNywiZXhwIjoxNzI3OTQ5NTM3fQ.M411ydJe2kBR7mNfQZ6UEmWzECgFYgejoKgdoYwHLW6cleYHMl_XiExc5vBlkepzyar41RjDbJwcJP5EhUmg6A
+2024-10-02 12:39:40 INFO  [http-nio-8080-exec-2] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:39:40 INFO  [http-nio-8080-exec-2] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:39:40 INFO  [http-nio-8080-exec-2] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:39:40 INFO  [http-nio-8080-exec-2] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:39:41 INFO  [http-nio-8080-exec-2] d.a.a.c.AffectationController - Entering the getListeCmdPrpZone from the AffectationController
+2024-10-02 12:39:41 INFO  [http-nio-8080-exec-2] d.a.a.c.AffectationController - Fetching liste des commandes from the service
+2024-10-02 12:39:41 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Entering getListCmdZones method from the AffectationService
+2024-10-02 12:39:41 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Fetching orders for the company 1
+2024-10-02 12:39:41 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Fetching data from the repo
+2024-10-02 12:39:41 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Data fetched from the repo length = 38
+2024-10-02 12:39:41 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Mapping entity classes to DTOs
+2024-10-02 12:39:41 INFO  [http-nio-8080-exec-2] d.a.a.s.impl.AffectationServiceImpl - Entity classes mapped to DTOs with length 38
+2024-10-02 12:39:41 INFO  [http-nio-8080-exec-2] d.a.a.c.AffectationController - Data fetched from the service length = 38
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-3] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-4] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-3] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-4] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-3] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-3] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-3] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-3] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-4] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-4] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-4] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-4] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-4] d.a.a.controllers.CompanyController - Entering getMethod method from CompanyController
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-3] d.a.a.controllers.UserController - Entering getAffectationAuthorization from the UserController
+2024-10-02 12:40:02 INFO  [http-nio-8080-exec-3] d.a.a.s.i.AuthorizationServiceImpl - Entering the getAffectationAuthorization method from the AuthorizationService for formCode 480
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-4] d.a.a.controllers.CompanyController - Returning the value of the method 2
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-3] d.a.a.controllers.UserController - Authorization retrieved from the service : AuthorizationDto(code=480, value=1)
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-5] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-5] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-5] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-5] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-5] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-5] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-5] d.a.a.controllers.CompanyController - Entering getMethod method from CompanyController
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-5] d.a.a.controllers.CompanyController - Returning the value of the method 2
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.c.AffectationController - Entering the getListeCmdPrpZone from the AffectationController
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.c.AffectationController - Fetching liste des commandes from the service
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.impl.AffectationServiceImpl - Entering getListCmdZones method from the AffectationService
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.impl.AffectationServiceImpl - Fetching orders for the company 1
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.impl.AffectationServiceImpl - Fetching data from the repo
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.impl.AffectationServiceImpl - Data fetched from the repo length = 38
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.impl.AffectationServiceImpl - Mapping entity classes to DTOs
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.s.impl.AffectationServiceImpl - Entity classes mapped to DTOs with length 38
+2024-10-02 12:40:03 INFO  [http-nio-8080-exec-6] d.a.a.c.AffectationController - Data fetched from the service length = 38
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-2] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-2] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-2] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-2] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-2] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-2] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.JWTAuthenticationFilter - Entering the JWTAuthenticationFilter
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.JWTAuthenticationFilter - JWTAuthenticationFilter recieving the token eyJhbGciOiJIUzUxMiJ9.eyJjb21wYW55SWQiOiIxIiwidXNlcm5hbWUiOiJBRE1JTiIsIm5hbWUiOiJBRE1JTklTVFJBVEVVUiIsImlhdCI6MTcyNzg2OTE2NywiZXhwIjoxNzI3OTU1NTY3fQ.dS6ebY1GbsPyuwoYoKcMOVqLeIoD1CH2MqHmpkTXsvFvWSFE0enSoGcDEwoQ9O6VdPkr6DRm3XiwHb1JVBgRcg
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.JWTAuthenticationFilter - Parsed the username from the token 1:ADMIN
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.CustomUserDetailsService - Entering loadUserByUsername method of UserDetails with 1:ADMIN
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.CustomUserDetailsService - The companyId is 1
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.CustomUserDetailsService - The userCode is ADMIN
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.c.AffectationController - Entering the getListeCmdPrpZone from the AffectationController
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.c.AffectationController - Fetching liste des commandes from the service
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.s.impl.AffectationServiceImpl - Entering getListCmdZones method from the AffectationService
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.s.impl.AffectationServiceImpl - Fetching orders for the company 1
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-4] d.a.a.s.impl.AffectationServiceImpl - Fetching data from the repo
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.c.AffectationController - Entering the getListeCmdPrpZone from the AffectationController
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.c.AffectationController - Fetching liste des commandes from the service
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.impl.AffectationServiceImpl - Entering getListCmdZones method from the AffectationService
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.impl.AffectationServiceImpl - Fetching orders for the company 1
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.impl.AffectationServiceImpl - Fetching data from the repo
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-2] d.a.a.controllers.CompanyController - Entering getMethod method from CompanyController
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-2] d.a.a.controllers.CompanyController - Returning the value of the method 2
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.impl.AffectationServiceImpl - Data fetched from the repo length = 38
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.impl.AffectationServiceImpl - Mapping entity classes to DTOs
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.s.impl.AffectationServiceImpl - Entity classes mapped to DTOs with length 38
+2024-10-02 12:41:38 INFO  [http-nio-8080-exec-3] d.a.a.c.AffectationController - Data fetched from the service length = 38
+2024-10-02 12:41:39 INFO  [http-nio-8080-exec-4] d.a.a.s.impl.AffectationServiceImpl - Data fetched from the repo length = 38
+2024-10-02 12:41:39 INFO  [http-nio-8080-exec-4] d.a.a.s.impl.AffectationServiceImpl - Mapping entity classes to DTOs
+2024-10-02 12:41:39 INFO  [http-nio-8080-exec-4] d.a.a.s.impl.AffectationServiceImpl - Entity classes mapped to DTOs with length 38
+2024-10-02 12:41:39 INFO  [http-nio-8080-exec-4] d.a.a.c.AffectationController - Data fetched from the service length = 38

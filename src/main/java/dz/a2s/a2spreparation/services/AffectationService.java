@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AffectationService {
 
-    List<PrpCdeZone> getListCmdZones();
+    List<AffCmdDto> getListCmdZones();
 
     List<PrpCmdDto> getListCmd(String date);
 
