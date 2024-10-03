@@ -1,10 +1,8 @@
 package dz.a2s.a2spreparation.services;
 
 import dz.a2s.a2spreparation.dto.affectation.*;
-import dz.a2s.a2spreparation.entities.views.PrpCdePrlv;
-import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
-import dz.a2s.a2spreparation.entities.views.PrpCommande;
-import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
+import dz.a2s.a2spreparation.entities.views.*;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -44,6 +42,18 @@ public interface AffectationService {
             int p_cnt2,
             String p_user,
             String reference
+    );
+
+    PrpCdePrepCont getPrepCont(
+            Integer vntId,
+            String vntType,
+            String vntStkCode
+    );
+
+    PrpCdePrlvPrepCont getPrepContPrlv(
+      Integer id,
+      String type,
+      Integer annee
     );
 
 }

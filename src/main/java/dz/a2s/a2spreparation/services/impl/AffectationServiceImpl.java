@@ -1,18 +1,12 @@
 package dz.a2s.a2spreparation.services.impl;
 
 import dz.a2s.a2spreparation.dto.affectation.*;
-import dz.a2s.a2spreparation.entities.views.PrpCdePrlv;
-import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
-import dz.a2s.a2spreparation.entities.views.PrpCommande;
-import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
+import dz.a2s.a2spreparation.entities.views.*;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.CmdPrlvMapper;
 import dz.a2s.a2spreparation.mappers.CommandeMapper;
 import dz.a2s.a2spreparation.repositories.DiMessagesRepository;
-import dz.a2s.a2spreparation.repositories.views.PrpCdePrlvRepository;
-import dz.a2s.a2spreparation.repositories.views.PrpCommandeRepository;
-import dz.a2s.a2spreparation.repositories.views.PrpListeCdeZonesRepository;
-import dz.a2s.a2spreparation.repositories.views.PrpPrepareControleRepository;
+import dz.a2s.a2spreparation.repositories.views.*;
 import dz.a2s.a2spreparation.services.AffectationService;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +26,8 @@ public class AffectationServiceImpl implements AffectationService {
     private final CustomUserDetailsService customUserDetailsService;
     private final DiMessagesRepository diMessagesRepository;
     private final PrpCdePrlvRepository prpCdePrlvRepository;
+    private final PrpCdePrepContRepository prpCdePrepContRepository;
+    private final PrpCdePrlvPrepContRepository prpCdePrlvPrepContRepository;
 
     @Override
     public List<AffCmdDto> getListCmdZones() throws RessourceNotFoundException {
@@ -191,5 +187,39 @@ public class AffectationServiceImpl implements AffectationService {
             result = AffectCmdResultDto.builder().messageId(response).message(message == null ? "Une erreur inconnue s'est produite" : message).venteRef(reference).build();
         }
         return result;
+    }
+
+    @Override
+    public PrpCdePrepCont getPrepCont(Integer vntId, String vntType, String vntStkCode) throws RessourceNotFoundException {
+        log.info("Entering getPrepCont method from AffectationService");
+
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+
+        log.info("Getting the entity from the repo");
+        PrpCdePrepCont prpCdePrepCont = this.prpCdePrepContRepository.getPrepCont(companyId, vntId, vntType, vntStkCode);
+
+        if(prpCdePrepCont == null)
+            throw new RessourceNotFoundException("Commande introuvable");
+        return prpCdePrepCont;
+    }
+
+    @Override
+    public PrpCdePrlvPrepCont getPrepContPrlv(Integer id, String type, Integer annee) throws RessourceNotFoundException {
+        log.info("Entering getPrepContPrlv method from AffectationService");
+
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+
+        log.info("Getting the entity from the repo");
+        PrpCdePrlvPrepCont prpCdePrlvPrepCont = this.prpCdePrlvPrepContRepository.getPrepCont(
+                companyId,
+                id,
+                type,
+                annee
+        );
+
+        if(prpCdePrlvPrepCont == null)
+            throw new RessourceNotFoundException("Commande par prélévement introuvable");
+
+        return prpCdePrlvPrepCont;
     }
 }

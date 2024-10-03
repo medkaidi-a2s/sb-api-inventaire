@@ -2,10 +2,7 @@ package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.dto.affectation.*;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
-import dz.a2s.a2spreparation.entities.views.PrpCdePrlv;
-import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
-import dz.a2s.a2spreparation.entities.views.PrpCommande;
-import dz.a2s.a2spreparation.entities.views.PrpPrepareControle;
+import dz.a2s.a2spreparation.entities.views.*;
 import dz.a2s.a2spreparation.services.AffectationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +70,25 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
+    @GetMapping("commandes/preparateur-controleurs")
+    public ResponseEntity<SuccessResponseDto<PrpCdePrepCont>> getCmdPrepCont(@RequestParam Integer id, @RequestParam String type, @RequestParam String stkCode) {
+        log.info("Entering getCmdPrepCont method from the AffectationController with id {}", id);
+
+        PrpCdePrepCont prpCdePrepCont = this.affectationService.getPrepCont(
+                id,
+                type,
+                stkCode
+        );
+
+        SuccessResponseDto<PrpCdePrepCont> response = new SuccessResponseDto<>(
+                200,
+                "Préparateur et contrôleurs de la commande",
+                prpCdePrepCont
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("commandes-preleve")
     public ResponseEntity<SuccessResponseDto<List<PrpCmdPrlvDto>>> getListeCmdPrlv(@RequestParam String date) {
         log.info("Entering the getListeCmdPrlv method from the AffectationController with date {}", date);
@@ -105,6 +121,23 @@ public class AffectationController {
         );
 
         return ResponseEntity.ok(successResponseDto);
+    }
+
+    @GetMapping("commandes-preleve/preparateur-controleurs")
+    public ResponseEntity<SuccessResponseDto<PrpCdePrlvPrepCont>> getPrepContPrlv(@RequestParam Integer id, @RequestParam String type, @RequestParam Integer annee) {
+        log.info("Entering the getPrepContPrlv method from the AffectationController");
+
+        log.info("Fetching data from the service");
+        PrpCdePrlvPrepCont prpCdePrlvPrepCont = this.affectationService.getPrepContPrlv(id, type, annee);
+        log.info("Data fetched from the service {}", prpCdePrlvPrepCont);
+
+        SuccessResponseDto<PrpCdePrlvPrepCont> response = new SuccessResponseDto<>(
+                200,
+                "Préparateur et contrôleurs de la commande par prélévement",
+                prpCdePrlvPrepCont
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/affect-commande")
