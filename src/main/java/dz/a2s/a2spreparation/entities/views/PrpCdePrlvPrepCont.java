@@ -23,14 +23,23 @@ public class PrpCdePrlvPrepCont {
     @EmbeddedId
     private StkListesId id;
 
-    @Column(name = "CONTROLEUR_ID")
+    @Column(name = "PREPARATEUR_ID")
     private Integer preparateurId;
+
+    @Column(name = "PREPARATEUR")
+    private String preparateur;
 
     @Column(name = "VERIFICATEUR_ID")
     private Integer verificateurId;
 
+    @Column(name = "VERIFICATEUR")
+    private String verificateur;
+
     @Column(name = "VERIFICATEUR_ID2")
     private Integer verificateurId2;
+
+    @Column(name = "VERIFICATEUR2")
+    private String verificateur2;
 
     @Column(name = "CREER_DATE")
     private Date creerDate;

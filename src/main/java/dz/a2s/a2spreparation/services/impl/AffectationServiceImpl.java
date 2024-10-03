@@ -166,6 +166,7 @@ public class AffectationServiceImpl implements AffectationService {
 
     @Override
     public AffectCmdResultDto affectCmdPrpPrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
+        log.info("Entering the affectCmdPrpPrlv from the AffectationService");
         AffectCmdResultDto result;
         int response = this.prpCdePrlvRepository.affectCommandePrpPrlv(
             p_cmp,
@@ -187,6 +188,37 @@ public class AffectationServiceImpl implements AffectationService {
             result = AffectCmdResultDto.builder().messageId(response).message(message == null ? "Une erreur inconnue s'est produite" : message).venteRef(reference).build();
         }
         return result;
+    }
+
+    @Override
+    public PrpCdePrlvPrepCont editAffectCmdPrpPrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee, int p_prp, int p_cnt1, int p_cnt2) throws Exception {
+        log.info("Entering the editAffectCmdPrpPrlv method from the AffectationService");
+
+        Integer response = this.prpCdePrlvPrepContRepository.editAffectCommandePrpPrlv(
+                p_cmp,
+                p_slt_id,
+                p_slt_type,
+                p_slt_annee,
+                p_prp,
+                p_cnt1,
+                p_cnt2
+        );
+
+        log.info("Result of the stored procedure {}", response);
+
+        if(response != 0)
+            throw new Exception("La réaffectation de cette commande n'a pas pu s'effectuer");
+
+        PrpCdePrlvPrepCont entity = this.prpCdePrlvPrepContRepository.getPrepCont(
+                p_cmp,
+                p_slt_id,
+                p_slt_type,
+                p_slt_annee
+        );
+
+        log.info("Edited entity returned from the repo {}", entity);
+
+        return entity;
     }
 
     @Override

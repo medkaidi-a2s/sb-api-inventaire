@@ -44,6 +44,16 @@ public interface AffectationService {
             String reference
     );
 
+    PrpCdePrlvPrepCont editAffectCmdPrpPrlv(
+            int p_cmp,
+            int p_slt_id,
+            String p_slt_type,
+            int p_slt_annee,
+            int p_prp,
+            int p_cnt1,
+            int p_cnt2
+    ) throws Exception;
+
     PrpCdePrepCont getPrepCont(
             Integer vntId,
             String vntType,
