@@ -1,4 +1,4 @@
-package dz.a2s.a2spreparation.mappers;
+package dz.a2s.a2spreparation.mappers.affectation;
 
 import dz.a2s.a2spreparation.dto.affectation.AffCmdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;

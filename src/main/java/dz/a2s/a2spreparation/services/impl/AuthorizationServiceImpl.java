@@ -19,6 +19,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     @Value("${params.authorizations.affectation}")
     private int affectationFormCode;
 
+    @Value("${params.authorizations.preparation}")
+    private int preparationFormCode;
+
     @Override
     public AuthorizationDto getAffectationAuthorization() {
         log.info("Entering the getAffectationAuthorization method from the AuthorizationService for formCode {}", affectationFormCode);
@@ -28,6 +31,19 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         Integer value = this.stpUserRolesRepository.getAuthorization(username, companyId, affectationFormCode);
 
         AuthorizationDto authorizationDto = new AuthorizationDto(affectationFormCode, value);
+
+        return authorizationDto;
+    }
+
+    @Override
+    public AuthorizationDto getPreparationAuthorization() {
+        log.info("Entering the getPreparationAuthorization method from the AuthorizationService for formCode {}", preparationFormCode);
+
+        String username = this.customUserDetailsService.getCurrentUserCode();
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        Integer value = this.stpUserRolesRepository.getAuthorization(username, companyId, preparationFormCode);
+
+        AuthorizationDto authorizationDto = new AuthorizationDto(preparationFormCode, value);
 
         return authorizationDto;
     }

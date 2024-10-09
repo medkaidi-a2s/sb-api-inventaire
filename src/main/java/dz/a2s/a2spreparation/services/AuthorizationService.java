@@ -6,4 +6,6 @@ public interface AuthorizationService {
 
     AuthorizationDto getAffectationAuthorization();
 
+    AuthorizationDto getPreparationAuthorization();
+
 }

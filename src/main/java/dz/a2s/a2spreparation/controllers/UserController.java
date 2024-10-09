@@ -23,11 +23,26 @@ public class UserController {
         log.info("Entering getAffectationAuthorization from the UserController");
 
         AuthorizationDto response = this.authorizationService.getAffectationAuthorization();
-        log.info("Authorization retrieved from the service : {}", response);
+        log.info("Affectation Authorization retrieved from the service : {}", response);
 
         SuccessResponseDto<AuthorizationDto> successResponseDto = new SuccessResponseDto<AuthorizationDto>(
                 200,
                 "Autorisation d'affectation",
+                response
+        );
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @GetMapping("/authorizations/preparation")
+    public ResponseEntity<SuccessResponseDto<AuthorizationDto>> getPreparationAuthorization() {
+        log.info("Entering the getPreparationAuthorization method from the UserController");
+
+        AuthorizationDto response = this.authorizationService.getPreparationAuthorization();
+        log.info("Preparation Authorization retrieved from the service : {}", response);
+
+        SuccessResponseDto<AuthorizationDto> successResponseDto = new SuccessResponseDto<AuthorizationDto>(
+                200,
+                "Autorisation de préparation",
                 response
         );
         return ResponseEntity.ok(successResponseDto);

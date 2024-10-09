@@ -3,8 +3,8 @@ package dz.a2s.a2spreparation.services.impl;
 import dz.a2s.a2spreparation.dto.affectation.*;
 import dz.a2s.a2spreparation.entities.views.*;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
-import dz.a2s.a2spreparation.mappers.CmdPrlvMapper;
-import dz.a2s.a2spreparation.mappers.CommandeMapper;
+import dz.a2s.a2spreparation.mappers.affectation.CmdPrlvMapper;
+import dz.a2s.a2spreparation.mappers.affectation.CommandeMapper;
 import dz.a2s.a2spreparation.repositories.DiMessagesRepository;
 import dz.a2s.a2spreparation.repositories.views.*;
 import dz.a2s.a2spreparation.services.AffectationService;
@@ -152,7 +152,7 @@ public class AffectationServiceImpl implements AffectationService {
             p_user
         );
 
-        log.info("La réponse de la procédure stockée affectatin des commandes {}", response);
+        log.info("La réponse de la procédure stockée affectation des commandes {}", response);
 
         if(response == 0)
             result = AffectCmdResultDto.builder().messageId(0).message("Affectation réussie").venteRef(reference).build();
