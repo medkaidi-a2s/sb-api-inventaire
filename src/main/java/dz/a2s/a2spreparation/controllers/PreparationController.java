@@ -1,5 +1,7 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
@@ -7,10 +9,7 @@ import dz.a2s.a2spreparation.services.PreparationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,6 +49,60 @@ public class PreparationController {
                 commandes
         );
 
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @GetMapping("/commande-preleve")
+    public ResponseEntity<SuccessResponseDto<PrpCmdPrlvUsrCodeDto>> getOnePrlvCommande(@RequestParam String type, @RequestParam Integer annee, @RequestParam Integer id) {
+        log.info("Entering the getOnePrlvCommande from PreparationController");
+
+        PrpCmdPrlvUsrCodeDto commande = this.preparationService.getOneCmdPrlv(id, type, annee);
+
+        SuccessResponseDto<PrpCmdPrlvUsrCodeDto> response = new SuccessResponseDto<>(
+                200,
+                "Commande par prélevement retournée",
+                commande
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/commande/start-prep-cde")
+    public ResponseEntity<SuccessResponseDto<Integer>> startPrepareCde(@RequestBody CmdIdDto commande) throws Exception {
+        log.info("Entering the method startPrepareCde from the PreparationController");
+
+        Integer response = this.preparationService.startPrepareCde(
+                commande.getCmpId(),
+                commande.getId(),
+                commande.getType(),
+                commande.getStkCode()
+        );
+
+        SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Commande mis à jour avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @PatchMapping("/commande/start-prep-preleve")
+    public ResponseEntity<SuccessResponseDto<Integer>> startPreparePrlv(@RequestBody CmdPrlvIdDto commande) throws Exception {
+        log.info("Entering the method startPreparePrlv from the PreparationController");
+
+        Integer response = this.preparationService.startPreparePrlv(
+                commande.getCmpId(),
+                commande.getId(),
+                commande.getType(),
+                commande.getAnnee()
+        );
+
+        SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Commande mis à jour avec succès",
+                response
+        );
         return ResponseEntity.ok(successResponseDto);
     }
 

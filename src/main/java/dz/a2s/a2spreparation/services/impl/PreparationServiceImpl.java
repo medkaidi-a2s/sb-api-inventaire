@@ -5,6 +5,7 @@ import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
 import dz.a2s.a2spreparation.entities.views.PrpCdePrlvUsrCode;
 import dz.a2s.a2spreparation.entities.views.PrpCdeUsrCode;
+import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdePrlvUsrCodeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdeUsrCodeMapper;
 import dz.a2s.a2spreparation.repositories.views.PrpCdePrlvUsrCodeRepository;
@@ -53,6 +54,66 @@ public class PreparationServiceImpl implements PreparationService {
         List<PrpCmdPrlvUsrCodeDto> response = commandes.stream().map(PrpCdePrlvUsrCodeMapper::toPrpCmdPrlvUsrCodeDto).toList();
 
         log.info("Returning fetched data to controller with length {}", response.size());
+
+        return response;
+    }
+
+    @Override
+    public Integer startPreparePrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee) throws Exception {
+        log.info("Entering the method startPreparePrlv from the PreparationService");
+
+        Integer response = this.prpCdePrlvUsrCodeRepository.startPreparePrlv(
+                p_cmp,
+                p_slt_id,
+                p_slt_type,
+                p_slt_annee
+        );
+
+        log.info("Valeur de retour de la stored procedure for starting preparation with prlv is {}", response);
+
+        if(response != 0)
+            throw new Exception("Erreur lors de la mise à jour de la commande");
+
+        return response;
+    }
+
+    @Override
+    public Integer startPrepareCde(int p_vnt_cmp_id, int p_vnt_id, String p_vnt_type, String p_vnt_stk_code) throws Exception{
+        log.info("Entering the method startPrepareCde from the PreparationService");
+
+        Integer response = this.prpCdeUsrCodeRepository.startPrepareCde(
+                p_vnt_cmp_id,
+                p_vnt_id,
+                p_vnt_type,
+                p_vnt_stk_code
+        );
+
+        log.info("Valeur de retour de la stored procedure for starting preparation with cde is {}", response);
+
+        if(response != 0)
+            throw new Exception("Erreur lors de la mise à jour de la commande");
+
+        return response;
+    }
+
+    @Override
+    public PrpCmdPrlvUsrCodeDto getOneCmdPrlv(Integer id, String type, Integer annee) {
+        log.info("Entering the getOneCmdPrlv method from the PreparationService");
+
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        log.info("Company Id retrieved {}", companyId);
+
+        PrpCdePrlvUsrCode commande = this.prpCdePrlvUsrCodeRepository.getOneCmdPrlv(
+                companyId,
+                id,
+                type,
+                annee
+        );
+
+        if(commande == null)
+            throw new RessourceNotFoundException("Commande demandée introuvable");
+
+        PrpCmdPrlvUsrCodeDto response = PrpCdePrlvUsrCodeMapper.toPrpCmdPrlvUsrCodeDto(commande);
 
         return response;
     }
