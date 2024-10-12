@@ -3,7 +3,10 @@ package dz.a2s.a2spreparation.services;
 import dz.a2s.a2spreparation.dto.affectation.PrpCmdPrlvDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
+import dz.a2s.a2spreparation.entities.keys.StkListesId;
+import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
 import dz.a2s.a2spreparation.entities.views.PrpCdeUsrCode;
+import dz.a2s.a2spreparation.entities.views.VentePrlvDetails;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -28,4 +31,7 @@ public interface PreparationService {
 
 
     PrpCmdPrlvUsrCodeDto getOneCmdPrlv(Integer id, String type, Integer annee);
+
+    List<VentePrlvDetails> getDetailsVentePrlv(StkListesId id);
+
 }

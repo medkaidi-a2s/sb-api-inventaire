@@ -3,13 +3,17 @@ package dz.a2s.a2spreparation.services.impl;
 import dz.a2s.a2spreparation.dto.affectation.PrpCmdPrlvDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
+import dz.a2s.a2spreparation.entities.keys.StkListesId;
+import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
 import dz.a2s.a2spreparation.entities.views.PrpCdePrlvUsrCode;
 import dz.a2s.a2spreparation.entities.views.PrpCdeUsrCode;
+import dz.a2s.a2spreparation.entities.views.VentePrlvDetails;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdePrlvUsrCodeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdeUsrCodeMapper;
 import dz.a2s.a2spreparation.repositories.views.PrpCdePrlvUsrCodeRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpCdeUsrCodeRepository;
+import dz.a2s.a2spreparation.repositories.views.VentePrlvDetailsRepository;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import dz.a2s.a2spreparation.services.PreparationService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,7 @@ public class PreparationServiceImpl implements PreparationService {
     private final CustomUserDetailsService customUserDetailsService;
     private final PrpCdePrlvUsrCodeRepository prpCdePrlvUsrCodeRepository;
     private final PrpCdeUsrCodeRepository prpCdeUsrCodeRepository;
+    private final VentePrlvDetailsRepository ventePrlvDetailsRepository;
 
     @Override
     public List<PrpCdeUsrCodeDto> getCommandes(String date) {
@@ -116,5 +121,22 @@ public class PreparationServiceImpl implements PreparationService {
         PrpCmdPrlvUsrCodeDto response = PrpCdePrlvUsrCodeMapper.toPrpCmdPrlvUsrCodeDto(commande);
 
         return response;
+    }
+
+    @Override
+    public List<VentePrlvDetails> getDetailsVentePrlv(StkListesId id) {
+        log.info("Entering the getDetailsVentePrlv method from the PreparationService with {}", id);
+
+        List<VentePrlvDetails> details = this.ventePrlvDetailsRepository.getDetailsByVente(
+                id.getSltCmpId(),
+                id.getSltId(),
+                id.getSltType(),
+                id.getSltAnnee()
+        );
+
+        if(details.isEmpty())
+            throw new RessourceNotFoundException("Aucun détails n'est associé à cette commande");
+
+        return details;
     }
 }
