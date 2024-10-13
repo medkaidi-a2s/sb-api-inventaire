@@ -1,18 +1,25 @@
 package dz.a2s.a2spreparation.services.impl;
 
 import dz.a2s.a2spreparation.dto.affectation.PrpCmdPrlvDto;
+import dz.a2s.a2spreparation.dto.preparation.LigneDto;
+import dz.a2s.a2spreparation.dto.preparation.LignePrlvDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
+import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
 import dz.a2s.a2spreparation.entities.views.PrpCdePrlvUsrCode;
 import dz.a2s.a2spreparation.entities.views.PrpCdeUsrCode;
+import dz.a2s.a2spreparation.entities.views.VenteDetails;
 import dz.a2s.a2spreparation.entities.views.VentePrlvDetails;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdePrlvUsrCodeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdeUsrCodeMapper;
+import dz.a2s.a2spreparation.mappers.preparation.VenteDetailsMapper;
+import dz.a2s.a2spreparation.mappers.preparation.VentePrlvDetailsMapper;
 import dz.a2s.a2spreparation.repositories.views.PrpCdePrlvUsrCodeRepository;
 import dz.a2s.a2spreparation.repositories.views.PrpCdeUsrCodeRepository;
+import dz.a2s.a2spreparation.repositories.views.VenteDetailsRepository;
 import dz.a2s.a2spreparation.repositories.views.VentePrlvDetailsRepository;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import dz.a2s.a2spreparation.services.PreparationService;
@@ -30,6 +37,7 @@ public class PreparationServiceImpl implements PreparationService {
     private final PrpCdePrlvUsrCodeRepository prpCdePrlvUsrCodeRepository;
     private final PrpCdeUsrCodeRepository prpCdeUsrCodeRepository;
     private final VentePrlvDetailsRepository ventePrlvDetailsRepository;
+    private final VenteDetailsRepository venteDetailsRepository;
 
     @Override
     public List<PrpCdeUsrCodeDto> getCommandes(String date) {
@@ -124,7 +132,7 @@ public class PreparationServiceImpl implements PreparationService {
     }
 
     @Override
-    public List<VentePrlvDetails> getDetailsVentePrlv(StkListesId id) {
+    public List<LignePrlvDto> getDetailsVentePrlv(StkListesId id) {
         log.info("Entering the getDetailsVentePrlv method from the PreparationService with {}", id);
 
         List<VentePrlvDetails> details = this.ventePrlvDetailsRepository.getDetailsByVente(
@@ -137,6 +145,28 @@ public class PreparationServiceImpl implements PreparationService {
         if(details.isEmpty())
             throw new RessourceNotFoundException("Aucun détails n'est associé à cette commande");
 
-        return details;
+        List<LignePrlvDto> response = details.stream().map(VentePrlvDetailsMapper::toLignePrlvDto).toList();
+
+        return response;
+    }
+
+    @Override
+    public List<LigneDto> getDetailsVente(VenteId id) {
+        log.info("Entering the getDetailsVente method from the PreparationService");
+
+        List<VenteDetails> details = this.venteDetailsRepository.getDetailsByVente(
+                id.getVntCmpId(),
+                id.getVntId(),
+                id.getVntType(),
+                id.getVntStkCode()
+        );
+
+        if(details.isEmpty())
+            throw new RessourceNotFoundException("Aucune lignes pour la commande spécifiée");
+
+        log.info("Retruning results from the PreparationService with length {}", details.size());
+        List<LigneDto> response = details.stream().map(VenteDetailsMapper::toLigneDto).toList();
+
+        return response;
     }
 }

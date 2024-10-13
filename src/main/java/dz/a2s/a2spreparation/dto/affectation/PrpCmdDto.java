@@ -23,6 +23,6 @@ public class PrpCmdDto {
     private Date creerDate;
     private String portefeuille;
     private String frigPsycho;
-    private String status;
+    private String statut;
 
 }

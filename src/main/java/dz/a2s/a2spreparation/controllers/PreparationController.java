@@ -2,11 +2,15 @@ package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
+import dz.a2s.a2spreparation.dto.preparation.LigneDto;
+import dz.a2s.a2spreparation.dto.preparation.LignePrlvDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
+import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
+import dz.a2s.a2spreparation.entities.views.VenteDetails;
 import dz.a2s.a2spreparation.entities.views.VentePrlvDetails;
 import dz.a2s.a2spreparation.services.PreparationService;
 import lombok.RequiredArgsConstructor;
@@ -71,13 +75,13 @@ public class PreparationController {
     }
 
     @GetMapping("/commande-preleve/details")
-    public ResponseEntity<SuccessResponseDto<List<VentePrlvDetails>>> getDetailsVentePrlv(
+    public ResponseEntity<SuccessResponseDto<List<LignePrlvDto>>> getDetailsVentePrlv(
             @RequestParam Integer cmpId,
             @RequestParam Integer id,
             @RequestParam String type,
             @RequestParam Integer annee
     ) {
-        List<VentePrlvDetails> details = this.preparationService.getDetailsVentePrlv(
+        List<LignePrlvDto> details = this.preparationService.getDetailsVentePrlv(
             new StkListesId(
                 cmpId,
                 id,
@@ -86,9 +90,34 @@ public class PreparationController {
             )
         );
 
-        SuccessResponseDto<List<VentePrlvDetails>> response = new SuccessResponseDto<>(
+        SuccessResponseDto<List<LignePrlvDto>> response = new SuccessResponseDto<>(
                 200,
                 "Détails de la commande par prélévement",
+                details
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/commande/details")
+    public ResponseEntity<SuccessResponseDto<List<LigneDto>>> getDetailsVente(
+            @RequestParam Integer cmpId,
+            @RequestParam Integer id,
+            @RequestParam String type,
+            @RequestParam String stkCode
+    ) {
+        log.info("Entering the getDetailsVente method from the PreparationController");
+
+        List<LigneDto> details = this.preparationService.getDetailsVente(new VenteId(
+           cmpId,
+           id,
+           type,
+           stkCode
+        ));
+
+        SuccessResponseDto<List<LigneDto>> response = new SuccessResponseDto<>(
+                200,
+                "Détails de la commande",
                 details
         );
 

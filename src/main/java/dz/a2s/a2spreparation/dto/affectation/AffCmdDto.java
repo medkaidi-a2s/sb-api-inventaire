@@ -27,7 +27,7 @@ public class AffCmdDto {
     private String verificateur2;
     private String prepare;
     private String frigPsycho;
-    private String status;
+    private String statut;
     private String zone;
 
 }

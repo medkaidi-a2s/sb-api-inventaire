@@ -1,0 +1,62 @@
+package dz.a2s.a2spreparation.entities.views;
+
+
+import dz.a2s.a2spreparation.entities.keys.VenteDetailsId;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Entity
+@Immutable
+@Table(name = "PRP_VENTE_DETAILS")
+public class VenteDetails {
+
+    @Id
+    @EmbeddedId
+    private VenteDetailsId id;
+
+    @Column(name = "VND_ANNEE")
+    private Integer vndAnnee;
+
+    @Column(name = "VND_MED_ID")
+    private Integer vndMedId;
+
+    @Column(name = "VND_NLOT")
+    private String vndNLot;
+
+    @Column(name = "VND_DATE_PEREMPTION")
+    private Date datePeremption;
+
+    @Column(name = "VND_QTE_CDE")
+    private Integer qteCde;
+
+    @Column(name = "VND_MONT_TTC")
+    private BigDecimal montantTtc;
+
+    @Column(name = "VND_REMARQUE")
+    private String vndRemarque;
+
+    @Column(name = "VND_CREER_PAR")
+    private String creerPar;
+
+    @Column(name = "VND_PREPARE_FLAG")
+    private Boolean prepareFlag;
+
+    @Column(name = "VND_QTE_PREPARE")
+    private Integer qtePrepare;
+
+    @Column(name = "MED_COMMERCIAL_NAME")
+    private String medCommercialName;
+
+    @Column(name = "VND_PRIX_PPA")
+    private BigDecimal ppa;
+
+}
