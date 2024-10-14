@@ -25,4 +25,19 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
             @Param("code") String code
     );
 
+    @Query(value = """
+            SELECT *
+            FROM PRP_ZONE_DETAILS
+            WHERE VND_CMP_ID = :cmpId
+              AND VND_VNT_ID = :id
+              AND VND_VNT_TYPE = :type
+              AND VND_STK_CODE = :code
+            """, nativeQuery = true)
+    List<VenteDetails> getDetailsByVenteZone(
+            @Param("cmpId") Integer cmpId,
+            @Param("id") Integer id,
+            @Param("type") String type,
+            @Param("code") String code
+    );
+
 }

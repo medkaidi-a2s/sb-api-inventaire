@@ -30,18 +30,24 @@ public class AffectationServiceImpl implements AffectationService {
     private final PrpCdePrlvPrepContRepository prpCdePrlvPrepContRepository;
 
     @Override
-    public List<AffCmdDto> getListCmdZones() throws RessourceNotFoundException {
+    public List<AffZoneDto> getListCmdZones() throws RessourceNotFoundException {
         log.info("Entering getListCmdZones method from the AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Fetching orders for the company {}", companyId);
 
+        String preparationZone = this.customUserDetailsService.getPreparationZone();
+        log.info("Fetching the preparation zone for the logged user {}", preparationZone);
+
+        Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
+        log.info("Fetching the current user id to filter the orders {}", preparateurId);
+
         log.info("Fetching data from the repo");
-        List<PrpCdeZone> listeCommandes = this.prpListeCdeZonesRepository.getListCmdZones(companyId);
+        List<PrpCdeZone> listeCommandes = this.prpListeCdeZonesRepository.getListCmdZones(companyId, preparationZone, preparateurId);
         log.info("Data fetched from the repo length = {}", listeCommandes.size());
 
         log.info("Mapping entity classes to DTOs");
-        List<AffCmdDto> commandes = listeCommandes.stream().map(CommandeMapper::toAffZoneCmdDto).toList();
+        List<AffZoneDto> commandes = listeCommandes.stream().map(CommandeMapper::toAffZoneCmdDto).toList();
         log.info("Entity classes mapped to DTOs with length {}", commandes.size());
 
         return commandes;

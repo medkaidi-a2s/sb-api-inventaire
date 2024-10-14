@@ -2,6 +2,7 @@ package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneDto;
 import dz.a2s.a2spreparation.dto.preparation.LignePrlvDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
@@ -124,6 +125,31 @@ public class PreparationController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/commande-zone/details")
+    public ResponseEntity<SuccessResponseDto<List<LigneDto>>> getDetailsVenteZone(
+            @RequestParam Integer cmpId,
+            @RequestParam Integer id,
+            @RequestParam String type,
+            @RequestParam String stkCode
+    ) {
+        log.info("Entering the getDetailsVente method from the PreparationController");
+
+        List<LigneDto> details = this.preparationService.getDetailsVenteZone(new VenteId(
+                cmpId,
+                id,
+                type,
+                stkCode
+        ));
+
+        SuccessResponseDto<List<LigneDto>> response = new SuccessResponseDto<>(
+                200,
+                "Détails de la commande",
+                details
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
     @PatchMapping("/commande/start-prep-cde")
     public ResponseEntity<SuccessResponseDto<Integer>> startPrepareCde(@RequestBody CmdIdDto commande) throws Exception {
         log.info("Entering the method startPrepareCde from the PreparationController");
@@ -133,6 +159,27 @@ public class PreparationController {
                 commande.getId(),
                 commande.getType(),
                 commande.getStkCode()
+        );
+
+        SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Commande mis à jour avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @PatchMapping("/commande/start-prep-zone")
+    public ResponseEntity<SuccessResponseDto<Integer>> startPrepareZone(@RequestBody CmdZoneIdDto commande) throws Exception {
+        log.info("Entering the method startPrepareZone from the PreparationController with {}", commande);
+
+        Integer response = this.preparationService.startPrepareZone(
+                commande.getCmpId(),
+                commande.getId(),
+                commande.getType(),
+                commande.getStkCode(),
+                commande.getZone()
         );
 
         SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(

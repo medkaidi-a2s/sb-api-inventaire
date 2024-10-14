@@ -20,16 +20,16 @@ public class AffectationController {
     private final AffectationService affectationService;
 
     @GetMapping("commandes-zones")
-    public ResponseEntity<SuccessResponseDto<List<AffCmdDto>>> getListeCmdPrpZone() {
+    public ResponseEntity<SuccessResponseDto<List<AffZoneDto>>> getListeCmdPrpZone() {
         log.info("Entering the getListeCmdPrpZone from the AffectationController");
 
         log.info("Fetching liste des commandes from the service");
-        List<AffCmdDto> commandes = this.affectationService.getListCmdZones();
+        List<AffZoneDto> commandes = this.affectationService.getListCmdZones();
         log.info("Data fetched from the service length = {}", commandes.size());
 
-        SuccessResponseDto<List<AffCmdDto>> successResponseDto = new SuccessResponseDto<>(
+        SuccessResponseDto<List<AffZoneDto>> successResponseDto = new SuccessResponseDto<>(
                 200,
-                "Liste des commandes déjà affectées par zone",
+                "Liste des commandes par zone",
                 commandes
         );
 

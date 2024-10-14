@@ -45,4 +45,26 @@ public class CustomUserDetailsService implements UserDetailsService {
         String[] split = username.split(":");
         return split[1];
     }
+
+    public String getPreparationZone() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String[] split = username.split(":");
+        Integer companyId = Integer.parseInt(split[0]);
+        String userCode = split[1];
+
+        String preparationZone = this.userEntityRepository.getPreparationZone(userCode, companyId);
+
+        return preparationZone;
+    }
+
+    public Integer getUtilisateurId() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String[] split = username.split(":");
+        Integer companyId = Integer.parseInt(split[0]);
+        String userCode = split[1];
+
+        Integer id = this.userEntityRepository.getUtilisateurId(userCode, companyId);
+
+        return id;
+    }
 }

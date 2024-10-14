@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AffectationService {
 
-    List<AffCmdDto> getListCmdZones();
+    List<AffZoneDto> getListCmdZones();
 
     List<PrpCmdDto> getListCmd(String date);
 

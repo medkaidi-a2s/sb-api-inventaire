@@ -33,11 +33,21 @@ public interface PreparationService {
             String p_vnt_stk_code
     ) throws Exception;
 
+    Integer startPrepareZone(
+            int v_vbz_cmp_id,
+            int v_vbz_vnt_id,
+            String v_vbz_vnt_type,
+            String v_vbz_stk_code,
+            int v_vbz_zone
+    ) throws Exception;
+
 
     PrpCmdPrlvUsrCodeDto getOneCmdPrlv(Integer id, String type, Integer annee);
 
     List<LignePrlvDto> getDetailsVentePrlv(StkListesId id);
 
     List<LigneDto> getDetailsVente(VenteId id);
+
+    List<LigneDto> getDetailsVenteZone(VenteId id);
 
 }

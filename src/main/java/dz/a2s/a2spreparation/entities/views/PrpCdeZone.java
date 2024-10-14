@@ -1,6 +1,7 @@
 package dz.a2s.a2spreparation.entities.views;
 
 import dz.a2s.a2spreparation.entities.keys.VenteId;
+import dz.a2s.a2spreparation.entities.keys.VenteZoneId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class PrpCdeZone {
 
     @Id
     @EmbeddedId
-    private VenteId id;
+    private VenteZoneId id;
 
     @Column(name = "REFERENCE")
     private String reference;

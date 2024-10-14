@@ -1,8 +1,6 @@
 package dz.a2s.a2spreparation.mappers.affectation;
 
-import dz.a2s.a2spreparation.dto.affectation.AffCmdDto;
-import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
-import dz.a2s.a2spreparation.dto.affectation.PrpCmdDto;
+import dz.a2s.a2spreparation.dto.affectation.*;
 import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import dz.a2s.a2spreparation.entities.views.PrpCommande;
 
@@ -65,15 +63,16 @@ public class CommandeMapper {
         return dto;
     }
 
-    public static AffCmdDto toAffZoneCmdDto(PrpCdeZone commande) {
-        CmdIdDto id = new CmdIdDto(
+    public static AffZoneDto toAffZoneCmdDto(PrpCdeZone commande) {
+        CmdZoneIdDto id = new CmdZoneIdDto(
                 commande.getId().getVntCmpId(),
                 commande.getId().getVntId(),
                 commande.getId().getVntType(),
-                commande.getId().getVntStkCode()
+                commande.getId().getVntStkCode(),
+                commande.getId().getVbzZone()
         );
 
-        AffCmdDto dto = new AffCmdDto(
+        AffZoneDto dto = new AffZoneDto(
                 id,
                 commande.getReference(),
                 commande.getVntDate(),

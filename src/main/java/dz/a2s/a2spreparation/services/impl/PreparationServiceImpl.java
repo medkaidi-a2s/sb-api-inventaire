@@ -17,10 +17,7 @@ import dz.a2s.a2spreparation.mappers.preparation.PrpCdePrlvUsrCodeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdeUsrCodeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.VenteDetailsMapper;
 import dz.a2s.a2spreparation.mappers.preparation.VentePrlvDetailsMapper;
-import dz.a2s.a2spreparation.repositories.views.PrpCdePrlvUsrCodeRepository;
-import dz.a2s.a2spreparation.repositories.views.PrpCdeUsrCodeRepository;
-import dz.a2s.a2spreparation.repositories.views.VenteDetailsRepository;
-import dz.a2s.a2spreparation.repositories.views.VentePrlvDetailsRepository;
+import dz.a2s.a2spreparation.repositories.views.*;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import dz.a2s.a2spreparation.services.PreparationService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +33,7 @@ public class PreparationServiceImpl implements PreparationService {
     private final CustomUserDetailsService customUserDetailsService;
     private final PrpCdePrlvUsrCodeRepository prpCdePrlvUsrCodeRepository;
     private final PrpCdeUsrCodeRepository prpCdeUsrCodeRepository;
+    private final PrpListeCdeZonesRepository prpListeCdeZonesRepository;
     private final VentePrlvDetailsRepository ventePrlvDetailsRepository;
     private final VenteDetailsRepository venteDetailsRepository;
 
@@ -110,6 +108,30 @@ public class PreparationServiceImpl implements PreparationService {
     }
 
     @Override
+    public Integer startPrepareZone(int v_vbz_cmp_id, int v_vbz_vnt_id, String v_vbz_vnt_type, String v_vbz_stk_code, int v_vbz_zone) throws Exception{
+        log.info("Entering the method startPrepareZone from the PreparationService");
+
+        Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
+        log.info("Fetched the preparateur id from the repo {}", preparateurId);
+
+        Integer response = this.prpListeCdeZonesRepository.startPrepareZone(
+                v_vbz_cmp_id,
+                v_vbz_vnt_id,
+                v_vbz_vnt_type,
+                v_vbz_stk_code,
+                v_vbz_zone,
+                preparateurId
+        );
+
+        log.info("Valeur de retour de la stored procedure for starting preparation par zone is {}", response);
+
+        if(response != 0)
+            throw new Exception("Erreur lors de la mise à jour de la commande par zone");
+
+        return response;
+    }
+
+    @Override
     public PrpCmdPrlvUsrCodeDto getOneCmdPrlv(Integer id, String type, Integer annee) {
         log.info("Entering the getOneCmdPrlv method from the PreparationService");
 
@@ -142,9 +164,6 @@ public class PreparationServiceImpl implements PreparationService {
                 id.getSltAnnee()
         );
 
-        if(details.isEmpty())
-            throw new RessourceNotFoundException("Aucun détails n'est associé à cette commande");
-
         List<LignePrlvDto> response = details.stream().map(VentePrlvDetailsMapper::toLignePrlvDto).toList();
 
         return response;
@@ -161,8 +180,22 @@ public class PreparationServiceImpl implements PreparationService {
                 id.getVntStkCode()
         );
 
-        if(details.isEmpty())
-            throw new RessourceNotFoundException("Aucune lignes pour la commande spécifiée");
+        log.info("Retruning results from the PreparationService with length {}", details.size());
+        List<LigneDto> response = details.stream().map(VenteDetailsMapper::toLigneDto).toList();
+
+        return response;
+    }
+
+    @Override
+    public List<LigneDto> getDetailsVenteZone(VenteId id) {
+        log.info("Entering the getDetailsVenteZone method from the PreparationService");
+
+        List<VenteDetails> details = this.venteDetailsRepository.getDetailsByVenteZone(
+                id.getVntCmpId(),
+                id.getVntId(),
+                id.getVntType(),
+                id.getVntStkCode()
+        );
 
         log.info("Retruning results from the PreparationService with length {}", details.size());
         List<LigneDto> response = details.stream().map(VenteDetailsMapper::toLigneDto).toList();
