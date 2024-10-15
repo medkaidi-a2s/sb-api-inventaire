@@ -24,6 +24,10 @@ public class LigneDto {
     private String remarque;
     private Boolean prepareFlag;
     private Integer qtePrepare;
+    private Boolean controlFlag;
+    private Integer qteControl;
+    private Boolean controlFlag2;
+    private Integer qteControl2;
     private String commercialName;
     private BigDecimal ppa;
 

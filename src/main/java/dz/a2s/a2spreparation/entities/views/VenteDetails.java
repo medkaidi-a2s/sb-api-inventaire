@@ -53,6 +53,18 @@ public class VenteDetails {
     @Column(name = "VND_QTE_PREPARE")
     private Integer qtePrepare;
 
+    @Column(name = "VND_CONTROLE_FLAG1")
+    private Boolean controlFlag;
+
+    @Column(name = "VND_CONTROLE_QTE1")
+    private Integer qteControle;
+
+    @Column(name = "VND_CONTROLE_FLAG2")
+    private Boolean controlFlag2;
+
+    @Column(name = "VND_CONTROLE_QTE2")
+    private Integer qteControle2;
+
     @Column(name = "MED_COMMERCIAL_NAME")
     private String medCommercialName;
 

@@ -18,6 +18,10 @@ public class VenteDetailsMapper {
                 ligne.getVndRemarque(),
                 ligne.getPrepareFlag(),
                 ligne.getQtePrepare(),
+                ligne.getControlFlag(),
+                ligne.getQteControle(),
+                ligne.getControlFlag2(),
+                ligne.getQteControle2(),
                 ligne.getMedCommercialName(),
                 ligne.getPpa()
         );

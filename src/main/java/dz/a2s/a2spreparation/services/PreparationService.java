@@ -50,4 +50,13 @@ public interface PreparationService {
 
     List<LigneDto> getDetailsVenteZone(VenteId id);
 
+    Integer setPreparedQuantity(
+            Integer cmpId,
+            Integer id,
+            String type,
+            String stkCode,
+            Integer no,
+            Integer qte
+    ) throws Exception;
+
 }

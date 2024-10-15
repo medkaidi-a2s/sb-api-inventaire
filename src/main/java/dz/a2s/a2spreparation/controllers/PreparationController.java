@@ -3,10 +3,7 @@ package dz.a2s.a2spreparation.controllers;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
-import dz.a2s.a2spreparation.dto.preparation.LigneDto;
-import dz.a2s.a2spreparation.dto.preparation.LignePrlvDto;
-import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
-import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
+import dz.a2s.a2spreparation.dto.preparation.*;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
@@ -207,6 +204,28 @@ public class PreparationController {
                 "Commande mis à jour avec succès",
                 response
         );
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @PatchMapping("/commande/set-prep-quantity")
+    public ResponseEntity<SuccessResponseDto<Integer>> setPreparedQuantity(@RequestBody LigneQteDto ligne) throws Exception {
+        log.info("Entering the setPreparedQuantity method from the PreparationController with {}", ligne);
+
+        Integer response = this.preparationService.setPreparedQuantity(
+                ligne.getCmpId(),
+                ligne.getId(),
+                ligne.getType(),
+                ligne.getStkCode(),
+                ligne.getNo(),
+                ligne.getQte()
+        );
+
+        SuccessResponseDto successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Quantité préparée mis à jour avec succès",
+                response
+        );
+
         return ResponseEntity.ok(successResponseDto);
     }
 

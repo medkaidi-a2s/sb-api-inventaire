@@ -1,13 +1,11 @@
 package dz.a2s.a2spreparation.services.impl;
 
-import dz.a2s.a2spreparation.dto.affectation.PrpCmdPrlvDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneDto;
 import dz.a2s.a2spreparation.dto.preparation.LignePrlvDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
-import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
 import dz.a2s.a2spreparation.entities.views.PrpCdePrlvUsrCode;
 import dz.a2s.a2spreparation.entities.views.PrpCdeUsrCode;
 import dz.a2s.a2spreparation.entities.views.VenteDetails;
@@ -199,6 +197,27 @@ public class PreparationServiceImpl implements PreparationService {
 
         log.info("Retruning results from the PreparationService with length {}", details.size());
         List<LigneDto> response = details.stream().map(VenteDetailsMapper::toLigneDto).toList();
+
+        return response;
+    }
+
+    @Override
+    public Integer setPreparedQuantity(Integer cmpId, Integer id, String type, String stkCode, Integer no, Integer qte) throws Exception {
+        log.info("Entering the setPreparedQuantity method from the PreparationService");
+
+        Integer response = this.venteDetailsRepository.setPreparedQuantity(
+                cmpId,
+                id,
+                type,
+                stkCode,
+                no,
+                qte
+        );
+
+        log.info("Réponse de la requête de mise à jour de la quantité préparée {}", response);
+
+        if(response == 0)
+            throw new Exception("Une erreur est survenu lors de la mise à jour de la quantité préparé pour la commande spécifiée");
 
         return response;
     }

@@ -22,12 +22,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorObject> handleNotFoundException(RessourceNotFoundException ex) {
         log.info("Entering notFoundExceptionHandler from the GlobalExceptionsHandler with message {}", ex.getMessage());
 
-        ErrorObject errorObject = new ErrorObject();
-
-        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
-        errorObject.setMessage(ex.getMessage());
-        errorObject.setTimestamp(new Date());
-//        errorObject.setError(ex);
+        ErrorObject errorObject = ErrorObject.builder()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                        .timestamp(new Date())
+                                .message("La ressource demandée est introuvable")
+                                        .build();
 
         log.info("Returning the following error {}", errorObject.getMessage());
         return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
@@ -56,6 +55,8 @@ public class GlobalExceptionHandler {
            return fieldError.getField() + " : " + fieldError.getDefaultMessage();
         }).toList();
 
+        log.info("Détails de l'erreur de validation {}", errors);
+
         ErrorObject errorObject =  ErrorObject
                 .builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
@@ -71,26 +72,26 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorObject> handleException(Exception ex) {
         log.info("Entering handleException from the GlobalHandleException with message {}", ex.getMessage());
 
-        ErrorObject errorObject = new ErrorObject();
-
-        errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        errorObject.setMessage(ex.getMessage());
-        errorObject.setTimestamp(new Date());
-//        errorObject.setError(ex);
+        ErrorObject errorObject = ErrorObject.builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                        .message("Une erreur interne s'est produite, veuillez contacter votre administrateur.")
+                                .timestamp(new Date())
+                                        .build();
 
         log.info("Returning the following error {}", errorObject.getMessage());
 
         return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorObject> handleRuntimeException(RuntimeException ex) {
         log.info("Entering handleRuntimeException from the GlobalHandleException with message {}", ex.getMessage());
 
-        ErrorObject errorObject = new ErrorObject();
-        errorObject.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        errorObject.setMessage(ex.getMessage());
-        errorObject.setTimestamp(new Date());
-//        errorObject.setError(ex);
+        ErrorObject errorObject = ErrorObject.builder()
+                        .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                                .message("Une erreur interne s'est produite en cours d'exécution de l'application, veuillez contacter votre administrateur.")
+                                        .timestamp(new Date())
+                                                .build();
 
         log.info("Returning the following error {}", ex.getMessage());
 
