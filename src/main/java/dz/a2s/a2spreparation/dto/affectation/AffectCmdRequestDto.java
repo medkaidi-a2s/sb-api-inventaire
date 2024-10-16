@@ -11,8 +11,8 @@ public class AffectCmdRequestDto {
 
     private int p_cmp;
     private int p_vnt;
-    private int p_stk;
-    private int p_type;
+    private String p_stk;
+    private String p_type;
     private int p_prp;
     private int p_cnt1;
     private int p_cnt2;

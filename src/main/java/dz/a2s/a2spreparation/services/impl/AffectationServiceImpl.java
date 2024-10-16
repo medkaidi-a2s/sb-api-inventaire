@@ -145,7 +145,7 @@ public class AffectationServiceImpl implements AffectationService {
     }
 
     @Override
-    public AffectCmdResultDto affectCmdPrp(int p_cmp, int p_vnt, int p_stk, int p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
+    public AffectCmdResultDto affectCmdPrp(int p_cmp, int p_vnt, String p_stk, String p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
         AffectCmdResultDto result;
         int response = this.prpCommandeRepository.affectCommandePrp(
                 p_cmp,
@@ -168,6 +168,41 @@ public class AffectationServiceImpl implements AffectationService {
         }
 
         return result;
+    }
+
+    @Override
+    public PrpCdePrepCont editAffectCmdPrp(int p_cmp, int p_vnt, String p_stk, String p_type, int p_prp, int p_cnt1, int p_cnt2) throws Exception {
+        log.info("Entering editAffectCmdPrp method from the AffectationService");
+
+        String username = this.customUserDetailsService.getCurrentUserCode();
+        log.info("Entering the getCommandes method from the PreparationService with username {}", username);
+
+        Integer response = this.prpCommandeRepository.editAffectCommandePrp(
+                p_cmp,
+                p_vnt,
+                p_stk,
+                p_type,
+                p_prp,
+                p_cnt1,
+                p_cnt2,
+                username
+        );
+
+        log.info("Réponse de la procédure stockée de réaffectation des commandes {}", response);
+
+        if(response != 0)
+            throw new Exception("La réaffectation de cette commande n'a pas pu s'effectuer");
+
+        PrpCdePrepCont entity = this.prpCdePrepContRepository.getPrepCont(
+                p_cmp,
+                p_vnt,
+                p_type,
+                p_stk
+        );
+
+        log.info("Edited entity return from the repo {}", entity);
+
+        return entity;
     }
 
     @Override

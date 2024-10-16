@@ -17,7 +17,7 @@ public class AffCmdPrlvDto {
     private String zone;
     private String client;
     private String region;
-    private Integer nbrLignes;
+    private Integer nbrLigne;
     private String preparateur;
     private String verificateur;
     private String verificateur2;

@@ -163,6 +163,29 @@ public class AffectationController {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("commandes/preparateur-controleurs")
+    public ResponseEntity<SuccessResponseDto<PrpCdePrepCont>> editAffectCmdPrp(@RequestBody AffectCmdRequestDto dto) throws Exception{
+        log.info("Entering the editAffectCmdPrpPrlv from the AffectationController");
+
+        PrpCdePrepCont prpCdePrlvPrepCont = this.affectationService.editAffectCmdPrp(
+                dto.getP_cmp(),
+                dto.getP_vnt(),
+                dto.getP_stk(),
+                dto.getP_type(),
+                dto.getP_prp(),
+                dto.getP_cnt1(),
+                dto.getP_cnt2()
+        );
+
+        SuccessResponseDto<PrpCdePrepCont> response = new SuccessResponseDto<>(
+                200,
+                "Réaffectation effectuée avec succès",
+                prpCdePrlvPrepCont
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/affect-commande")
     public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrp(@RequestBody List<AffectCmdRequestDto> commandes) {
         log.info("Entering the affectation method with {}", commandes);

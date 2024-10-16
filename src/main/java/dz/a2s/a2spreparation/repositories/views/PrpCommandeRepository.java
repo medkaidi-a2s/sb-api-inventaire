@@ -33,8 +33,20 @@ public interface PrpCommandeRepository extends JpaRepository<PrpCommande, VenteI
     Integer affectCommandePrp(
             @Param("p_cmp") int p_cmp,
             @Param("p_vnt") int p_vnt,
-            @Param("p_stk") int p_stk,
-            @Param("p_type") int p_type,
+            @Param("p_stk") String p_stk,
+            @Param("p_type") String p_type,
+            @Param("p_prp") int p_prp,
+            @Param("p_cnt1") int p_cnt1,
+            @Param("p_cnt2") int p_cnt2,
+            @Param("p_user") String p_user
+    );
+
+    @Procedure(procedureName = "logistiques.p_edit_affcte_cde_prepare", outputParameterName = "p_msg")
+    Integer editAffectCommandePrp(
+            @Param("p_cmp") int p_cmp,
+            @Param("p_vnt") int p_vnt,
+            @Param("p_stk") String p_stk,
+            @Param("p_type") String p_type,
             @Param("p_prp") int p_prp,
             @Param("p_cnt1") int p_cnt1,
             @Param("p_cnt2") int p_cnt2,

@@ -17,7 +17,7 @@ public class PrpCmdPrlvDto {
     private String zone;
     private String client;
     private String region;
-    private Integer nbrLignes;
+    private Integer nbrLigne;
     private String statut;
     private String creerPar;
 

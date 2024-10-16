@@ -24,13 +24,21 @@ public interface AffectationService {
 
     AffectCmdResultDto affectCmdPrp(int p_cmp,
                                     int p_vnt,
-                                    int p_stk,
-                                    int p_type,
+                                    String p_stk,
+                                    String p_type,
                                     int p_prp,
                                     int p_cnt1,
                                     int p_cnt2,
                                     String p_user,
                                     String reference);
+
+    PrpCdePrepCont editAffectCmdPrp(int p_cmp,
+                                        int p_vnt,
+                                        String p_stk,
+                                        String p_type,
+                                        int p_prp,
+                                        int p_cnt1,
+                                        int p_cnt2) throws Exception;
 
     AffectCmdResultDto affectCmdPrpPrlv(
             int p_cmp,
