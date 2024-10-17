@@ -17,7 +17,7 @@ public interface PrpListeCdeZonesRepository extends JpaRepository<PrpCdeZone, Ve
                 FROM PRP_LISTE_CDE_ZONES_GLOB 
                 WHERE VNT_CMP_ID = :companyId
                   AND ZONE = :zone 
-                  AND VBZ_STATUT_PREPARE = 0
+                  AND (VBZ_STATUT_PREPARE = 0  OR VBZ_STATUT_PREPARE IS NULL)
                   OR (VBZ_STATUT_PREPARE > 0 AND VBZ_PREPAR_ID = :preparId)
             """, nativeQuery = true)
     List<PrpCdeZone> getListCmdZones(@Param("companyId") Integer companyId, @Param("zone") String zone, @Param("preparId") Integer preparId);

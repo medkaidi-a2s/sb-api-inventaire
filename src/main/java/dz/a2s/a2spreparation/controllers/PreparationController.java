@@ -7,16 +7,16 @@ import dz.a2s.a2spreparation.dto.preparation.*;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
-import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
-import dz.a2s.a2spreparation.entities.views.VenteDetails;
-import dz.a2s.a2spreparation.entities.views.VentePrlvDetails;
+import dz.a2s.a2spreparation.entities.views.Motif;
 import dz.a2s.a2spreparation.services.PreparationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -26,10 +26,12 @@ public class PreparationController {
     private final PreparationService preparationService;
 
     @GetMapping("/commandes")
-    public ResponseEntity<SuccessResponseDto<List<PrpCdeUsrCodeDto>>> getCommandeParPreparateur(@RequestParam String date) {
-        log.info("Entering the getCommandeParPreparateur method from the PreparationController with date {}", date);
+    public ResponseEntity<SuccessResponseDto<List<PrpCdeUsrCodeDto>>> getCommandeParPreparateur(@RequestParam Optional<String> date) {
+        String reqDate = date.orElse("");
 
-        List<PrpCdeUsrCodeDto> commandes = this.preparationService.getCommandes(date);
+        log.info("Entering the getCommandeParPreparateur method from the PreparationController with date {}", reqDate);
+
+        List<PrpCdeUsrCodeDto> commandes = this.preparationService.getCommandes(reqDate);
         log.info("Commandes par préparateur fetched from the service with length {}", commandes.size());
 
         SuccessResponseDto<List<PrpCdeUsrCodeDto>> successResponseDto = new SuccessResponseDto<List<PrpCdeUsrCodeDto>>(
@@ -42,10 +44,12 @@ public class PreparationController {
     }
 
     @GetMapping("/commandes-preleve")
-    public ResponseEntity<SuccessResponseDto<List<PrpCmdPrlvUsrCodeDto>>> getCommandesPrlvParPreparateur(@RequestParam String date) {
-        log.info("Entering the getCommandesPrlvParPreparateur method from the PreparationController with date {}", date);
+    public ResponseEntity<SuccessResponseDto<List<PrpCmdPrlvUsrCodeDto>>> getCommandesPrlvParPreparateur(@RequestParam Optional<String> date) {
+        String reqDate = date.orElse("");
 
-        List<PrpCmdPrlvUsrCodeDto> commandes = this.preparationService.getCommandesPrlv(date);
+        log.info("Entering the getCommandesPrlvParPreparateur method from the PreparationController with date {}", reqDate);
+
+        List<PrpCmdPrlvUsrCodeDto> commandes = this.preparationService.getCommandesPrlv(reqDate);
         log.info("Commandes prélevement par préparateur fetched from the service with length {}", commandes.size());
 
         SuccessResponseDto successResponseDto = new SuccessResponseDto<>(
@@ -58,8 +62,11 @@ public class PreparationController {
     }
 
     @GetMapping("/commande-preleve")
-    public ResponseEntity<SuccessResponseDto<PrpCmdPrlvUsrCodeDto>> getOnePrlvCommande(@RequestParam String type, @RequestParam Integer annee, @RequestParam Integer id) {
-        log.info("Entering the getOnePrlvCommande from PreparationController");
+    public ResponseEntity<SuccessResponseDto<PrpCmdPrlvUsrCodeDto>> getOnePrlvCommande(@RequestParam String type, @RequestParam Integer annee, @RequestParam Integer id) throws Exception {
+        log.info("Entering the getOnePrlvCommande from PreparationController with id : {} type : {} annee : {}", id, type, annee);
+
+        if(id == 0 || type.isEmpty() || annee == 0)
+            throw new Exception("Paramètre manquant ou invalide");
 
         PrpCmdPrlvUsrCodeDto commande = this.preparationService.getOneCmdPrlv(id, type, annee);
 
@@ -78,7 +85,12 @@ public class PreparationController {
             @RequestParam Integer id,
             @RequestParam String type,
             @RequestParam Integer annee
-    ) {
+    ) throws Exception {
+       log.info("Entering the getDetailsVenteprlv method from the PreparationController with cmpId : {} id : {} type : {} annee : {}", cmpId, id, type, annee);
+
+       if(id == 0 || type.isEmpty() || cmpId == 0 || annee == 0)
+           throw new Exception("Paramètre manquant ou invalide");
+
         List<LignePrlvDto> details = this.preparationService.getDetailsVentePrlv(
             new StkListesId(
                 cmpId,
@@ -128,8 +140,11 @@ public class PreparationController {
             @RequestParam Integer id,
             @RequestParam String type,
             @RequestParam String stkCode
-    ) {
-        log.info("Entering the getDetailsVente method from the PreparationController");
+    ) throws Exception {
+        log.info("Entering the getDetailsVente method from the PreparationController with cmpId : {} id : {} type : {} stkCode : {}", cmpId, id, type, stkCode);
+
+        if(cmpId == 0 || id == 0 || type.isEmpty() || stkCode.isEmpty())
+            throw new Exception("Paramètres manquant ou invalide");
 
         List<LigneDto> details = this.preparationService.getDetailsVenteZone(new VenteId(
                 cmpId,
@@ -148,7 +163,7 @@ public class PreparationController {
     }
 
     @PatchMapping("/commande/start-prep-cde")
-    public ResponseEntity<SuccessResponseDto<Integer>> startPrepareCde(@RequestBody CmdIdDto commande) throws Exception {
+    public ResponseEntity<SuccessResponseDto<Integer>> startPrepareCde(@RequestBody @Valid CmdIdDto commande) throws Exception {
         log.info("Entering the method startPrepareCde from the PreparationController");
 
         Integer response = this.preparationService.startPrepareCde(
@@ -168,7 +183,7 @@ public class PreparationController {
     }
 
     @PatchMapping("/commande/start-prep-zone")
-    public ResponseEntity<SuccessResponseDto<Integer>> startPrepareZone(@RequestBody CmdZoneIdDto commande) throws Exception {
+    public ResponseEntity<SuccessResponseDto<Integer>> startPrepareZone(@RequestBody @Valid CmdZoneIdDto commande) throws Exception {
         log.info("Entering the method startPrepareZone from the PreparationController with {}", commande);
 
         Integer response = this.preparationService.startPrepareZone(
@@ -189,7 +204,7 @@ public class PreparationController {
     }
 
     @PatchMapping("/commande/start-prep-preleve")
-    public ResponseEntity<SuccessResponseDto<Integer>> startPreparePrlv(@RequestBody CmdPrlvIdDto commande) throws Exception {
+    public ResponseEntity<SuccessResponseDto<Integer>> startPreparePrlv(@RequestBody @Valid CmdPrlvIdDto commande) throws Exception {
         log.info("Entering the method startPreparePrlv from the PreparationController");
 
         Integer response = this.preparationService.startPreparePrlv(
@@ -208,7 +223,7 @@ public class PreparationController {
     }
 
     @PatchMapping("/commande/set-prep-quantity")
-    public ResponseEntity<SuccessResponseDto<Integer>> setPreparedQuantity(@RequestBody LigneQteDto ligne) throws Exception {
+    public ResponseEntity<SuccessResponseDto<Integer>> setPreparedQuantity(@RequestBody @Valid LigneQteDto ligne) throws Exception {
         log.info("Entering the setPreparedQuantity method from the PreparationController with {}", ligne);
 
         Integer response = this.preparationService.setPreparedQuantity(
@@ -224,6 +239,22 @@ public class PreparationController {
                 200,
                 "Quantité préparée mis à jour avec succès",
                 response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @GetMapping("/motifs")
+    public ResponseEntity<SuccessResponseDto<List<Motif>>> getAllMotifs() {
+        log.info("Entering the method getAllMotifs from the PreparationController");
+
+        List<Motif> motifs = this.preparationService.getAllMotif();
+        log.info("Fetched the list of motifs from the service {}", motifs);
+
+        SuccessResponseDto successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Liste des motifs",
+                motifs
         );
 
         return ResponseEntity.ok(successResponseDto);

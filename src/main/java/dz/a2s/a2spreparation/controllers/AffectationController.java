@@ -4,6 +4,7 @@ import dz.a2s.a2spreparation.dto.affectation.*;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.views.*;
 import dz.a2s.a2spreparation.services.AffectationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,11 +39,13 @@ public class AffectationController {
     }
 
     @GetMapping("commandes")
-    public ResponseEntity<SuccessResponseDto<List<PrpCmdDto>>> getListeCmdPrp(@RequestParam String date) {
-        log.info("Entering the getListeCmdPrp from the AffectationController date {}", date);
+    public ResponseEntity<SuccessResponseDto<List<PrpCmdDto>>> getListeCmdPrp(@RequestParam Optional<String> date) {
+        String reqDate = date.orElse("");
+
+        log.info("Entering the getListeCmdPrp from the AffectationController with reqDate {}", reqDate);
 
         log.info("Fetching liste des commandes from the service");
-        List<PrpCmdDto> commandes = this.affectationService.getListCmd(date);
+        List<PrpCmdDto> commandes = this.affectationService.getListCmd(reqDate);
         log.info("Data fetched from the service length = {}", commandes.size());
 
         SuccessResponseDto<List<PrpCmdDto>> successResponseDto = new SuccessResponseDto<>(
@@ -54,11 +58,13 @@ public class AffectationController {
     }
 
     @GetMapping("commandes/assigned")
-    public ResponseEntity<SuccessResponseDto<List<AffCmdDto>>> getListeCmdAssigned(@RequestParam String date) {
-        log.info("Entering the getListeCmdAssigned from the AffectationController date {}", date);
+    public ResponseEntity<SuccessResponseDto<List<AffCmdDto>>> getListeCmdAssigned(@RequestParam Optional<String> date) {
+        String reqDate = date.orElse("");
+
+        log.info("Entering the getListeCmdAssigned from the AffectationController with date {}", reqDate);
 
         log.info("Fetching liste des commandes affectées from the service");
-        List<AffCmdDto> commandes = this.affectationService.getListCmdAssigned(date);
+        List<AffCmdDto> commandes = this.affectationService.getListCmdAssigned(reqDate);
         log.info("Data fetched from the service length = {}", commandes.size());
 
         SuccessResponseDto<List<AffCmdDto>> successResponseDto = new SuccessResponseDto<>(
@@ -71,8 +77,11 @@ public class AffectationController {
     }
 
     @GetMapping("commandes/preparateur-controleurs")
-    public ResponseEntity<SuccessResponseDto<PrpCdePrepCont>> getCmdPrepCont(@RequestParam Integer id, @RequestParam String type, @RequestParam String stkCode) {
-        log.info("Entering getCmdPrepCont method from the AffectationController with id {}", id);
+    public ResponseEntity<SuccessResponseDto<PrpCdePrepCont>> getCmdPrepCont(@RequestParam Integer id, @RequestParam String type, @RequestParam String stkCode) throws Exception {
+        log.info("Entering getCmdPrepCont method from the AffectationController with id : {} type : {} stkCode : {}", id, type, stkCode);
+
+        if(id == 0 || type.isEmpty() || stkCode.isEmpty())
+            throw new Exception("Paramètre manquant ou invalide");
 
         PrpCdePrepCont prpCdePrepCont = this.affectationService.getPrepCont(
                 id,
@@ -90,11 +99,13 @@ public class AffectationController {
     }
 
     @GetMapping("commandes-preleve")
-    public ResponseEntity<SuccessResponseDto<List<PrpCmdPrlvDto>>> getListeCmdPrlv(@RequestParam String date) {
+    public ResponseEntity<SuccessResponseDto<List<PrpCmdPrlvDto>>> getListeCmdPrlv(@RequestParam Optional<String> date) {
+        String reqDate = date.orElse("");
+
         log.info("Entering the getListeCmdPrlv method from the AffectationController with date {}", date);
 
         log.info("Fetching data from the service");
-        List<PrpCmdPrlvDto> commandes = this.affectationService.getListCmdPrlv(date);
+        List<PrpCmdPrlvDto> commandes = this.affectationService.getListCmdPrlv(reqDate);
         log.info("Fetched data from the service with length {}", commandes.size());
 
         SuccessResponseDto<List<PrpCmdPrlvDto>> successResponseDto = new SuccessResponseDto<>(
@@ -107,11 +118,13 @@ public class AffectationController {
     }
 
     @GetMapping("commandes-preleve/assigned")
-    public ResponseEntity<SuccessResponseDto<List<AffCmdPrlvDto>>> getListCmdPrlvAssigned(@RequestParam String date) {
+    public ResponseEntity<SuccessResponseDto<List<AffCmdPrlvDto>>> getListCmdPrlvAssigned(@RequestParam Optional<String> date) {
+        String reqDate = date.orElse("");
+
         log.info("Entering the getListCmdPrlvAssigned method from the AffectationController with date {}", date);
 
         log.info("Fetching data from the service with date {}", date);
-        List<AffCmdPrlvDto> commandes = this.affectationService.getListCmdPrlvAssigned(date);
+        List<AffCmdPrlvDto> commandes = this.affectationService.getListCmdPrlvAssigned(reqDate);
         log.info("Fetched data from the service with length {}", commandes.size());
 
         SuccessResponseDto<List<AffCmdPrlvDto>> successResponseDto = new SuccessResponseDto<>(
@@ -124,8 +137,11 @@ public class AffectationController {
     }
 
     @GetMapping("commandes-preleve/preparateur-controleurs")
-    public ResponseEntity<SuccessResponseDto<PrpCdePrlvPrepCont>> getPrepContPrlv(@RequestParam Integer id, @RequestParam String type, @RequestParam Integer annee) {
-        log.info("Entering the getPrepContPrlv method from the AffectationController");
+    public ResponseEntity<SuccessResponseDto<PrpCdePrlvPrepCont>> getPrepContPrlv(@RequestParam Integer id, @RequestParam String type, @RequestParam Integer annee) throws Exception {
+        log.info("Entering the getPrepContPrlv method from the AffectationController with id : {} type : {} annee : {}", id, type, annee);
+
+        if(id == 0 || type.isEmpty() || annee == 0)
+            throw new Exception("Paramètre manquant ou invalide");
 
         log.info("Fetching data from the service");
         PrpCdePrlvPrepCont prpCdePrlvPrepCont = this.affectationService.getPrepContPrlv(id, type, annee);
@@ -141,7 +157,7 @@ public class AffectationController {
     }
 
     @PatchMapping("commandes-preleve/preparateur-controleurs")
-    public ResponseEntity<SuccessResponseDto<PrpCdePrlvPrepCont>> editAffectCmdPrpPrlv(@RequestBody PrpCdePrlvPrepContDto dto) throws Exception{
+    public ResponseEntity<SuccessResponseDto<PrpCdePrlvPrepCont>> editAffectCmdPrpPrlv(@RequestBody @Valid PrpCdePrlvPrepContDto dto) throws Exception{
         log.info("Entering the editAffectCmdPrpPrlv from the AffectationController");
 
         PrpCdePrlvPrepCont prpCdePrlvPrepCont = this.affectationService.editAffectCmdPrpPrlv(
@@ -164,7 +180,7 @@ public class AffectationController {
     }
 
     @PatchMapping("commandes/preparateur-controleurs")
-    public ResponseEntity<SuccessResponseDto<PrpCdePrepCont>> editAffectCmdPrp(@RequestBody AffectCmdRequestDto dto) throws Exception{
+    public ResponseEntity<SuccessResponseDto<PrpCdePrepCont>> editAffectCmdPrp(@RequestBody @Valid AffectCmdRequestDto dto) throws Exception{
         log.info("Entering the editAffectCmdPrpPrlv from the AffectationController");
 
         PrpCdePrepCont prpCdePrlvPrepCont = this.affectationService.editAffectCmdPrp(
@@ -187,7 +203,7 @@ public class AffectationController {
     }
 
     @PostMapping("/affect-commande")
-    public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrp(@RequestBody List<AffectCmdRequestDto> commandes) {
+    public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrp(@RequestBody @Valid List<AffectCmdRequestDto> commandes) {
         log.info("Entering the affectation method with {}", commandes);
         ArrayList<AffectCmdResultDto> tableau = new ArrayList<>();
         commandes.forEach(commande -> {
@@ -209,7 +225,7 @@ public class AffectationController {
     }
 
     @PostMapping("/affect-preleve")
-    public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrlv(@RequestBody List<AffectCmdPrlvReqDto> commandes) {
+    public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrlv(@RequestBody @Valid List<AffectCmdPrlvReqDto> commandes) {
         log.info("Entering method affectCommandePrlv from the AffectatinController with {}", commandes);
         ArrayList<AffectCmdResultDto> tableau = new ArrayList<>();
         commandes.forEach(commande -> {

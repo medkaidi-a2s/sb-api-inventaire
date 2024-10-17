@@ -8,6 +8,7 @@ import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
+import dz.a2s.a2spreparation.entities.views.Motif;
 import dz.a2s.a2spreparation.entities.views.PrpCdeUsrCode;
 import dz.a2s.a2spreparation.entities.views.VenteDetails;
 import dz.a2s.a2spreparation.entities.views.VentePrlvDetails;
@@ -58,5 +59,7 @@ public interface PreparationService {
             Integer no,
             Integer qte
     ) throws Exception;
+
+    List<Motif> getAllMotif();
 
 }

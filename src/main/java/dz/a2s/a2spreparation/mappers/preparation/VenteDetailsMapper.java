@@ -13,7 +13,7 @@ public class VenteDetailsMapper {
                 ligne.getVndMedId(),
                 ligne.getVndNLot(),
                 ligne.getDatePeremption(),
-                ligne.getQteCde(),
+                ligne.getQte() + ligne.getQteUg(),
                 ligne.getMontantTtc(),
                 ligne.getVndRemarque(),
                 ligne.getPrepareFlag(),

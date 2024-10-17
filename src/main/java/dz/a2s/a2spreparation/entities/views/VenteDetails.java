@@ -35,8 +35,11 @@ public class VenteDetails {
     @Column(name = "VND_DATE_PEREMPTION")
     private Date datePeremption;
 
-    @Column(name = "VND_QTE_CDE")
-    private Integer qteCde;
+    @Column(name = "VND_QTE")
+    private Integer qte;
+
+    @Column(name = "VND_QTE_UG")
+    private Integer qteUg;
 
     @Column(name = "VND_MONT_TTC")
     private BigDecimal montantTtc;

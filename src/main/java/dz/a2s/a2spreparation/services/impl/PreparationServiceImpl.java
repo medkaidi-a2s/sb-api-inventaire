@@ -6,10 +6,7 @@ import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
 import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
-import dz.a2s.a2spreparation.entities.views.PrpCdePrlvUsrCode;
-import dz.a2s.a2spreparation.entities.views.PrpCdeUsrCode;
-import dz.a2s.a2spreparation.entities.views.VenteDetails;
-import dz.a2s.a2spreparation.entities.views.VentePrlvDetails;
+import dz.a2s.a2spreparation.entities.views.*;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdePrlvUsrCodeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdeUsrCodeMapper;
@@ -22,22 +19,29 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class PreparationServiceImpl implements PreparationService {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final CustomUserDetailsService customUserDetailsService;
     private final PrpCdePrlvUsrCodeRepository prpCdePrlvUsrCodeRepository;
     private final PrpCdeUsrCodeRepository prpCdeUsrCodeRepository;
     private final PrpListeCdeZonesRepository prpListeCdeZonesRepository;
     private final VentePrlvDetailsRepository ventePrlvDetailsRepository;
     private final VenteDetailsRepository venteDetailsRepository;
+    private final MotifRepository motifRepository;
 
     @Override
     public List<PrpCdeUsrCodeDto> getCommandes(String date) {
         log.info("Entering the getCommandes method from the PreparationService with date {}", date);
+
+        if(!date.isEmpty())
+            LocalDate.parse(date, DATE_FORMATTER);
 
         String username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Entering the getCommandes method from the PreparationService with username {}", username);
@@ -54,6 +58,9 @@ public class PreparationServiceImpl implements PreparationService {
     @Override
     public List<PrpCmdPrlvUsrCodeDto> getCommandesPrlv(String date) {
         log.info("Entering the getCommandesPrlv method from the PreparationService with date {}", date);
+
+        if(!date.isEmpty())
+            LocalDate.parse(date, DATE_FORMATTER);
 
         String username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Entering the getCommandesPrlv method from the PreparationService with username {}", username);
@@ -220,5 +227,16 @@ public class PreparationServiceImpl implements PreparationService {
             throw new Exception("Une erreur est survenu lors de la mise à jour de la quantité préparé pour la commande spécifiée");
 
         return response;
+    }
+
+    @Override
+    public List<Motif> getAllMotif() {
+        log.info("Entering the geAllMotif method from the PreparationService");
+
+        List<Motif> motifs = this.motifRepository.getAll();
+
+        log.info("Fetched the motifs from the repo {}", motifs);
+
+        return motifs;
     }
 }

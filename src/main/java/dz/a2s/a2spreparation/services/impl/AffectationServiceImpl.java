@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -20,6 +22,7 @@ import java.util.List;
 @Service
 public class AffectationServiceImpl implements AffectationService {
 
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final PrpListeCdeZonesRepository prpListeCdeZonesRepository;
     private final PrpCommandeRepository prpCommandeRepository;
     private final PrpPrepareControleRepository prpPrepareControleRepository;
@@ -55,7 +58,10 @@ public class AffectationServiceImpl implements AffectationService {
 
     @Override
     public List<PrpCmdDto> getListCmd(String date) {
-        log.info("Entering getListCommande method from the AffectationService");
+        log.info("Entering getListCommande method from the AffectationService with date {}", date);
+
+        if(!date.isEmpty())
+            LocalDate.parse(date, DATE_FORMATTER);
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Fetching orders for the company {}", companyId);
@@ -71,7 +77,10 @@ public class AffectationServiceImpl implements AffectationService {
 
     @Override
     public List<AffCmdDto> getListCmdAssigned(String date) {
-        log.info("Entering getListCommandeAssigned method from the AffectationService");
+        log.info("Entering getListCommandeAssigned method from the AffectationService with date {}", date);
+
+        if(!date.isEmpty())
+            LocalDate.parse(date, DATE_FORMATTER);
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Fetching assigned orders for the company {}", companyId);
@@ -90,6 +99,9 @@ public class AffectationServiceImpl implements AffectationService {
     public List<PrpCmdPrlvDto> getListCmdPrlv(String date) {
         log.info("Entering the getListeCommandesPrlv from the AffectationService with date {}", date);
 
+        if(!date.isEmpty())
+            LocalDate.parse(date, DATE_FORMATTER);
+
         log.info("Fetching liste des commandes from the repo");
         List<PrpCdePrlv> listeCommandes = this.prpCdePrlvRepository.getListeCommandesPrlv(date);
         log.info("Data fetched from the repo with length {}", listeCommandes.size());
@@ -104,6 +116,9 @@ public class AffectationServiceImpl implements AffectationService {
     @Override
     public List<AffCmdPrlvDto> getListCmdPrlvAssigned(String date) {
         log.info("Entering the getListeCommandesPrlvAssigned from the AffectationService with date {}", date);
+
+        if(!date.isEmpty())
+            LocalDate.parse(date, DATE_FORMATTER);
 
         log.info("Fetching liste des commandes par prélévement déjà affectées from the repo");
         List<PrpCdePrlv> listeCommandes = this.prpCdePrlvRepository.getListCmdPrlvAssigned(date);
