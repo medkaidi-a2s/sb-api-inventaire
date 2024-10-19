@@ -40,7 +40,7 @@ public class AffectationServiceImpl implements AffectationService {
         log.info("Fetching orders for the company {}", companyId);
 
         String preparationZone = this.customUserDetailsService.getPreparationZone();
-        log.info("Fetching the preparation zone for the logged user {}", preparationZone);
+        log.info("Fetching the preparation zone id for the logged user {}", preparationZone);
 
         Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
         log.info("Fetching the current user id to filter the orders {}", preparateurId);

@@ -1,9 +1,7 @@
 package dz.a2s.a2spreparation.services.impl;
 
-import dz.a2s.a2spreparation.dto.preparation.LigneDto;
-import dz.a2s.a2spreparation.dto.preparation.LignePrlvDto;
-import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
-import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.preparation.*;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.*;
@@ -34,6 +32,7 @@ public class PreparationServiceImpl implements PreparationService {
     private final PrpListeCdeZonesRepository prpListeCdeZonesRepository;
     private final VentePrlvDetailsRepository ventePrlvDetailsRepository;
     private final VenteDetailsRepository venteDetailsRepository;
+    private final VenteZoneDetailsRepository venteZoneDetailsRepository;
     private final MotifRepository motifRepository;
 
     @Override
@@ -192,24 +191,25 @@ public class PreparationServiceImpl implements PreparationService {
     }
 
     @Override
-    public List<LigneDto> getDetailsVenteZone(VenteId id) {
+    public List<LigneZoneDto> getDetailsVenteZone(CmdZoneIdDto id) {
         log.info("Entering the getDetailsVenteZone method from the PreparationService");
 
-        List<VenteDetails> details = this.venteDetailsRepository.getDetailsByVenteZone(
-                id.getVntCmpId(),
-                id.getVntId(),
-                id.getVntType(),
-                id.getVntStkCode()
+        List<VenteZoneDetails> details = this.venteZoneDetailsRepository.getDetailsByVenteZone(
+                id.getCmpId(),
+                id.getId(),
+                id.getType(),
+                id.getStkCode(),
+                id.getZone()
         );
 
         log.info("Retruning results from the PreparationService with length {}", details.size());
-        List<LigneDto> response = details.stream().map(VenteDetailsMapper::toLigneDto).toList();
+        List<LigneZoneDto> response = details.stream().map(VenteDetailsMapper::toLigneZoneDto).toList();
 
         return response;
     }
 
     @Override
-    public Integer setPreparedQuantity(Integer cmpId, Integer id, String type, String stkCode, Integer no, Integer qte) throws Exception {
+    public Integer setPreparedQuantity(Integer cmpId, Integer id, String type, String stkCode, Integer no, Integer qte, String motif) throws Exception {
         log.info("Entering the setPreparedQuantity method from the PreparationService");
 
         Integer response = this.venteDetailsRepository.setPreparedQuantity(
@@ -218,7 +218,31 @@ public class PreparationServiceImpl implements PreparationService {
                 type,
                 stkCode,
                 no,
-                qte
+                qte,
+                motif
+        );
+
+        log.info("Réponse de la requête de mise à jour de la quantité préparée {}", response);
+
+        if(response == 0)
+            throw new Exception("Une erreur est survenu lors de la mise à jour de la quantité préparé pour la commande spécifiée");
+
+        return response;
+    }
+
+    @Override
+    public Integer setPreparedQuantityZone(LigneQteZoneDto ligne) throws Exception {
+        log.info("Entering the setPreparedQuantity method from the PreparationService with ligne {}", ligne);
+
+        Integer response = this.venteZoneDetailsRepository.setPreparedQuantityZone(
+                ligne.getCmpId(),
+                ligne.getId(),
+                ligne.getType(),
+                ligne.getType(),
+                ligne.getZone(),
+                ligne.getNo(),
+                ligne.getQte(),
+                ligne.getMotif()
         );
 
         log.info("Réponse de la requête de mise à jour de la quantité préparée {}", response);

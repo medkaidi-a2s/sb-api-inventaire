@@ -1,7 +1,7 @@
 package dz.a2s.a2spreparation.entities.views;
 
-
 import dz.a2s.a2spreparation.entities.keys.VenteDetailsId;
+import dz.a2s.a2spreparation.entities.keys.VenteZoneDetailsId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,12 +16,12 @@ import java.util.Date;
 @Data
 @Entity
 @Immutable
-@Table(name = "PRP_VENTE_DETAILS")
-public class VenteDetails {
+@Table(name = "PRP_ZONE_DETAILS")
+public class VenteZoneDetails {
 
     @Id
     @EmbeddedId
-    private VenteDetailsId id;
+    private VenteZoneDetailsId id;
 
     @Column(name = "VND_ANNEE")
     private Integer vndAnnee;

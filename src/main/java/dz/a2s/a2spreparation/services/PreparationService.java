@@ -1,10 +1,8 @@
 package dz.a2s.a2spreparation.services;
 
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.affectation.PrpCmdPrlvDto;
-import dz.a2s.a2spreparation.dto.preparation.LigneDto;
-import dz.a2s.a2spreparation.dto.preparation.LignePrlvDto;
-import dz.a2s.a2spreparation.dto.preparation.PrpCdeUsrCodeDto;
-import dz.a2s.a2spreparation.dto.preparation.PrpCmdPrlvUsrCodeDto;
+import dz.a2s.a2spreparation.dto.preparation.*;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
@@ -49,7 +47,7 @@ public interface PreparationService {
 
     List<LigneDto> getDetailsVente(VenteId id);
 
-    List<LigneDto> getDetailsVenteZone(VenteId id);
+    List<LigneZoneDto> getDetailsVenteZone(CmdZoneIdDto id);
 
     Integer setPreparedQuantity(
             Integer cmpId,
@@ -57,8 +55,11 @@ public interface PreparationService {
             String type,
             String stkCode,
             Integer no,
-            Integer qte
+            Integer qte,
+            String motif
     ) throws Exception;
+
+    Integer setPreparedQuantityZone(LigneQteZoneDto ligne) throws Exception;
 
     List<Motif> getAllMotif();
 

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LigneQteDto {
+public class LigneQteZoneDto {
 
     @NotNull(message = "Identifiant du site obligatoire")
     private Integer cmpId;
@@ -21,6 +21,9 @@ public class LigneQteDto {
 
     @NotNull(message = "Code stock obligatoire")
     private String stkCode;
+
+    @NotNull(message = "Zone de la commande obligatoire")
+    private Integer zone;
 
     @NotNull(message = "Numéro de la ligne obligatoire")
     private Integer no;

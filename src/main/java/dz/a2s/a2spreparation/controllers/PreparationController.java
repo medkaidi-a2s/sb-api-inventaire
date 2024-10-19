@@ -135,25 +135,27 @@ public class PreparationController {
     }
 
     @GetMapping("/commande-zone/details")
-    public ResponseEntity<SuccessResponseDto<List<LigneDto>>> getDetailsVenteZone(
+    public ResponseEntity<SuccessResponseDto<List<LigneZoneDto>>> getDetailsVenteZone(
             @RequestParam Integer cmpId,
             @RequestParam Integer id,
             @RequestParam String type,
-            @RequestParam String stkCode
+            @RequestParam String stkCode,
+            @RequestParam Integer zone
     ) throws Exception {
         log.info("Entering the getDetailsVente method from the PreparationController with cmpId : {} id : {} type : {} stkCode : {}", cmpId, id, type, stkCode);
 
-        if(cmpId == 0 || id == 0 || type.isEmpty() || stkCode.isEmpty())
+        if(cmpId == 0 || zone == 0 || id == 0 || type.isEmpty() || stkCode.isEmpty())
             throw new Exception("Paramètres manquant ou invalide");
 
-        List<LigneDto> details = this.preparationService.getDetailsVenteZone(new VenteId(
+        List<LigneZoneDto> details = this.preparationService.getDetailsVenteZone(new CmdZoneIdDto(
                 cmpId,
                 id,
                 type,
-                stkCode
+                stkCode,
+                zone
         ));
 
-        SuccessResponseDto<List<LigneDto>> response = new SuccessResponseDto<>(
+        SuccessResponseDto<List<LigneZoneDto>> response = new SuccessResponseDto<>(
                 200,
                 "Détails de la commande",
                 details
@@ -162,7 +164,7 @@ public class PreparationController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/commande/start-prep-cde")
+    @PatchMapping("/commande/start-prep")
     public ResponseEntity<SuccessResponseDto<Integer>> startPrepareCde(@RequestBody @Valid CmdIdDto commande) throws Exception {
         log.info("Entering the method startPrepareCde from the PreparationController");
 
@@ -182,7 +184,7 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande/start-prep-zone")
+    @PatchMapping("/commande-zone/start-prep")
     public ResponseEntity<SuccessResponseDto<Integer>> startPrepareZone(@RequestBody @Valid CmdZoneIdDto commande) throws Exception {
         log.info("Entering the method startPrepareZone from the PreparationController with {}", commande);
 
@@ -203,7 +205,7 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande/start-prep-preleve")
+    @PatchMapping("/commande-preleve/start-prep")
     public ResponseEntity<SuccessResponseDto<Integer>> startPreparePrlv(@RequestBody @Valid CmdPrlvIdDto commande) throws Exception {
         log.info("Entering the method startPreparePrlv from the PreparationController");
 
@@ -232,8 +234,24 @@ public class PreparationController {
                 ligne.getType(),
                 ligne.getStkCode(),
                 ligne.getNo(),
-                ligne.getQte()
+                ligne.getQte(),
+                ligne.getMotif()
         );
+
+        SuccessResponseDto successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Quantité préparée mis à jour avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @PatchMapping("/commande-zone/set-prep-quantity")
+    public ResponseEntity<SuccessResponseDto<Integer>> setPreparedQuantityZone(@RequestBody @Valid LigneQteZoneDto ligne) throws Exception {
+        log.info("Entering the setPreparedQuantity method from the PreparationController with {}", ligne);
+
+        Integer response = this.preparationService.setPreparedQuantityZone(ligne);
 
         SuccessResponseDto successResponseDto = new SuccessResponseDto<>(
                 200,

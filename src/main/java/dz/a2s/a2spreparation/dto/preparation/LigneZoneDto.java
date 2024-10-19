@@ -1,7 +1,7 @@
 package dz.a2s.a2spreparation.dto.preparation;
 
 import dz.a2s.a2spreparation.entities.keys.VenteDetailsId;
-import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
+import dz.a2s.a2spreparation.entities.keys.VenteZoneDetailsId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +12,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LigneDto {
+public class LigneZoneDto {
 
-    private VenteDetailsId id;
+    private VenteZoneDetailsId id;
     private Integer vndAnnee;
     private Integer medId;
     private String prdNLot;

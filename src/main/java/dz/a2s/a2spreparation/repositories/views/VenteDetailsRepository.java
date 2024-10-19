@@ -27,26 +27,11 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
             @Param("code") String code
     );
 
-    @Query(value = """
-            SELECT *
-            FROM PRP_ZONE_DETAILS
-            WHERE VND_CMP_ID = :cmpId
-              AND VND_VNT_ID = :id
-              AND VND_VNT_TYPE = :type
-              AND VND_STK_CODE = :code
-            """, nativeQuery = true)
-    List<VenteDetails> getDetailsByVenteZone(
-            @Param("cmpId") Integer cmpId,
-            @Param("id") Integer id,
-            @Param("type") String type,
-            @Param("code") String code
-    );
-
     @Transactional
     @Modifying
     @Query(value = """
             UPDATE VNT_BON_DETAILS v
-            SET v.vnd_qte_prepare = :qte, v.vnd_prepare_flag = 1
+            SET v.vnd_qte_prepare = :qte, v.vnd_prepare_flag = 1, v.vnd_prepare_motif = :motif
             WHERE v.vnd_vnt_id = :id
               AND v.vnd_vnt_type = :type
               AND v.vnd_cmp_id = :cmpId
@@ -59,7 +44,8 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
             @Param("type") String type,
             @Param("stkCode") String stkCode,
             @Param("no") Integer no,
-            @Param("qte") Integer qte
+            @Param("qte") Integer qte,
+            @Param("motif") String motif
     );
 
 }
