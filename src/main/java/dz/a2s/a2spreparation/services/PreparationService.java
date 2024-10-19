@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.services;
 
+import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.affectation.PrpCmdPrlvDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
@@ -62,5 +63,9 @@ public interface PreparationService {
     Integer setPreparedQuantityZone(LigneQteZoneDto ligne) throws Exception;
 
     List<Motif> getAllMotif();
+
+    Integer setCommandePrepared(CmdIdDto id) throws Exception;
+
+    Integer setCommandeZonePrepared(CmdZoneIdDto id) throws Exception;
 
 }

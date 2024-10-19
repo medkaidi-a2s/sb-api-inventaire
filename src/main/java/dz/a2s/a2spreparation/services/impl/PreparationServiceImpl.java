@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.services.impl;
 
+import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
@@ -262,5 +263,46 @@ public class PreparationServiceImpl implements PreparationService {
         log.info("Fetched the motifs from the repo {}", motifs);
 
         return motifs;
+    }
+
+    @Override
+    public Integer setCommandePrepared(CmdIdDto id) throws Exception {
+        log.info("Entering the setCommandePrepared method from the PreparationService with {}", id);
+
+        String username = this.customUserDetailsService.getCurrentUserCode();
+        log.info("Getting the logged in user from the customUserDetailsService {}", username);
+
+        Integer response = this.prpCdeUsrCodeRepository.setCommandePrepared(
+                id.getCmpId(),
+                id.getId(),
+                id.getStkCode(),
+                id.getType(),
+                username
+        );
+
+        log.info("Réponse de la procédure stockée pour marquer la commande comme préparée {}", response);
+
+        if(response != 0)
+            throw new Exception("Erreur lors de la mise à jour de la commande");
+
+        return response;
+    }
+
+    @Override
+    public Integer setCommandeZonePrepared(CmdZoneIdDto id) throws Exception {
+        log.info("Entering the setCommandeZonePrepared method from the PreparationService with {}", id);
+
+        Integer response = this.venteZoneDetailsRepository.setCommandeZonePrepared(
+                id.getCmpId(),
+                id.getId(),
+                id.getType(),
+                id.getStkCode(),
+                id.getZone()
+        );
+        log.info("Réponse de la procédure stockée pour marquer la commande zone comme préparée {}", response);
+        if(response != 0)
+            throw new Exception("Erreur lors de la mise à jour de la commande par zone");
+
+        return response;
     }
 }

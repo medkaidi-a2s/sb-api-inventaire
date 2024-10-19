@@ -278,4 +278,34 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
+    @PatchMapping("/commande/set-prepared")
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandePrepared(@RequestBody @Valid CmdIdDto id) throws Exception {
+        log.info("Entering the setCommandePrepared method from the PreparationController with {}", id);
+
+        Integer response = this.preparationService.setCommandePrepared(id);
+
+        SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Commande préparée avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @PatchMapping("/commande-zone/set-prepared")
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZonePrepared(@RequestBody @Valid CmdZoneIdDto id) throws Exception {
+        log.info("Entering the setCommandeZonePrepared method from the PreparationController with {}", id);
+
+        Integer response = this.preparationService.setCommandeZonePrepared(id);
+
+        SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Commande par zone préparée avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
 }

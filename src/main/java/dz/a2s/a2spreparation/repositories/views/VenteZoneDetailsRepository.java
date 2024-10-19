@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -67,6 +68,15 @@ public interface VenteZoneDetailsRepository extends JpaRepository<VenteZoneDetai
             @Param("no") Integer no,
             @Param("qte") Integer qte,
             @Param("motif") String motif
+    );
+
+    @Procedure(procedureName = "logistiques.P_SET_ZONE_PREPARED", outputParameterName = "p_msg")
+    Integer setCommandeZonePrepared(
+            @Param("P_CMP") Integer cmpId,
+            @Param("P_VNT") Integer id,
+            @Param("P_TYPE") String type,
+            @Param("P_STK") String stkCode,
+            @Param("P_ZONE") Integer zone
     );
 
 }

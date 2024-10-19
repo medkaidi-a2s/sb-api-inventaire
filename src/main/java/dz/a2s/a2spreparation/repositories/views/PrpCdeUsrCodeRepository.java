@@ -22,4 +22,13 @@ public interface PrpCdeUsrCodeRepository extends JpaRepository<PrpCdeUsrCode, Ve
             @Param("p_vnt_stk_code") String p_vnt_stk_code
     );
 
+    @Procedure(procedureName = "logistiques.P_SET_CDE_PREPARED", outputParameterName = "p_msg")
+    Integer setCommandePrepared(
+            @Param("p_cmp") int p_cmp,
+            @Param("p_vnt") int p_vnt,
+            @Param("p_stk") String p_stk,
+            @Param("p_type") String p_type,
+            @Param("p_user") String p_user
+    );
+
 }
