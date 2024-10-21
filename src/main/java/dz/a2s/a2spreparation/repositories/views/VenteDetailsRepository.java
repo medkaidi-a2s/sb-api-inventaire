@@ -48,4 +48,25 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
             @Param("motif") String motif
     );
 
+    @Transactional
+    @Modifying
+    @Query(value = """
+            UPDATE VNT_BON_DETAILS v
+            SET v.VND_CONTROLE_QTE1 = :qte, v.VND_CONTROLE_FLAG1 = 1, v.VND_CONTROLE_MOTIF1 = :motif
+            WHERE v.vnd_vnt_id = :id
+              AND v.vnd_vnt_type = :type
+              AND v.vnd_cmp_id = :cmpId
+              AND v.vnd_stk_code = :stkCode
+              AND v.vnd_no = :no
+            """, nativeQuery = true)
+    Integer setControlledQuantity(
+            @Param("cmpId") Integer cmpId,
+            @Param("id") Integer id,
+            @Param("type") String type,
+            @Param("stkCode") String stkCode,
+            @Param("no") Integer no,
+            @Param("qte") Integer qte,
+            @Param("motif") String motif
+    );
+
 }
