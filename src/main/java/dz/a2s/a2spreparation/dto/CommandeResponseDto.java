@@ -1,10 +1,6 @@
 package dz.a2s.a2spreparation.dto;
 
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
-import dz.a2s.a2spreparation.entities.keys.VenteId;
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

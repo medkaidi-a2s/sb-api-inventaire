@@ -1,0 +1,45 @@
+package dz.a2s.a2spreparation.repositories.views;
+
+import dz.a2s.a2spreparation.entities.keys.VenteZoneId;
+import dz.a2s.a2spreparation.entities.views.Commande;
+import dz.a2s.a2spreparation.entities.views.CommandeZone;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface CommandeZoneRepository extends JpaRepository<CommandeZone, VenteZoneId> {
+
+    @Query(value = """
+                SELECT *
+                FROM PRP_LISTE_CDE_ZONE_CONTROLES
+                WHERE VNT_CMP_ID = :companyId 
+                  AND VBZ_ZONE = :zone 
+                  AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+                  AND VBZ_STATUT_PREPARE = 3
+                  OR (VBZ_STATUT_PREPARE > 3 AND VBZ_VERIF_ID = :utilisateurId)
+            """, nativeQuery = true)
+    List<CommandeZone> getPreparedCommandesZone(@Param("companyId") Integer companyId, @Param("zone") String zone, @Param("utilisateurId") Integer utilisateurId, @Param("date") String date);
+
+    @Procedure(procedureName = "logistiques.P_EDIT_START_CONTROL_ZONE", outputParameterName = "p_msg")
+    Integer startControleZone(
+            @Param("V_VBZ_CMP_ID") int v_vbz_cmp_id,
+            @Param("V_VBZ_VNT_ID") int v_vbz_vnt_id,
+            @Param("V_VBZ_VNT_TYPE") String v_vbz_vnt_type,
+            @Param("V_VBZ_STK_CODE") String v_vbz_stk_code,
+            @Param("V_VBZ_ZONE") int v_vbz_zone,
+            @Param("V_VBZ_VERIF_ID") int v_vbz_verif_id
+    );
+
+    @Procedure(procedureName = "logistiques.P_SET_ZONE_CONTROLLED", outputParameterName = "p_msg")
+    Integer setCommandeZoneControlled(
+            @Param("P_CMP") Integer cmpId,
+            @Param("P_VNT") Integer id,
+            @Param("P_TYPE") String type,
+            @Param("P_STK") String stkCode,
+            @Param("P_ZONE") Integer zone
+    );
+
+}

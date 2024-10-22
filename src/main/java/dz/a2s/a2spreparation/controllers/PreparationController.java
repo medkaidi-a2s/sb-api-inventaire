@@ -142,7 +142,7 @@ public class PreparationController {
             @RequestParam String stkCode,
             @RequestParam Integer zone
     ) throws Exception {
-        log.info("Entering the getDetailsVente method from the PreparationController with cmpId : {} id : {} type : {} stkCode : {}", cmpId, id, type, stkCode);
+        log.info("Entering the getDetailsVenteZone method from the PreparationController with cmpId : {} venteId : {} type : {} stkCode : {} zone : {}", cmpId, id, type, stkCode, zone);
 
         if(cmpId == 0 || zone == 0 || id == 0 || type.isEmpty() || stkCode.isEmpty())
             throw new Exception("Paramètres manquant ou invalide");
