@@ -36,8 +36,8 @@ public class AffectationServiceImpl implements AffectationService {
     private final CommandeZoneRepository commandeZoneRepository;
 
     @Override
-    public List<CommandeZoneResponseDto> getListCmdZones() throws RessourceNotFoundException {
-        log.info("Point d'entrée de la méthode getListCmdZones du AffectationService");
+    public List<CommandeZoneResponseDto> getListCmdZones(String date) throws RessourceNotFoundException {
+        log.info("Point d'entrée de la méthode getListCmdZones du AffectationService avec date {}", date);
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Récupération de la companyId : {}", companyId);
@@ -49,7 +49,7 @@ public class AffectationServiceImpl implements AffectationService {
         log.info("Fetching the current user id to filter the orders {}", preparateurId);
 
         log.info("Récupération de la liste des commandes par zone à partir du repo");
-        List<CommandeZone> listeCommandes = this.commandeZoneRepository.getListCmdZones(companyId, preparationZone, preparateurId);
+        List<CommandeZone> listeCommandes = this.commandeZoneRepository.getListCmdZones(companyId, preparationZone, preparateurId, date);
         log.info("Commandes récupérées du repo avec size : {}", listeCommandes.size());
 
         log.info("Mappage des entités vers les DTOs");

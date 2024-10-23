@@ -59,6 +59,7 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
                 WHERE PREPARATEUR_ID = :preparateurId 
                 AND VNT_CMP_ID = :companyId
                 AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+                AND VNT_STATUT_PREPARE IN (1, 2, 3)
             """, nativeQuery = true)
     List<Commande> getCommandesParPreparateur(@Param("preparateurId") Integer preparateurId, @Param("companyId") Integer companyId,@Param("date") String date);
 

@@ -14,14 +14,20 @@ import java.util.List;
 public interface CommandeZoneRepository extends JpaRepository<CommandeZone, VenteZoneId> {
 
     @Query(value = """
-                SELECT * 
-                FROM PRP_LISTE_CDE_ZONES_GLOB 
+                SELECT *
+                FROM PRP_LISTE_CDE_ZONES_GLOB
                 WHERE VNT_CMP_ID = :companyId
-                  AND VBZ_ZONE = :zone 
-                  AND (VBZ_STATUT_PREPARE = 0  OR VBZ_STATUT_PREPARE IS NULL)
-                  OR (VBZ_STATUT_PREPARE > 0 AND VBZ_PREPAR_ID = :preparId)
+                  AND VBZ_ZONE = :zone
+                  AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+                  AND (
+                      VBZ_STATUT_PREPARE IS NULL OR VBZ_STATUT_PREPARE IN (0, 1, 2, 3)
+                  )
+                  AND (
+                    (VBZ_STATUT_PREPARE = 0  OR VBZ_STATUT_PREPARE IS NULL)
+                    OR (VBZ_STATUT_PREPARE > 0 AND VBZ_PREPAR_ID = :preparId)
+                  )
             """, nativeQuery = true)
-    List<CommandeZone> getListCmdZones(@Param("companyId") Integer companyId, @Param("zone") String zone, @Param("preparId") Integer preparId);
+    List<CommandeZone> getListCmdZones(@Param("companyId") Integer companyId, @Param("zone") String zone, @Param("preparId") Integer preparId, @Param("date") String date);
 
     @Procedure(procedureName = "logistiques.P_EDIT_START_PREPAR_ZONE", outputParameterName = "p_msg")
     Integer startPrepareZone(

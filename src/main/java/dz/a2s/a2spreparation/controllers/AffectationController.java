@@ -24,11 +24,13 @@ public class AffectationController {
     private final AffectationService affectationService;
 
     @GetMapping("commandes-zones")
-    public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getListeCmdPrpZone() {
+    public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getListeCmdPrpZone(@RequestParam Optional<String> date) {
+        String reqDate = date.orElse("");
+
         log.info("Entering the getListeCmdPrpZone from the AffectationController");
 
         log.info("Fetching liste des commandes from the service");
-        List<CommandeZoneResponseDto> commandes = this.affectationService.getListCmdZones();
+        List<CommandeZoneResponseDto> commandes = this.affectationService.getListCmdZones(reqDate);
         log.info("Data fetched from the service length = {}", commandes.size());
 
         SuccessResponseDto<List<CommandeZoneResponseDto>> successResponseDto = new SuccessResponseDto<>(
