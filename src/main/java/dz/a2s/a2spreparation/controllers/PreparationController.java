@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
@@ -26,15 +27,15 @@ public class PreparationController {
     private final PreparationService preparationService;
 
     @GetMapping("/commandes")
-    public ResponseEntity<SuccessResponseDto<List<PrpCdeUsrCodeDto>>> getCommandeParPreparateur(@RequestParam Optional<String> date) {
+    public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getCommandeParPreparateur(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
-        log.info("Entering the getCommandeParPreparateur method from the PreparationController with date {}", reqDate);
+        log.info("Point d'entrée à la méthode getCommandeParPreparateur du PreparationController avec date {}", reqDate);
 
-        List<PrpCdeUsrCodeDto> commandes = this.preparationService.getCommandes(reqDate);
-        log.info("Commandes par préparateur fetched from the service with length {}", commandes.size());
+        List<CommandeResponseDto> commandes = this.preparationService.getCommandes(reqDate);
+        log.info("Récupération de la liste des commandes par préparateur à partir du service avec size : {}", commandes.size());
 
-        SuccessResponseDto<List<PrpCdeUsrCodeDto>> successResponseDto = new SuccessResponseDto<List<PrpCdeUsrCodeDto>>(
+        SuccessResponseDto<List<CommandeResponseDto>> successResponseDto = new SuccessResponseDto<List<CommandeResponseDto>>(
                 200,
                 "Listes des commandes par préparateur",
                 commandes

@@ -1,10 +1,13 @@
 package dz.a2s.a2spreparation.services.impl;
 
+import dz.a2s.a2spreparation.dto.CommandeResponseDto;
+import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.*;
 import dz.a2s.a2spreparation.entities.views.*;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
+import dz.a2s.a2spreparation.mappers.CommandeMapper;
+import dz.a2s.a2spreparation.mappers.CommandeZoneMapper;
 import dz.a2s.a2spreparation.mappers.affectation.CmdPrlvMapper;
-import dz.a2s.a2spreparation.mappers.affectation.CommandeMapper;
 import dz.a2s.a2spreparation.repositories.DiMessagesRepository;
 import dz.a2s.a2spreparation.repositories.views.*;
 import dz.a2s.a2spreparation.services.AffectationService;
@@ -23,74 +26,74 @@ import java.util.List;
 public class AffectationServiceImpl implements AffectationService {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private final PrpListeCdeZonesRepository prpListeCdeZonesRepository;
-    private final PrpCommandeRepository prpCommandeRepository;
     private final PrpPrepareControleRepository prpPrepareControleRepository;
     private final CustomUserDetailsService customUserDetailsService;
     private final DiMessagesRepository diMessagesRepository;
     private final PrpCdePrlvRepository prpCdePrlvRepository;
     private final PrpCdePrepContRepository prpCdePrepContRepository;
     private final PrpCdePrlvPrepContRepository prpCdePrlvPrepContRepository;
+    private final CommandeRepository commandeRepository;
+    private final CommandeZoneRepository commandeZoneRepository;
 
     @Override
-    public List<AffZoneDto> getListCmdZones() throws RessourceNotFoundException {
-        log.info("Entering getListCmdZones method from the AffectationService");
+    public List<CommandeZoneResponseDto> getListCmdZones() throws RessourceNotFoundException {
+        log.info("Point d'entrée de la méthode getListCmdZones du AffectationService");
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
-        log.info("Fetching orders for the company {}", companyId);
+        log.info("Récupération de la companyId : {}", companyId);
 
         String preparationZone = this.customUserDetailsService.getPreparationZone();
-        log.info("Fetching the preparation zone id for the logged user {}", preparationZone);
+        log.info("Récupération de l'id de la zone de l'utilisateur authentifié : {}", preparationZone);
 
         Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
         log.info("Fetching the current user id to filter the orders {}", preparateurId);
 
-        log.info("Fetching data from the repo");
-        List<PrpCdeZone> listeCommandes = this.prpListeCdeZonesRepository.getListCmdZones(companyId, preparationZone, preparateurId);
-        log.info("Data fetched from the repo length = {}", listeCommandes.size());
+        log.info("Récupération de la liste des commandes par zone à partir du repo");
+        List<CommandeZone> listeCommandes = this.commandeZoneRepository.getListCmdZones(companyId, preparationZone, preparateurId);
+        log.info("Commandes récupérées du repo avec size : {}", listeCommandes.size());
 
-        log.info("Mapping entity classes to DTOs");
-        List<AffZoneDto> commandes = listeCommandes.stream().map(CommandeMapper::toAffZoneCmdDto).toList();
-        log.info("Entity classes mapped to DTOs with length {}", commandes.size());
+        log.info("Mappage des entités vers les DTOs");
+        List<CommandeZoneResponseDto> commandes = listeCommandes.stream().map(CommandeZoneMapper::toCommandeZoneResponseDto).toList();
+        log.info("Mappage terminé avec size : {}", commandes.size());
 
         return commandes;
     }
 
     @Override
-    public List<PrpCmdDto> getListCmd(String date) {
+    public List<CommandeResponseDto> getListCmd(String date) {
         log.info("Entering getListCommande method from the AffectationService with date {}", date);
 
         if(!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
-        log.info("Fetching orders for the company {}", companyId);
-        List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommande(companyId, date);
-        log.info("Data fetched from the repo length = {}", listeCommandes.size());
+        log.info("Récupération de la companyId {}", companyId);
+        List<Commande> listeCommandes = this.commandeRepository.getListCommande(companyId, date);
+        log.info("Liste des commandes récupérés à partir du repo = {}", listeCommandes.size());
 
-        log.info("Mapping entity classes to DTOs");
-        List<PrpCmdDto> commandes = listeCommandes.stream().map(CommandeMapper::toPrpCmdDto).toList();
-        log.info("Entity classes mapped to DTOs with length {}", commandes.size());
+        log.info("Mappage des entités vers les DTOs");
+        List<CommandeResponseDto> commandes = listeCommandes.stream().map(CommandeMapper::toCommandeResponseDto).toList();
+        log.info("Mappage de la liste des entités terminé avec size {}", commandes.size());
 
         return commandes;
     }
 
     @Override
-    public List<AffCmdDto> getListCmdAssigned(String date) {
-        log.info("Entering getListCommandeAssigned method from the AffectationService with date {}", date);
+    public List<CommandeResponseDto> getListCmdAssigned(String date) {
+        log.info("Point d'entrée à la méthode getListCommandeAssigned du AffectationService avec date {}", date);
 
         if(!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
-        log.info("Fetching assigned orders for the company {}", companyId);
+        log.info("Récupération de la companyId {}", companyId);
 
-        List<PrpCommande> listeCommandes = this.prpCommandeRepository.getListCommandeAssigned(companyId, date);
-        log.info("Data fetched from the repo length = {}", listeCommandes.size());
+        List<Commande> listeCommandes = this.commandeRepository.getListCommandeAssigned(companyId, date);
+        log.info("Liste des commandes déjà affectées récupérées à partir du repo avec size : {}", listeCommandes.size());
 
-        log.info("Mapping entity classes to DTOs");
-        List<AffCmdDto> commandes = listeCommandes.stream().map(CommandeMapper::toAffCmdDto).toList();
-        log.info("Entity classes mapped to DTOs with length {}", commandes.size());
+        log.info("Mappage des entités vers les DTOs");
+        List<CommandeResponseDto> commandes = listeCommandes.stream().map(CommandeMapper::toCommandeResponseDto).toList();
+        log.info("Mappage de la liste des entité terminé avec size : {}", commandes.size());
 
         return commandes;
     }
@@ -162,7 +165,7 @@ public class AffectationServiceImpl implements AffectationService {
     @Override
     public AffectCmdResultDto affectCmdPrp(int p_cmp, int p_vnt, String p_stk, String p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
         AffectCmdResultDto result;
-        int response = this.prpCommandeRepository.affectCommandePrp(
+        int response = this.commandeRepository.affectCommandePrp(
                 p_cmp,
             p_vnt,
             p_stk,
@@ -173,7 +176,7 @@ public class AffectationServiceImpl implements AffectationService {
             p_user
         );
 
-        log.info("La réponse de la procédure stockée affectation des commandes {}", response);
+        log.info("La réponse de la procédure stockée pour l'affectation des commandes {}", response);
 
         if(response == 0)
             result = AffectCmdResultDto.builder().messageId(0).message("Affectation réussie").venteRef(reference).build();
@@ -192,7 +195,7 @@ public class AffectationServiceImpl implements AffectationService {
         String username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Entering the getCommandes method from the PreparationService with username {}", username);
 
-        Integer response = this.prpCommandeRepository.editAffectCommandePrp(
+        Integer response = this.commandeRepository.editAffectCommandePrp(
                 p_cmp,
                 p_vnt,
                 p_stk,

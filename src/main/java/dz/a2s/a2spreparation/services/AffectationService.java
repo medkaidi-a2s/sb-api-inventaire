@@ -1,5 +1,7 @@
 package dz.a2s.a2spreparation.services;
 
+import dz.a2s.a2spreparation.dto.CommandeResponseDto;
+import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.*;
 import dz.a2s.a2spreparation.entities.views.*;
 import org.springframework.data.repository.query.Param;
@@ -8,11 +10,11 @@ import java.util.List;
 
 public interface AffectationService {
 
-    List<AffZoneDto> getListCmdZones();
+    List<CommandeZoneResponseDto> getListCmdZones();
 
-    List<PrpCmdDto> getListCmd(String date);
+    List<CommandeResponseDto> getListCmd(String date);
 
-    List<AffCmdDto> getListCmdAssigned(String date);
+    List<CommandeResponseDto> getListCmdAssigned(String date);
 
     List<PrpCmdPrlvDto> getListCmdPrlv(String date);
 

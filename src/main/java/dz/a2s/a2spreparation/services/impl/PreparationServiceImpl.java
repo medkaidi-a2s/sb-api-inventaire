@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.services.impl;
 
+import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
@@ -7,8 +8,8 @@ import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.*;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
+import dz.a2s.a2spreparation.mappers.CommandeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdePrlvUsrCodeMapper;
-import dz.a2s.a2spreparation.mappers.preparation.PrpCdeUsrCodeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.VenteDetailsMapper;
 import dz.a2s.a2spreparation.mappers.preparation.VentePrlvDetailsMapper;
 import dz.a2s.a2spreparation.repositories.views.*;
@@ -29,26 +30,28 @@ public class PreparationServiceImpl implements PreparationService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final CustomUserDetailsService customUserDetailsService;
     private final PrpCdePrlvUsrCodeRepository prpCdePrlvUsrCodeRepository;
-    private final PrpCdeUsrCodeRepository prpCdeUsrCodeRepository;
-    private final PrpListeCdeZonesRepository prpListeCdeZonesRepository;
     private final VentePrlvDetailsRepository ventePrlvDetailsRepository;
     private final VenteDetailsRepository venteDetailsRepository;
     private final VenteZoneDetailsRepository venteZoneDetailsRepository;
+    private final CommandeRepository commandeRepository;
+    private final CommandeZoneRepository commandeZoneRepository;
     private final MotifRepository motifRepository;
 
     @Override
-    public List<PrpCdeUsrCodeDto> getCommandes(String date) {
+    public List<CommandeResponseDto> getCommandes(String date) {
         log.info("Entering the getCommandes method from the PreparationService with date {}", date);
 
         if(!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
-        String username = this.customUserDetailsService.getCurrentUserCode();
-        log.info("Entering the getCommandes method from the PreparationService with username {}", username);
+        Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
+        log.info("Récupération de l'id de préparateur à partir du service qui est de : {}", preparateurId);
+
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
 
         log.info("Fetching the liste of orders by preparateur from the repo");
-        List<PrpCdeUsrCode> commandes = this.prpCdeUsrCodeRepository.getCmdParPreparateur(username, date);
-        List<PrpCdeUsrCodeDto> response = commandes.stream().map(PrpCdeUsrCodeMapper::toPrpCdeUsrCodeDto).toList();
+        List<Commande> commandes = this.commandeRepository.getCommandesParPreparateur(preparateurId, companyId, date);
+        List<CommandeResponseDto> response = commandes.stream().map(CommandeMapper::toCommandeResponseDto).toList();
 
         log.info("Returning fetched data to controller with length {}", response.size());
 
@@ -97,7 +100,7 @@ public class PreparationServiceImpl implements PreparationService {
     public Integer startPrepareCde(int p_vnt_cmp_id, int p_vnt_id, String p_vnt_type, String p_vnt_stk_code) throws Exception{
         log.info("Entering the method startPrepareCde from the PreparationService");
 
-        Integer response = this.prpCdeUsrCodeRepository.startPrepareCde(
+        Integer response = this.commandeRepository.startPrepareCde(
                 p_vnt_cmp_id,
                 p_vnt_id,
                 p_vnt_type,
@@ -114,12 +117,12 @@ public class PreparationServiceImpl implements PreparationService {
 
     @Override
     public Integer startPrepareZone(int v_vbz_cmp_id, int v_vbz_vnt_id, String v_vbz_vnt_type, String v_vbz_stk_code, int v_vbz_zone) throws Exception{
-        log.info("Entering the method startPrepareZone from the PreparationService");
+        log.info("Point d'entrée à la méthode startPrepareZone du PreparationService");
 
         Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
-        log.info("Fetched the preparateur id from the repo {}", preparateurId);
+        log.info("Récupération de l'id du préparateur : {}", preparateurId);
 
-        Integer response = this.prpListeCdeZonesRepository.startPrepareZone(
+        Integer response = this.commandeZoneRepository.startPrepareZone(
                 v_vbz_cmp_id,
                 v_vbz_vnt_id,
                 v_vbz_vnt_type,
@@ -128,7 +131,7 @@ public class PreparationServiceImpl implements PreparationService {
                 preparateurId
         );
 
-        log.info("Valeur de retour de la stored procedure for starting preparation par zone is {}", response);
+        log.info("Valeur de retour de la procédure stockée pour marquer le début de préparation d'une commance par zone : {}", response);
 
         if(response != 0)
             throw new Exception("Erreur lors de la mise à jour de la commande par zone");
@@ -272,7 +275,7 @@ public class PreparationServiceImpl implements PreparationService {
         String username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Getting the logged in user from the customUserDetailsService {}", username);
 
-        Integer response = this.prpCdeUsrCodeRepository.setCommandePrepared(
+        Integer response = this.commandeRepository.setCommandePrepared(
                 id.getCmpId(),
                 id.getId(),
                 id.getStkCode(),
