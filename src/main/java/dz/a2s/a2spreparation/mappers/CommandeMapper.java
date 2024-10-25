@@ -32,7 +32,8 @@ public class CommandeMapper {
                 commande.getVerificateur2(),
                 commande.getPrepare(),
                 commande.getFrigPsycho(),
-                commande.getStatut()
+                commande.getStatut(),
+                commande.getReference() + " " + commande.getClient() + " " + commande.getRegion() + " " + commande.getFrigPsycho()
         );
 
         return dto;

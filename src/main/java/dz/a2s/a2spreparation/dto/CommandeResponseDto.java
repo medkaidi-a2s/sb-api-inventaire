@@ -32,5 +32,6 @@ public class CommandeResponseDto {
     private String prepare;
     private String frigPsycho;
     private String statut;
+    private String search;
 
 }
