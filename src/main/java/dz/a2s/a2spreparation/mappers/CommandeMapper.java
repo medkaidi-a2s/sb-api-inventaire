@@ -20,6 +20,7 @@ public class CommandeMapper {
                 commande.getClient(),
                 commande.getRegion(),
                 commande.getNbrLigne(),
+                commande.getNbrLigneValid(),
                 commande.getTotalTtc(),
                 commande.getCreerPar(),
                 commande.getCreerDate(),

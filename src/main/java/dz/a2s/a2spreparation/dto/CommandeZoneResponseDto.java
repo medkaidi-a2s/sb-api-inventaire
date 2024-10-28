@@ -19,6 +19,7 @@ public class CommandeZoneResponseDto {
     private String client;
     private String region;
     private Integer nbrLigne;
+    private Integer nbrLigneValid;
     private BigDecimal totalTtc;
     private String creerPar;
     private Date creerDate;

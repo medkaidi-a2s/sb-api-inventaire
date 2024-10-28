@@ -24,6 +24,7 @@ public class CommandeZoneMapper {
                 commande.getClient(),
                 commande.getRegion(),
                 commande.getNbrLigne(),
+                commande.getNbrLigneValid(),
                 commande.getTotalTtc(),
                 commande.getCreerPar(),
                 commande.getCreerDate(),

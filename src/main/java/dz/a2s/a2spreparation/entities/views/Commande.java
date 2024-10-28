@@ -37,6 +37,9 @@ public class Commande {
     @Column(name = "NBR_LIGNE")
     private Integer nbrLigne;
 
+    @Column(name = "NBR_LIGNE_VALID")
+    private Integer nbrLigneValid;
+
     @Column(name = "TOTAL_TTC")
     private BigDecimal totalTtc;
 
