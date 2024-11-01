@@ -63,7 +63,7 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
             """, nativeQuery = true)
     List<Commande> getCommandesParPreparateur(@Param("preparateurId") Integer preparateurId, @Param("companyId") Integer companyId,@Param("date") String date);
 
-    @Procedure(procedureName = "logistiques.P_SET_CDE_PREPARED", outputParameterName = "p_msg")
+    @Procedure(procedureName = "logistiques.P_VALIDE_CDE_PREPARE", outputParameterName = "p_msg")
     Integer setCommandePrepared(
             @Param("p_cmp") int p_cmp,
             @Param("p_vnt") int p_vnt,

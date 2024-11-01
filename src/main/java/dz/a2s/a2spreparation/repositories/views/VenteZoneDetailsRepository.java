@@ -70,13 +70,14 @@ public interface VenteZoneDetailsRepository extends JpaRepository<VenteZoneDetai
             @Param("motif") String motif
     );
 
-    @Procedure(procedureName = "logistiques.P_SET_ZONE_PREPARED", outputParameterName = "p_msg")
+    @Procedure(procedureName = "logistiques.P_VALIDE_CDE_PREPARE_ZONE", outputParameterName = "p_msg")
     Integer setCommandeZonePrepared(
             @Param("P_CMP") Integer cmpId,
             @Param("P_VNT") Integer id,
             @Param("P_TYPE") String type,
             @Param("P_STK") String stkCode,
-            @Param("P_ZONE") Integer zone
+            @Param("P_ZONE") Integer zone,
+            @Param("P_USER") String user
     );
 
     @Transactional

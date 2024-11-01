@@ -295,12 +295,16 @@ public class PreparationServiceImpl implements PreparationService {
     public Integer setCommandeZonePrepared(CmdZoneIdDto id) throws Exception {
         log.info("Entering the setCommandeZonePrepared method from the PreparationService with {}", id);
 
+        log.info("Récupération du user code de l'utilisateur authentifié");
+        String username = this.customUserDetailsService.getCurrentUserCode();
+
         Integer response = this.venteZoneDetailsRepository.setCommandeZonePrepared(
                 id.getCmpId(),
                 id.getId(),
                 id.getType(),
                 id.getStkCode(),
-                id.getZone()
+                id.getZone(),
+                username
         );
         log.info("Réponse de la procédure stockée pour marquer la commande zone comme préparée {}", response);
         if(response != 0)
