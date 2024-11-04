@@ -23,13 +23,7 @@ public interface VenteZoneDetailsRepository extends JpaRepository<VenteZoneDetai
               AND VND_STK_CODE = :code
               AND VBZ_ZONE = :zone
             """, nativeQuery = true)
-    List<VenteZoneDetails> getDetailsByVenteZone(
-            @Param("cmpId") Integer cmpId,
-            @Param("id") Integer id,
-            @Param("type") String type,
-            @Param("code") String code,
-            @Param("zone") Integer zone
-    );
+    List<VenteZoneDetails> getDetailsByVenteZone(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("code") String code, @Param("zone") Integer zone);
 
     @Transactional
     @Modifying
@@ -59,26 +53,10 @@ public interface VenteZoneDetailsRepository extends JpaRepository<VenteZoneDetai
                 )
                 set vnd_qte_prepare = :qte, vnd_prepare_flag = 1, vnd_prepare_motif = :motif
             """, nativeQuery = true)
-    Integer setPreparedQuantityZone(
-            @Param("cmpId") Integer cmpId,
-            @Param("id") Integer id,
-            @Param("type") String type,
-            @Param("stkCode") String stkCode,
-            @Param("zone") Integer zone,
-            @Param("no") Integer no,
-            @Param("qte") Integer qte,
-            @Param("motif") String motif
-    );
+    Integer setPreparedQuantityZone(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stkCode") String stkCode, @Param("zone") Integer zone, @Param("no") Integer no, @Param("qte") Integer qte, @Param("motif") String motif);
 
     @Procedure(procedureName = "logistiques.P_VALIDE_CDE_PREPARE_ZONE", outputParameterName = "p_msg")
-    Integer setCommandeZonePrepared(
-            @Param("P_CMP") Integer cmpId,
-            @Param("P_VNT") Integer id,
-            @Param("P_TYPE") String type,
-            @Param("P_STK") String stkCode,
-            @Param("P_ZONE") Integer zone,
-            @Param("P_USER") String user
-    );
+    Integer setCommandeZonePrepared(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_ZONE") Integer zone, @Param("P_USER") String user);
 
     @Transactional
     @Modifying
@@ -108,15 +86,6 @@ public interface VenteZoneDetailsRepository extends JpaRepository<VenteZoneDetai
                 )
                 set vnd_controle_qte1 = :qte, vnd_controle_flag1 = 1, vnd_controle_motif1 = :motif
             """, nativeQuery = true)
-    Integer setControlledQuantityZone(
-            @Param("cmpId") Integer cmpId,
-            @Param("id") Integer id,
-            @Param("type") String type,
-            @Param("stkCode") String stkCode,
-            @Param("zone") Integer zone,
-            @Param("no") Integer no,
-            @Param("qte") Integer qte,
-            @Param("motif") String motif
-    );
+    Integer setControlledQuantityZone(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stkCode") String stkCode, @Param("zone") Integer zone, @Param("no") Integer no, @Param("qte") Integer qte, @Param("motif") String motif);
 
 }
