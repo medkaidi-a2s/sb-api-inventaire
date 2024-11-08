@@ -243,7 +243,7 @@ public class PreparationServiceImpl implements PreparationService {
                 ligne.getId(),
                 ligne.getType(),
                 ligne.getType(),
-                ligne.getZone(),
+//                ligne.getZone(),
                 ligne.getNo(),
                 ligne.getQte(),
                 ligne.getMotif()

@@ -44,14 +44,31 @@ public interface VenteZoneDetailsRepository extends JpaRepository<VenteZoneDetai
     @Transactional
     @Modifying
     @Query(value = """
-                    update vnt_bon_details v
-                      set vnd_controle_qte1   = :qte,
-                          vnd_controle_flag1  = 1,
-                          vnd_controle_motif1 = :motif
-                    where  v.vnd_vnt_id = :id and v.vnd_cmp_id = :cmpId and
-                     v.vnd_vnt_type = :type and v.vnd_stk_code = :stkCode and
-                     v.vnd_no = :no
+                    update (
+                       select v.vnd_vnt_id,
+                              v.vnd_vnt_type,
+                              v.vnd_cmp_id,
+                              v.vnd_stk_code,
+                              v.vnd_no,
+                              z.vbz_zone,
+                              v.vnd_controle_flag1,
+                              v.vnd_controle_qte1,
+                              v.vnd_controle_motif1
+                        from vnt_bon_details v
+                        join vnt_bon_zones z
+                        on z.VBZ_CMP_ID = v.VND_CMP_ID
+                        AND z.VBZ_VNT_ID = v.VND_VNT_ID
+                        AND z.VBZ_VNT_TYPE = v.VND_VNT_TYPE
+                        AND z.VBZ_STK_CODE = v.VND_STK_CODE
+                        where z.vbz_zone = :zone
+                        and v.vnd_vnt_id = :id
+                        and v.vnd_cmp_id = :cmpId
+                        and v.vnd_vnt_type = :type
+                        and v.vnd_stk_code = :stkCode
+                        and v.vnd_no = :no
+                )
+                set vnd_controle_qte1 = :qte, vnd_controle_flag1 = 1, vnd_controle_motif1 = :motif
             """, nativeQuery = true)
-    Integer setControlledQuantityZone(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stkCode") String stkCode, @Param("no") Integer no, @Param("qte") Integer qte, @Param("motif") String motif);
+    Integer setControlledQuantityZone(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stkCode") String stkCode, @Param("zone") Integer zone, @Param("no") Integer no, @Param("qte") Integer qte, @Param("motif") String motif);
 
 }
