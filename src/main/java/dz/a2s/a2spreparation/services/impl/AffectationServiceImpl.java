@@ -63,7 +63,7 @@ public class AffectationServiceImpl implements AffectationService {
     public List<CommandeResponseDto> getListCmd(String date) {
         log.info("Entering getListCommande method from the AffectationService with date {}", date);
 
-        if(!date.isEmpty())
+        if (!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
@@ -82,7 +82,7 @@ public class AffectationServiceImpl implements AffectationService {
     public List<CommandeResponseDto> getListCmdAssigned(String date) {
         log.info("Point d'entrée à la méthode getListCommandeAssigned du AffectationService avec date {}", date);
 
-        if(!date.isEmpty())
+        if (!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
@@ -102,7 +102,7 @@ public class AffectationServiceImpl implements AffectationService {
     public List<PrpCmdPrlvDto> getListCmdPrlv(String date) {
         log.info("Entering the getListeCommandesPrlv from the AffectationService with date {}", date);
 
-        if(!date.isEmpty())
+        if (!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
         log.info("Fetching liste des commandes from the repo");
@@ -120,7 +120,7 @@ public class AffectationServiceImpl implements AffectationService {
     public List<AffCmdPrlvDto> getListCmdPrlvAssigned(String date) {
         log.info("Entering the getListeCommandesPrlvAssigned from the AffectationService with date {}", date);
 
-        if(!date.isEmpty())
+        if (!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
         log.info("Fetching liste des commandes par prélévement déjà affectées from the repo");
@@ -142,7 +142,7 @@ public class AffectationServiceImpl implements AffectationService {
         List<PrpPrepareControle> preparateurs = this.prpPrepareControleRepository.getAllPreparateurs();
         log.info("Data fetched from the repository with length {}", preparateurs.size());
 
-        if(preparateurs.isEmpty())
+        if (preparateurs.isEmpty())
             throw new RessourceNotFoundException(("Liste des préparateurs vide"));
 
         return preparateurs;
@@ -156,7 +156,7 @@ public class AffectationServiceImpl implements AffectationService {
         List<PrpPrepareControle> controleurs = this.prpPrepareControleRepository.getAllControleurs();
         log.info("Data fetched from the repository with length {}", controleurs.size());
 
-        if(controleurs.isEmpty())
+        if (controleurs.isEmpty())
             throw new RessourceNotFoundException(("Liste des contrôleurs vide"));
 
         return controleurs;
@@ -165,20 +165,24 @@ public class AffectationServiceImpl implements AffectationService {
     @Override
     public AffectCmdResultDto affectCmdPrp(int p_cmp, int p_vnt, String p_stk, String p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
         AffectCmdResultDto result;
+
+        if(p_cnt2 == 0)
+            p_cnt2 = p_cnt1;
+
         int response = this.commandeRepository.affectCommandePrp(
                 p_cmp,
-            p_vnt,
-            p_stk,
-            p_type,
-            p_prp,
-            p_cnt1,
-            p_cnt2,
-            p_user
+                p_vnt,
+                p_stk,
+                p_type,
+                p_prp,
+                p_cnt1,
+                p_cnt2,
+                p_user
         );
 
         log.info("La réponse de la procédure stockée pour l'affectation des commandes {}", response);
 
-        if(response == 0)
+        if (response == 0)
             result = AffectCmdResultDto.builder().messageId(0).message("Affectation réussie").venteRef(reference).build();
         else {
             String message = this.diMessagesRepository.getMsgDescLocById(response);
@@ -191,6 +195,9 @@ public class AffectationServiceImpl implements AffectationService {
     @Override
     public PrpCdePrepCont editAffectCmdPrp(int p_cmp, int p_vnt, String p_stk, String p_type, int p_prp, int p_cnt1, int p_cnt2) throws Exception {
         log.info("Entering editAffectCmdPrp method from the AffectationService");
+
+        if (p_cnt2 == 0)
+            p_cnt2 = p_cnt1;
 
         String username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Entering the getCommandes method from the PreparationService with username {}", username);
@@ -208,7 +215,7 @@ public class AffectationServiceImpl implements AffectationService {
 
         log.info("Réponse de la procédure stockée de réaffectation des commandes {}", response);
 
-        if(response != 0)
+        if (response != 0)
             throw new Exception("La réaffectation de cette commande n'a pas pu s'effectuer");
 
         PrpCdePrepCont entity = this.prpCdePrepContRepository.getPrepCont(
@@ -227,20 +234,24 @@ public class AffectationServiceImpl implements AffectationService {
     public AffectCmdResultDto affectCmdPrpPrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
         log.info("Entering the affectCmdPrpPrlv from the AffectationService");
         AffectCmdResultDto result;
+
+        if(p_cnt2 == 0)
+            p_cnt2 = p_cnt1;
+
         int response = this.prpCdePrlvRepository.affectCommandePrpPrlv(
-            p_cmp,
-            p_slt_id,
-            p_slt_type,
-            p_slt_annee,
-            p_prp,
-            p_cnt1,
-            p_cnt2,
-            p_user
+                p_cmp,
+                p_slt_id,
+                p_slt_type,
+                p_slt_annee,
+                p_prp,
+                p_cnt1,
+                p_cnt2,
+                p_user
         );
 
         log.info("La réponse de la procédure stockée affectation des commandes par prélévement {}", response);
 
-        if(response == 0)
+        if (response == 0)
             result = AffectCmdResultDto.builder().messageId(0).message("Affectation réussie").venteRef(reference).build();
         else {
             String message = this.diMessagesRepository.getMsgDescLocById(response);
@@ -252,6 +263,9 @@ public class AffectationServiceImpl implements AffectationService {
     @Override
     public PrpCdePrlvPrepCont editAffectCmdPrpPrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee, int p_prp, int p_cnt1, int p_cnt2) throws Exception {
         log.info("Entering the editAffectCmdPrpPrlv method from the AffectationService");
+
+        if (p_cnt2 == 0)
+            p_cnt2 = p_cnt1;
 
         Integer response = this.prpCdePrlvPrepContRepository.editAffectCommandePrpPrlv(
                 p_cmp,
@@ -265,7 +279,7 @@ public class AffectationServiceImpl implements AffectationService {
 
         log.info("Result of the stored procedure {}", response);
 
-        if(response != 0)
+        if (response != 0)
             throw new Exception("La réaffectation de cette commande n'a pas pu s'effectuer");
 
         PrpCdePrlvPrepCont entity = this.prpCdePrlvPrepContRepository.getPrepCont(
@@ -289,7 +303,7 @@ public class AffectationServiceImpl implements AffectationService {
         log.info("Getting the entity from the repo");
         PrpCdePrepCont prpCdePrepCont = this.prpCdePrepContRepository.getPrepCont(companyId, vntId, vntType, vntStkCode);
 
-        if(prpCdePrepCont == null)
+        if (prpCdePrepCont == null)
             throw new RessourceNotFoundException("Commande introuvable");
         return prpCdePrepCont;
     }
@@ -308,7 +322,7 @@ public class AffectationServiceImpl implements AffectationService {
                 annee
         );
 
-        if(prpCdePrlvPrepCont == null)
+        if (prpCdePrlvPrepCont == null)
             throw new RessourceNotFoundException("Commande par prélévement introuvable");
 
         return prpCdePrlvPrepCont;

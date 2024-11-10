@@ -229,7 +229,7 @@ public class PreparationServiceImpl implements PreparationService {
         log.info("Réponse de la requête de mise à jour de la quantité préparée {}", response);
 
         if(response == 0)
-            throw new Exception("Une erreur est survenu lors de la mise à jour de la quantité préparé pour la commande spécifiée");
+            throw new Exception("Une erreur est survenu lors de la mise à jour de la quantité préparée pour la commande spécifiée");
 
         return response;
     }
