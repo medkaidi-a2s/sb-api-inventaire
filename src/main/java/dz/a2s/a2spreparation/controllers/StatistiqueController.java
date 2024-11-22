@@ -1,7 +1,9 @@
 package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
+import dz.a2s.a2spreparation.dto.statistique.StatsPreparateurDto;
 import dz.a2s.a2spreparation.entities.views.Statistique;
+import dz.a2s.a2spreparation.entities.views.StatsPreparateur;
 import dz.a2s.a2spreparation.services.StatistiqueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,36 @@ public class StatistiqueController {
         SuccessResponseDto response = new SuccessResponseDto(
                 200,
                 "Statistiques de la période spécifiée",
+                statistiques
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/stats-par-preparateur")
+    public ResponseEntity<SuccessResponseDto<List<StatsPreparateurDto>>> getStatistiquesParPreparateur(@RequestParam String dateDebut, @RequestParam String dateFin) {
+        log.info("Point d'entrée à la méthode getStatistiquesParPreparateur du StatistiqueController avec date début et fin {} - {}", dateDebut, dateFin);
+
+        List<StatsPreparateurDto> statistiques = this.statistiqueService.getStatistiquesParPreparateur(dateDebut, dateFin);
+
+        SuccessResponseDto response = new SuccessResponseDto(
+                200,
+                "Statistiques de la période spécifiée par préparateur",
+                statistiques
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/stats-par-controleur")
+    public ResponseEntity<SuccessResponseDto<List<StatsPreparateurDto>>> getStatistiquesParControleur(@RequestParam String dateDebut, @RequestParam String dateFin) {
+        log.info("Point d'entrée à la méthode getStatistiquesParControleur du StatistiqueController avec date début et fin {} - {}", dateDebut, dateFin);
+
+        List<StatsPreparateurDto> statistiques = this.statistiqueService.getStatistiquesParControleur(dateDebut, dateFin);
+
+        SuccessResponseDto response = new SuccessResponseDto(
+                200,
+                "Statistiques de la période spécifiée par contrôleur",
                 statistiques
         );
 
