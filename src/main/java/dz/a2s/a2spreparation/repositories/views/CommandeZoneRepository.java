@@ -51,10 +51,13 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
             """, nativeQuery = true)
     List<CommandeZone> getPreparedCommandesZone(@Param("companyId") Integer companyId, @Param("zone") String zone, @Param("utilisateurId") Integer utilisateurId, @Param("date") String date);
 
+    @Procedure(procedureName = "logistiques.P_VALIDE_CDE_PREPARE_ZONE", outputParameterName = "p_msg")
+    Integer setCommandeZonePrepared(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_ZONE") Integer zone, @Param("P_USER") String user);
+
     @Procedure(procedureName = "logistiques.P_EDIT_START_CONTROL_ZONE", outputParameterName = "p_msg")
     Integer startControleZone(@Param("V_VBZ_CMP_ID") int v_vbz_cmp_id, @Param("V_VBZ_VNT_ID") int v_vbz_vnt_id, @Param("V_VBZ_VNT_TYPE") String v_vbz_vnt_type, @Param("V_VBZ_STK_CODE") String v_vbz_stk_code, @Param("V_VBZ_ZONE") int v_vbz_zone, @Param("V_VBZ_VERIF_ID") int v_vbz_verif_id);
 
     @Procedure(procedureName = "logistiques.P_SET_ZONE_CONTROLLED", outputParameterName = "p_msg")
-    Integer setCommandeZoneControlled(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_ZONE") Integer zone);
+    Integer setCommandeZoneControlled(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_ZONE") Integer zone, @Param("P_USER") String username);
 
 }

@@ -185,12 +185,16 @@ public class CheckingServiceImpl implements CheckingService {
     public Integer setCommandeZoneControlled(CmdZoneIdDto id) throws Exception {
         log.info("Entering the setCommandeZoneControlled method from the CheckingService with {}", id);
 
+        String username = this.customUserDetailsService.getCurrentUserCode();
+        log.info("Getting the logged in user from the customUserDetailsService {}", username);
+
         Integer response = this.commandeZoneRepository.setCommandeZoneControlled(
                 id.getCmpId(),
                 id.getId(),
                 id.getType(),
                 id.getStkCode(),
-                id.getZone()
+                id.getZone(),
+                username
         );
         log.info("Réponse de la procédure stockée pour marquer la commande zone comme contrôlée {}", response);
         if(response != 0)

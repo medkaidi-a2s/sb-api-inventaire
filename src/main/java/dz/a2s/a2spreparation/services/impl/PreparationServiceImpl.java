@@ -298,7 +298,7 @@ public class PreparationServiceImpl implements PreparationService {
         log.info("Récupération du user code de l'utilisateur authentifié");
         String username = this.customUserDetailsService.getCurrentUserCode();
 
-        Integer response = this.venteZoneDetailsRepository.setCommandeZonePrepared(
+        Integer response = this.commandeZoneRepository.setCommandeZonePrepared(
                 id.getCmpId(),
                 id.getId(),
                 id.getType(),
