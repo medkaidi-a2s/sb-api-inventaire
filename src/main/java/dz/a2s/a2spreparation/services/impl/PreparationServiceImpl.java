@@ -122,6 +122,20 @@ public class PreparationServiceImpl implements PreparationService {
         Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
         log.info("Récupération de l'id du préparateur : {}", preparateurId);
 
+        Integer isPreparationStarted = this.commandeZoneRepository.isPreparationStartedByOther(
+                v_vbz_cmp_id,
+                v_vbz_vnt_id,
+                v_vbz_vnt_type,
+                v_vbz_stk_code,
+                v_vbz_zone,
+                preparateurId
+        );
+
+        log.info("Valeur de retour de la requête isPreparationStartedByOther : {}", isPreparationStarted);
+
+        if(isPreparationStarted != 0)
+            throw new Exception("La préparation a été déjà commencé par un autre préparateur.");
+
         Integer response = this.commandeZoneRepository.startPrepareZone(
                 v_vbz_cmp_id,
                 v_vbz_vnt_id,

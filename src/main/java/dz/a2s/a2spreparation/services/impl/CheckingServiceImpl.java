@@ -141,6 +141,20 @@ public class CheckingServiceImpl implements CheckingService {
         Integer verificateurId = this.customUserDetailsService.getUtilisateurId();
         log.info("Fetched the verificateur id from the repo {}", verificateurId);
 
+        Integer isControlStarted = this.commandeZoneRepository.isControlStartedByOther(
+                v_vbz_cmp_id,
+                v_vbz_vnt_id,
+                v_vbz_vnt_type,
+                v_vbz_stk_code,
+                v_vbz_zone,
+                verificateurId
+        );
+
+        log.info("Valeur de retour de la requête isControlStartedByOther : {}", isControlStarted);
+
+        if(isControlStarted != 0)
+            throw new Exception("Le contrôle a été déjà commencé par un autre contrôleur");
+
         Integer response = this.commandeZoneRepository.startControleZone(
                 v_vbz_cmp_id,
                 v_vbz_vnt_id,

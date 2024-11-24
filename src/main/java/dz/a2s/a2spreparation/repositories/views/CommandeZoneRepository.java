@@ -29,6 +29,18 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
             """, nativeQuery = true)
     List<CommandeZone> getListCmdZones(@Param("companyId") Integer companyId, @Param("zone") String zone, @Param("preparId") Integer preparId, @Param("date") String date);
 
+    @Query(value = """
+                select count(*) from PRP_LISTE_CDE_ZONES_GLOB t\s
+                where t.VNT_CMP_ID = :V_VBZ_CMP_ID
+                  and t.VNT_ID = :V_VBZ_VNT_ID
+                  and t.VNT_TYPE = :V_VBZ_VNT_TYPE
+                  and t.VNT_STK_CODE = :V_VBZ_STK_CODE
+                  and t.VBZ_ZONE = :V_VBZ_ZONE
+                  and t.VBZ_PREPAR_ID <> :V_VBZ_PREPAR_ID
+                  and t.vbz_statut_prepare = 2
+            """, nativeQuery = true)
+    Integer isPreparationStartedByOther(@Param("V_VBZ_CMP_ID") int v_vbz_cmp_id, @Param("V_VBZ_VNT_ID") int v_vbz_vnt_id, @Param("V_VBZ_VNT_TYPE") String v_vbz_vnt_type, @Param("V_VBZ_STK_CODE") String v_vbz_stk_code, @Param("V_VBZ_ZONE") int v_vbz_zone, @Param("V_VBZ_PREPAR_ID") int v_vbz_prepar_id);
+
     @Procedure(procedureName = "logistiques.P_EDIT_START_PREPAR_ZONE", outputParameterName = "p_msg")
     Integer startPrepareZone(@Param("V_VBZ_CMP_ID") int v_vbz_cmp_id, @Param("V_VBZ_VNT_ID") int v_vbz_vnt_id, @Param("V_VBZ_VNT_TYPE") String v_vbz_vnt_type, @Param("V_VBZ_STK_CODE") String v_vbz_stk_code, @Param("V_VBZ_ZONE") int v_vbz_zone, @Param("V_VBZ_PREPAR_ID") int v_vbz_prepar_id);
 
@@ -53,6 +65,18 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
 
     @Procedure(procedureName = "logistiques.P_VALIDE_CDE_PREPARE_ZONE", outputParameterName = "p_msg")
     Integer setCommandeZonePrepared(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_ZONE") Integer zone, @Param("P_USER") String user);
+
+    @Query(value = """
+            select count(*) from PRP_LISTE_CDE_ZONES_GLOB t\s
+            where t.VNT_CMP_ID = :V_VBZ_CMP_ID
+              and t.VNT_ID = :V_VBZ_VNT_ID
+              and t.VNT_TYPE = :V_VBZ_VNT_TYPE
+              and t.VNT_STK_CODE = :V_VBZ_STK_CODE
+              and t.VBZ_ZONE = :V_VBZ_ZONE
+              and t.VBZ_VERIF_ID <> :V_VBZ_VERIF_ID
+              and t.vbz_statut_prepare = 4
+            """, nativeQuery = true)
+    Integer isControlStartedByOther(@Param("V_VBZ_CMP_ID") int v_vbz_cmp_id, @Param("V_VBZ_VNT_ID") int v_vbz_vnt_id, @Param("V_VBZ_VNT_TYPE") String v_vbz_vnt_type, @Param("V_VBZ_STK_CODE") String v_vbz_stk_code, @Param("V_VBZ_ZONE") int v_vbz_zone, @Param("V_VBZ_VERIF_ID") int v_vbz_verif_id);
 
     @Procedure(procedureName = "logistiques.P_EDIT_START_CONTROL_ZONE", outputParameterName = "p_msg")
     Integer startControleZone(@Param("V_VBZ_CMP_ID") int v_vbz_cmp_id, @Param("V_VBZ_VNT_ID") int v_vbz_vnt_id, @Param("V_VBZ_VNT_TYPE") String v_vbz_vnt_type, @Param("V_VBZ_STK_CODE") String v_vbz_stk_code, @Param("V_VBZ_ZONE") int v_vbz_zone, @Param("V_VBZ_VERIF_ID") int v_vbz_verif_id);
