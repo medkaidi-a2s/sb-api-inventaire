@@ -2,7 +2,9 @@ package dz.a2s.a2spreparation.repositories;
 
 import dz.a2s.a2spreparation.entities.UserEntity;
 import dz.a2s.a2spreparation.entities.keys.UserEntityId;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -34,5 +36,21 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, UserEnti
               and t.ter_cmp_id = :companyId
             """, nativeQuery = true)
     Integer getUtilisateurId(@Param("username") String username, @Param("companyId") Integer companyId);
+
+    @Query(value = """
+                SELECT USR_PASSWORD 
+                FROM STP_USERS 
+                WHERE USR_CODE = :username AND USR_CMP_ID = :companyId
+            """, nativeQuery = true)
+    String getUserPassword(@Param("username") String username, @Param("companyId") Integer companyId);
+
+    @Transactional
+    @Modifying
+    @Query(value = """
+                UPDATE STP_USERS
+                SET USR_PASSWORD = :password
+                WHERE USR_CODE = :username AND USR_CMP_ID = :companyId
+            """, nativeQuery = true)
+    Integer changePassword(@Param("username") String username, @Param("companyId") Integer companyId, @Param("password") String password);
 
 }

@@ -33,7 +33,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         String token = getJWTFromRequest(request);
 
-        log.info("JWTAuthenticationFilter recieving the token {}", token);
+//        log.info("JWTAuthenticationFilter recieving the token {}", token);
 
         if(StringUtils.hasText(token) && this.jwtGenerator.validateToken(token)) {
             String username = this.jwtGenerator.getUsernameFromJWT(token);

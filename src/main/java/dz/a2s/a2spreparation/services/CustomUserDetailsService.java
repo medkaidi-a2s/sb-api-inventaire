@@ -67,4 +67,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return id;
     }
+
+    public Integer changePassword(String currentPassword, String newPassowrd) throws Exception {
+        int response = 0;
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String[] split = username.split(":");
+        Integer companyId = Integer.parseInt(split[0]);
+        String userCode = split[1];
+
+        String passwordFromDb = this.userEntityRepository.getUserPassword(userCode, companyId);
+        if(currentPassword.equals(passwordFromDb))
+            response = this.userEntityRepository.changePassword(userCode, companyId, newPassowrd);
+
+        if(response == 0)
+            throw new Exception("Le mot de passe de l'utilisateur n'a pas pu être changé");
+
+        return response;
+    }
 }

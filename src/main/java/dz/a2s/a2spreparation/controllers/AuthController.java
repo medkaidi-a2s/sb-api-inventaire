@@ -1,10 +1,12 @@
 package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.dto.auth.AuthResponseDto;
+import dz.a2s.a2spreparation.dto.auth.ChangePasswordDto;
 import dz.a2s.a2spreparation.dto.auth.LoginDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.repositories.UserEntityRepository;
 import dz.a2s.a2spreparation.security.JWTGenerator;
+import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ public class AuthController {
     private final UserEntityRepository userEntityRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTGenerator jwtGenerator;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @PostMapping("/login")
     public ResponseEntity<SuccessResponseDto<AuthResponseDto>> login(@RequestBody @Valid LoginDto loginDto) {
@@ -50,6 +53,21 @@ public class AuthController {
         String token = this.jwtGenerator.generateToken(authentication);
         AuthResponseDto authResponseDto = new AuthResponseDto(token);
         SuccessResponseDto<AuthResponseDto> successResponseDto = new SuccessResponseDto<AuthResponseDto>(200, "Authentification réussie", authResponseDto);
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<SuccessResponseDto<Integer>> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto) throws Exception {
+        log.info("Point d'entrée de la méthode changePassword du AuthController");
+
+        int response = this.customUserDetailsService.changePassword(changePasswordDto.getCurrentPassword(), changePasswordDto.getNewPassword());
+
+        SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Mot de passe de l'utilisateur a été changé avec succès",
+                response
+        );
+
         return ResponseEntity.ok(successResponseDto);
     }
 
