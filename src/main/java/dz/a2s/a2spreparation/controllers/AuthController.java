@@ -35,7 +35,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<SuccessResponseDto<AuthResponseDto>> login(@RequestBody @Valid LoginDto loginDto) {
-        log.info("Entering login method from AuthController with {}", loginDto);
+        log.info("Entering login method from AuthController with userCode and companyId {} : {}", loginDto.getUsername(), loginDto.getCompanyId());
 
         String username = loginDto.getCompanyId() + ":" + loginDto.getUsername();
         log.info("Getting the custom username from the loginDto inside the authController {}", username);

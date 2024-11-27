@@ -1,8 +1,17 @@
 package dz.a2s.a2spreparation.security;
 
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Getter
+@Component
 public class SecurityConstants {
 
-    public static final long JWT_EXPIRATION  = 24 * 60 * 60 * 1000;
-    public static final String JWT_SECRET = "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e";
+    @Value("${params.security.jwt.exp}")
+    private long JWT_EXPIRATION;
+
+    @Value("${params.security.jwt.secret}")
+    private String JWT_SECRET;
 
 }

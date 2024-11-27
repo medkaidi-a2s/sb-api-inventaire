@@ -78,6 +78,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         String passwordFromDb = this.userEntityRepository.getUserPassword(userCode, companyId);
         if(currentPassword.equals(passwordFromDb))
             response = this.userEntityRepository.changePassword(userCode, companyId, newPassowrd);
+        else
+            throw new Exception("Le mot de passe actuel est incorrecte");
 
         if(response == 0)
             throw new Exception("Le mot de passe de l'utilisateur n'a pas pu être changé");
