@@ -17,7 +17,7 @@ public interface StatistiqueRepository extends JpaRepository<Statistique, Intege
                    sum(t.nbr_ligne) nbr_ligne,
                    sum(t.VNT_TOTAL_TTC) total
               from PRP_STATS_CDES t
-              where t.vnt_date between to_date(:dateDebut,'DD/MM/RRRR') AND to_date(:dateFin,'DD/MM/RRRR')
+              where TRUNC(t.vnt_date) between to_date(:dateDebut,'DD/MM/RRRR') AND to_date(:dateFin,'DD/MM/RRRR')
              group by t.VNT_STATUT_PREPARE, statut
              order by VNT_STATUT_PREPARE
             """, nativeQuery = true)

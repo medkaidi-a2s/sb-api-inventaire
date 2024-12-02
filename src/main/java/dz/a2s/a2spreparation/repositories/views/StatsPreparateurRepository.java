@@ -18,7 +18,7 @@ public interface StatsPreparateurRepository extends JpaRepository<StatsPreparate
                    sum(t.nbr_ligne) nbr_ligne,
                    sum(t.VNT_TOTAL_TTC) total
               from PRP_STATS_CDES t
-              where t.vnt_date between to_date(:dateDebut,'DD/MM/RRRR') AND to_date(:dateFin,'DD/MM/RRRR') AND (t.Preparateur is not null)
+              where (TRUNC(t.vnt_date) between to_date(:dateDebut,'DD/MM/RRRR') AND to_date(:dateFin,'DD/MM/RRRR')) AND (t.Preparateur is not null)
              group by t.VNT_STATUT_PREPARE, statut,t.Preparateur
              order by VNT_STATUT_PREPARE
             """, nativeQuery = true)
@@ -33,7 +33,7 @@ public interface StatsPreparateurRepository extends JpaRepository<StatsPreparate
                        sum(t.nbr_ligne) nbr_ligne,
                        sum(t.VNT_TOTAL_TTC) total
                   from PRP_STATS_CDES t
-                  where t.vnt_date between to_date(:dateDebut,'DD/MM/RRRR') AND to_date(:dateFin,'DD/MM/RRRR') AND (t.Preparateur is not null)
+                  where (TRUNC(t.vnt_date) between to_date(:dateDebut,'DD/MM/RRRR') AND to_date(:dateFin,'DD/MM/RRRR')) AND (t.Preparateur is not null)
                  group by t.VNT_STATUT_PREPARE, statut,t.Controleur1
                  order by VNT_STATUT_PREPARE
             """, nativeQuery = true)
