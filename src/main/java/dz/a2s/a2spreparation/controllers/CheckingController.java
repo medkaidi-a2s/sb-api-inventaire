@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.api.CheckingApi;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
@@ -21,10 +22,9 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/api/controle")
-public class CheckingController {
+public class CheckingController implements CheckingApi {
     private final CheckingService checkingService;
 
-    @GetMapping("/commandes")
     public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getAllPreparedCommandes(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
@@ -42,7 +42,6 @@ public class CheckingController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("/commandes-zone")
     public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getAllPreparedCommandesZone(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
@@ -60,7 +59,6 @@ public class CheckingController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande/start-control")
     public ResponseEntity<SuccessResponseDto<Integer>> startControleCde(@RequestBody @Valid CmdIdDto commande) throws Exception {
         log.info("Entering the method startControleCde from the CheckingController");
 
@@ -80,7 +78,6 @@ public class CheckingController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande/set-control-quantity")
     public ResponseEntity<SuccessResponseDto<Integer>> setControlledQuantity(@RequestBody @Valid LigneQteDto ligne) throws Exception {
         log.info("Entering the setControlledQuantity method from the CheckingController with {}", ligne);
 
@@ -103,7 +100,6 @@ public class CheckingController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande/set-controlled")
     public ResponseEntity<SuccessResponseDto<Integer>> setCommandeControlled(@RequestBody @Valid CmdIdDto id) throws Exception {
         log.info("Entering the setCommandeControlled method from the CheckingController with {}", id);
 
@@ -117,7 +113,6 @@ public class CheckingController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande-zone/start-control")
     public ResponseEntity<SuccessResponseDto<Integer>> startControleZone(@RequestBody @Valid CmdZoneIdDto commande) throws Exception {
         log.info("Entering the method startControleZone from the CheckingController with {}", commande);
 
@@ -138,7 +133,6 @@ public class CheckingController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande-zone/set-control-quantity")
     public ResponseEntity<SuccessResponseDto<Integer>> setControlledQuantityZone(@RequestBody @Valid LigneQteZoneDto ligne) throws Exception {
         log.info("Entering the setControlledQuantityZone method from the CheckingController with {}", ligne);
 
@@ -153,7 +147,6 @@ public class CheckingController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande-zone/set-controlled")
     public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneControlled(@RequestBody @Valid CmdZoneIdDto id) throws Exception {
         log.info("Entering the setCommandeZoneControlled method from the CheckingController with {}", id);
 

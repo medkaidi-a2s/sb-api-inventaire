@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.api.CompanyApi;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.Company;
 import dz.a2s.a2spreparation.services.CompanyService;
@@ -17,11 +18,10 @@ import java.util.List;
 @Slf4j
 @RestController
 //@RequestMapping("/auth/companies")
-public class CompanyController {
+public class CompanyController implements CompanyApi {
 
     private final CompanyService companyService;
 
-    @GetMapping("/auth/companies")
     public ResponseEntity<SuccessResponseDto<List<Company>>> findAllCompanies() {
         log.info("findAllCompanies from the CompanyController");
         List<Company> companies = this.companyService.findAll();
@@ -36,7 +36,6 @@ public class CompanyController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("/api/company/method")
     public ResponseEntity<SuccessResponseDto<Integer>> getMethod() {
         log.info("Entering getMethod method from CompanyController");
 

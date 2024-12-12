@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.api.AffectationApi;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.*;
@@ -20,10 +21,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/affectation")
-public class AffectationController {
+public class AffectationController implements AffectationApi {
     private final AffectationService affectationService;
 
-    @GetMapping("commandes-zones")
     public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getListeCmdPrpZone(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
@@ -38,7 +38,6 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("commandes")
     public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getListeCmdPrp(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
@@ -53,7 +52,6 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("commandes/assigned")
     public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getListeCmdAssigned(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
@@ -68,7 +66,6 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("commandes/preparateur-controleurs")
     public ResponseEntity<SuccessResponseDto<PrpCdePrepCont>> getCmdPrepCont(@RequestParam Integer id, @RequestParam String type, @RequestParam String stkCode) throws Exception {
         log.info("Entering getCmdPrepCont method from the AffectationController with id : {} type : {} stkCode : {}", id, type, stkCode);
 
@@ -81,7 +78,6 @@ public class AffectationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("commandes-preleve")
     public ResponseEntity<SuccessResponseDto<List<PrpCmdPrlvDto>>> getListeCmdPrlv(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
@@ -96,7 +92,6 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("commandes-preleve/assigned")
     public ResponseEntity<SuccessResponseDto<List<AffCmdPrlvDto>>> getListCmdPrlvAssigned(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
@@ -111,7 +106,6 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("commandes-preleve/preparateur-controleurs")
     public ResponseEntity<SuccessResponseDto<PrpCdePrlvPrepCont>> getPrepContPrlv(@RequestParam Integer id, @RequestParam String type, @RequestParam Integer annee) throws Exception {
         log.info("Entering the getPrepContPrlv method from the AffectationController with id : {} type : {} annee : {}", id, type, annee);
 
@@ -126,7 +120,6 @@ public class AffectationController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("commandes-preleve/preparateur-controleurs")
     public ResponseEntity<SuccessResponseDto<PrpCdePrlvPrepCont>> editAffectCmdPrpPrlv(@RequestBody @Valid PrpCdePrlvPrepContDto dto) throws Exception {
         log.info("Entering the editAffectCmdPrpPrlv from the AffectationController");
 
@@ -137,7 +130,6 @@ public class AffectationController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("commandes/preparateur-controleurs")
     public ResponseEntity<SuccessResponseDto<PrpCdePrepCont>> editAffectCmdPrp(@RequestBody @Valid AffectCmdRequestDto dto) throws Exception {
         log.info("Entering the editAffectCmdPrpPrlv from the AffectationController");
 
@@ -148,7 +140,6 @@ public class AffectationController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/affect-commande")
     public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrp(@RequestBody @Valid List<AffectCmdRequestDto> commandes) {
         log.info("Entering the affectation method with {}", commandes);
         ArrayList<AffectCmdResultDto> tableau = new ArrayList<>();
@@ -160,7 +151,6 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PostMapping("/affect-preleve")
     public ResponseEntity<SuccessResponseDto<ArrayList<AffectCmdResultDto>>> affectCommandePrlv(@RequestBody @Valid List<AffectCmdPrlvReqDto> commandes) {
         log.info("Entering method affectCommandePrlv from the AffectatinController with {}", commandes);
         ArrayList<AffectCmdResultDto> tableau = new ArrayList<>();
@@ -172,7 +162,6 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("preparateurs")
     public ResponseEntity<SuccessResponseDto<List<PrpPrepareControle>>> getAllPreparateurs() {
         log.info("Entering the getAllPreparateurs method from the AffectationController");
 
@@ -185,7 +174,6 @@ public class AffectationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("controleurs")
     public ResponseEntity<SuccessResponseDto<List<PrpPrepareControle>>> getAllControleurs() {
         log.info("Entering the getAllControleurs method from the AffectationController");
 

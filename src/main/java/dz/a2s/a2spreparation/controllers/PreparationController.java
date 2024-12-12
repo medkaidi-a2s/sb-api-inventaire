@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.api.PreparationApi;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
@@ -23,10 +24,9 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/api/preparation")
-public class PreparationController {
+public class PreparationController implements PreparationApi {
     private final PreparationService preparationService;
 
-    @GetMapping("/commandes")
     public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getCommandeParPreparateur(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
@@ -44,7 +44,6 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("/commandes-preleve")
     public ResponseEntity<SuccessResponseDto<List<PrpCmdPrlvUsrCodeDto>>> getCommandesPrlvParPreparateur(@RequestParam Optional<String> date) {
         String reqDate = date.orElse("");
 
@@ -62,7 +61,6 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("/commande-preleve")
     public ResponseEntity<SuccessResponseDto<PrpCmdPrlvUsrCodeDto>> getOnePrlvCommande(@RequestParam String type, @RequestParam Integer annee, @RequestParam Integer id) throws Exception {
         log.info("Entering the getOnePrlvCommande from PreparationController with id : {} type : {} annee : {}", id, type, annee);
 
@@ -80,7 +78,6 @@ public class PreparationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/commande-preleve/details")
     public ResponseEntity<SuccessResponseDto<List<LignePrlvDto>>> getDetailsVentePrlv(
             @RequestParam Integer cmpId,
             @RequestParam Integer id,
@@ -110,7 +107,6 @@ public class PreparationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/commande/details")
     public ResponseEntity<SuccessResponseDto<List<LigneDto>>> getDetailsVente(
             @RequestParam Integer cmpId,
             @RequestParam Integer id,
@@ -135,7 +131,6 @@ public class PreparationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/commande-zone/details")
     public ResponseEntity<SuccessResponseDto<List<LigneZoneDto>>> getDetailsVenteZone(
             @RequestParam Integer cmpId,
             @RequestParam Integer id,
@@ -165,7 +160,6 @@ public class PreparationController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/commande/start-prep")
     public ResponseEntity<SuccessResponseDto<Integer>> startPrepareCde(@RequestBody @Valid CmdIdDto commande) throws Exception {
         log.info("Entering the method startPrepareCde from the PreparationController");
 
@@ -185,7 +179,6 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande-zone/start-prep")
     public ResponseEntity<SuccessResponseDto<Integer>> startPrepareZone(@RequestBody @Valid CmdZoneIdDto commande) throws Exception {
         log.info("Entering the method startPrepareZone from the PreparationController with {}", commande);
 
@@ -206,7 +199,6 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande-preleve/start-prep")
     public ResponseEntity<SuccessResponseDto<Integer>> startPreparePrlv(@RequestBody @Valid CmdPrlvIdDto commande) throws Exception {
         log.info("Entering the method startPreparePrlv from the PreparationController");
 
@@ -225,7 +217,6 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande/set-prep-quantity")
     public ResponseEntity<SuccessResponseDto<Integer>> setPreparedQuantity(@RequestBody @Valid LigneQteDto ligne) throws Exception {
         log.info("Entering the setPreparedQuantity method from the PreparationController with {}", ligne);
 
@@ -248,7 +239,6 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande-zone/set-prep-quantity")
     public ResponseEntity<SuccessResponseDto<Integer>> setPreparedQuantityZone(@RequestBody @Valid LigneQteZoneDto ligne) throws Exception {
         log.info("Entering the setPreparedQuantity method from the PreparationController with {}", ligne);
 
@@ -263,7 +253,6 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("/motifs")
     public ResponseEntity<SuccessResponseDto<List<Motif>>> getAllMotifs() {
         log.info("Entering the method getAllMotifs from the PreparationController");
 
@@ -279,7 +268,6 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande/set-prepared")
     public ResponseEntity<SuccessResponseDto<Integer>> setCommandePrepared(@RequestBody @Valid CmdIdDto id) throws Exception {
         log.info("Entering the setCommandePrepared method from the PreparationController with {}", id);
 
@@ -294,7 +282,6 @@ public class PreparationController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PatchMapping("/commande-zone/set-prepared")
     public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZonePrepared(@RequestBody @Valid CmdZoneIdDto id) throws Exception {
         log.info("Entering the setCommandeZonePrepared method from the PreparationController with {}", id);
 

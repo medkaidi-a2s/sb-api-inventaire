@@ -52,7 +52,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/auth/**").permitAll()
-//                                .requestMatchers("/api/companies").permitAll()
+                                .requestMatchers("/actuator/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()) // All other requests require authentication
                 .httpBasic(httpBasic -> {});
 

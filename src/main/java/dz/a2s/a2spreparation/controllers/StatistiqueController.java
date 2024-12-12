@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.api.StatistiqueApi;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.dto.statistique.StatsPreparateurDto;
 import dz.a2s.a2spreparation.entities.views.Statistique;
@@ -19,10 +20,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/statistiques")
-public class StatistiqueController {
+public class StatistiqueController implements StatistiqueApi {
     private final StatistiqueService statistiqueService;
 
-    @GetMapping("/general-stats")
     public ResponseEntity<SuccessResponseDto<List<Statistique>>> getStatistiques(@RequestParam String dateDebut, @RequestParam String dateFin) {
         log.info("Point d'entrée à la méthode getStatistiques du StatistiqueController avec date début et fin {} - {}", dateDebut, dateFin);
 
@@ -37,7 +37,6 @@ public class StatistiqueController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/stats-par-preparateur")
     public ResponseEntity<SuccessResponseDto<List<StatsPreparateurDto>>> getStatistiquesParPreparateur(@RequestParam String dateDebut, @RequestParam String dateFin) {
         log.info("Point d'entrée à la méthode getStatistiquesParPreparateur du StatistiqueController avec date début et fin {} - {}", dateDebut, dateFin);
 
@@ -52,7 +51,6 @@ public class StatistiqueController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/stats-par-controleur")
     public ResponseEntity<SuccessResponseDto<List<StatsPreparateurDto>>> getStatistiquesParControleur(@RequestParam String dateDebut, @RequestParam String dateFin) {
         log.info("Point d'entrée à la méthode getStatistiquesParControleur du StatistiqueController avec date début et fin {} - {}", dateDebut, dateFin);
 

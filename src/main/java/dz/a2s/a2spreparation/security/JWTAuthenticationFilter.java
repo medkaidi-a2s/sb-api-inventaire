@@ -17,6 +17,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @NoArgsConstructor
@@ -61,6 +63,13 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request)
             throws ServletException {
         String path = request.getRequestURI();
-        return "/auth/login".equals(path);
+
+        List<String> excludedPaths = Arrays.asList(
+                "/actuator",
+                "/swagger-ui/index.html",
+                "/auth/login"
+        );
+
+        return excludedPaths.contains(path);
     }
 }

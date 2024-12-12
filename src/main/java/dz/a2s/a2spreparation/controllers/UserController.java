@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.api.UserApi;
 import dz.a2s.a2spreparation.dto.AuthorizationDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.services.AuthorizationService;
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user-data")
-public class UserController {
+public class UserController implements UserApi {
     private final AuthorizationService authorizationService;
 
-    @GetMapping("/authorizations/affectation")
     public ResponseEntity<SuccessResponseDto<AuthorizationDto>> getAffectationAuthorization() {
         log.info("Entering getAffectationAuthorization from the UserController");
 
@@ -33,7 +33,6 @@ public class UserController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @GetMapping("/authorizations/preparation")
     public ResponseEntity<SuccessResponseDto<AuthorizationDto>> getPreparationAuthorization() {
         log.info("Entering the getPreparationAuthorization method from the UserController");
 

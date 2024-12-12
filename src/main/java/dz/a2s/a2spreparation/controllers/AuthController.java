@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.controllers;
 
+import dz.a2s.a2spreparation.api.AuthApi;
 import dz.a2s.a2spreparation.dto.auth.AuthResponseDto;
 import dz.a2s.a2spreparation.dto.auth.ChangePasswordDto;
 import dz.a2s.a2spreparation.dto.auth.LoginDto;
@@ -7,6 +8,7 @@ import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.repositories.UserEntityRepository;
 import dz.a2s.a2spreparation.security.JWTGenerator;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements AuthApi {
 
     private final AuthenticationManager authenticationManager;
     private final UserEntityRepository userEntityRepository;
@@ -33,7 +35,6 @@ public class AuthController {
     private final JWTGenerator jwtGenerator;
     private final CustomUserDetailsService customUserDetailsService;
 
-    @PostMapping("/login")
     public ResponseEntity<SuccessResponseDto<AuthResponseDto>> login(@RequestBody @Valid LoginDto loginDto) {
         log.info("Entering login method from AuthController with userCode and companyId {} : {}", loginDto.getUsername(), loginDto.getCompanyId());
 
@@ -56,7 +57,6 @@ public class AuthController {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    @PostMapping("/change-password")
     public ResponseEntity<SuccessResponseDto<Integer>> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto) throws Exception {
         log.info("Point d'entrée de la méthode changePassword du AuthController");
 

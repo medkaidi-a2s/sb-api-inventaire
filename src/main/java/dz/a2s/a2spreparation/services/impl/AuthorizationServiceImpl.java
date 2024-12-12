@@ -30,6 +30,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         Integer value = this.stpUserRolesRepository.getAuthorization(username, companyId, affectationFormCode);
 
+        log.info("Valeur de retour de la requête relative à l'autorisation d'affectation {}", value);
+
         AuthorizationDto authorizationDto = new AuthorizationDto(affectationFormCode, value);
 
         return authorizationDto;
@@ -42,6 +44,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         String username = this.customUserDetailsService.getCurrentUserCode();
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         Integer value = this.stpUserRolesRepository.getAuthorization(username, companyId, preparationFormCode);
+
+        log.info("Valeur de retour de la requête relative à l'autorisation de préparation {}", value);
 
         AuthorizationDto authorizationDto = new AuthorizationDto(preparationFormCode, value);
 
