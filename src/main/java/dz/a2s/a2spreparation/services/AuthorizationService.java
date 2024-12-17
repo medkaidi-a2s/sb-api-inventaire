@@ -8,4 +8,8 @@ public interface AuthorizationService {
 
     AuthorizationDto getPreparationAuthorization();
 
+    AuthorizationDto getControlAuthorization();
+
+    AuthorizationDto getStatisticsAuthorization();
+
 }

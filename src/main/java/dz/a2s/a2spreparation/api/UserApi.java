@@ -21,4 +21,14 @@ public interface UserApi {
     @GetMapping("/authorizations/preparation")
     public ResponseEntity<SuccessResponseDto<AuthorizationDto>> getPreparationAuthorization();
 
+    @Operation(summary = "Autorisation de contrôle", description = "Déterminer si l'utilisateur authentifié à accès à l'interface du contrôle")
+    @ApiResponse(responseCode = "200", description = "Autorisation récupérée avec succés, si elle est égale à 1 cela veut dire que l'utilisateur peut accèder à l'interface du contrôle")
+    @GetMapping("/authorizations/control")
+    public ResponseEntity<SuccessResponseDto<AuthorizationDto>> getControlAuthorization();
+
+    @Operation(summary = "Autorisation pour les statistiques", description = "Déterminer si l'utilisateur authentifié à accès à l'interface des statistiques")
+    @ApiResponse(responseCode = "200", description = "Autorisation récupérée avec succés, si elle est égale à 1 cela veut dire que l'utilisateur peut accèder à l'interface des statistiques")
+    @GetMapping("/authorizations/statistics")
+    public ResponseEntity<SuccessResponseDto<AuthorizationDto>> getStatisticsAuthorization();
+
 }

@@ -22,6 +22,12 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     @Value("${params.authorizations.preparation}")
     private int preparationFormCode;
 
+    @Value("${params.authorizations.control}")
+    private int controlFormCode;
+
+    @Value("${params.authorizations.statistics}")
+    private int statisticsFormCode;
+
     @Override
     public AuthorizationDto getAffectationAuthorization() {
         log.info("Entering the getAffectationAuthorization method from the AuthorizationService for formCode {}", affectationFormCode);
@@ -48,6 +54,36 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         log.info("Valeur de retour de la requête relative à l'autorisation de préparation {}", value);
 
         AuthorizationDto authorizationDto = new AuthorizationDto(preparationFormCode, value);
+
+        return authorizationDto;
+    }
+
+    @Override
+    public AuthorizationDto getControlAuthorization() {
+        log.info("Entering the getControlAuthorization method from the AuthorizationService for formCode {}", controlFormCode);
+
+        String username = this.customUserDetailsService.getCurrentUserCode();
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        Integer value = this.stpUserRolesRepository.getAuthorization(username, companyId, controlFormCode);
+
+        log.info("Valeur de retour de la requête relative à l'autorisation du contrôle {}", value);
+
+        AuthorizationDto authorizationDto = new AuthorizationDto(controlFormCode, value);
+
+        return authorizationDto;
+    }
+
+    @Override
+    public AuthorizationDto getStatisticsAuthorization() {
+        log.info("Entering the getStatisticsAuthorization method from the AuthorizationService for formCode {}", statisticsFormCode);
+
+        String username = this.customUserDetailsService.getCurrentUserCode();
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        Integer value = this.stpUserRolesRepository.getAuthorization(username, companyId, statisticsFormCode);
+
+        log.info("Valeur de retour de la requête relative à l'autorisation des statistiques {}", value);
+
+        AuthorizationDto authorizationDto = new AuthorizationDto(statisticsFormCode, value);
 
         return authorizationDto;
     }

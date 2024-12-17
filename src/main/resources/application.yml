@@ -27,3 +27,5 @@ params:
     authorizations:
         affectation: 480
         preparation: 481
+        control: 482
+        statistics: 489

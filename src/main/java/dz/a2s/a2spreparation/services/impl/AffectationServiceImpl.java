@@ -52,6 +52,7 @@ public class AffectationServiceImpl implements AffectationService {
         List<CommandeZone> listeCommandes = this.commandeZoneRepository.getListCmdZones(companyId, preparationZone, preparateurId, date);
         log.info("Commandes récupérées du repo avec size : {}", listeCommandes.size());
 
+
         log.info("Mappage des entités vers les DTOs");
         List<CommandeZoneResponseDto> commandes = listeCommandes.stream().map(CommandeZoneMapper::toCommandeZoneResponseDto).toList();
         log.info("Mappage terminé avec size : {}", commandes.size());
