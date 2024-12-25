@@ -13,21 +13,38 @@ import java.util.List;
 
 public interface CommandeZoneRepository extends JpaRepository<CommandeZone, VenteZoneId> {
 
+//    @Query(value = """
+//                SELECT *
+//                FROM PRP_LISTE_CDE_ZONES_GLOB
+//                WHERE VNT_CMP_ID = :companyId
+//                  AND VBZ_ZONE = :zone
+//                  AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+//                  AND (
+//                      VBZ_STATUT_PREPARE IS NULL OR VBZ_STATUT_PREPARE IN (0, 1, 2, 3)
+//                  )
+//                  AND (
+//                    (VBZ_STATUT_PREPARE = 0  OR VBZ_STATUT_PREPARE IS NULL)
+//                    OR (VBZ_STATUT_PREPARE > 0 AND VBZ_PREPAR_ID = :preparId)
+//                  )
+//            """, nativeQuery = true)
     @Query(value = """
                 SELECT *
-                FROM PRP_LISTE_CDE_ZONES_GLOB
-                WHERE VNT_CMP_ID = :companyId
-                  AND VBZ_ZONE = :zone
-                  AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
-                  AND (
-                      VBZ_STATUT_PREPARE IS NULL OR VBZ_STATUT_PREPARE IN (0, 1, 2, 3)
-                  )
-                  AND (
-                    (VBZ_STATUT_PREPARE = 0  OR VBZ_STATUT_PREPARE IS NULL)
-                    OR (VBZ_STATUT_PREPARE > 0 AND VBZ_PREPAR_ID = :preparId)
-                  )
+                  FROM PRP_LISTE_CDE_ZONES_GLOB T
+                 WHERE EXISTS
+                 (SELECT 'X'
+                          FROM STP_TIERS_ZONES X
+                         WHERE X.TRZ_CMP_ID = T.VNT_CMP_ID
+                           AND X.TRZ_ZNS_ID = T.VBZ_ZONE
+                           AND X.TRZ_TER_ID = :preparId
+                           AND X.TRZ_TER_TYPE = 4)
+                   AND (VNT_CMP_ID = :companyId)
+                   AND (:date IS NULL OR
+                       TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+                   AND (VBZ_STATUT_PREPARE IS NULL OR VBZ_STATUT_PREPARE IN (0, 1, 2, 3))
+                   AND ((VBZ_STATUT_PREPARE = 0 OR VBZ_STATUT_PREPARE IS NULL) OR
+                       (VBZ_STATUT_PREPARE > 0 AND VBZ_PREPAR_ID = :preparId))
             """, nativeQuery = true)
-    List<CommandeZone> getListCmdZones(@Param("companyId") Integer companyId, @Param("zone") String zone, @Param("preparId") Integer preparId, @Param("date") String date);
+    List<CommandeZone> getListCmdZones(@Param("companyId") Integer companyId, @Param("preparId") Integer preparId, @Param("date") String date);
 
     @Query(value = """
                 select count(*) from PRP_LISTE_CDE_ZONES_GLOB t\s
@@ -53,15 +70,31 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
 //                  AND VBZ_STATUT_PREPARE = 3
 //                  OR (VBZ_STATUT_PREPARE > 3 AND VBZ_VERIF_ID = :utilisateurId)
 //            """, nativeQuery = true)
-    @Query(value = """
-            SELECT * 
-            FROM PRP_LISTE_CDE_ZONE_CONTROLES
-            WHERE VNT_CMP_ID = :companyId 
-              AND VBZ_ZONE = :zone 
-              AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
-              AND (VBZ_STATUT_PREPARE = 3 OR (VBZ_STATUT_PREPARE > 3 AND VBZ_VERIF_ID = :utilisateurId))
+//    @Query(value = """
+//            SELECT *
+//            FROM PRP_LISTE_CDE_ZONE_CONTROLES
+//            WHERE VNT_CMP_ID = :companyId
+//              AND VBZ_ZONE = :zone
+//              AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+//              AND (VBZ_STATUT_PREPARE = 3 OR (VBZ_STATUT_PREPARE > 3 AND VBZ_VERIF_ID = :utilisateurId))
+//            """, nativeQuery = true)
+    @Query(value= """
+                SELECT *
+                  FROM PRP_LISTE_CDE_ZONE_CONTROLES T
+                 WHERE EXISTS (SELECT 'X'
+                          FROM STP_TIERS_ZONES X
+                         WHERE X.TRZ_CMP_ID = T.VNT_CMP_ID
+                           AND X.TRZ_ZNS_ID = T.VBZ_ZONE
+                           AND X.TRZ_TER_ID = :utilisateurId
+                           AND X.TRZ_TER_TYPE = 5)
+                   AND VNT_CMP_ID = :companyId
+                   AND (:date IS NULL OR
+                       TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+                   AND (VBZ_STATUT_PREPARE = 3 OR
+                       (VBZ_STATUT_PREPARE > 3 AND VBZ_VERIF_ID = :utilisateurId))
+            
             """, nativeQuery = true)
-    List<CommandeZone> getPreparedCommandesZone(@Param("companyId") Integer companyId, @Param("zone") String zone, @Param("utilisateurId") Integer utilisateurId, @Param("date") String date);
+    List<CommandeZone> getPreparedCommandesZone(@Param("companyId") Integer companyId, @Param("utilisateurId") Integer utilisateurId, @Param("date") String date);
 
     @Procedure(procedureName = "logistiques.P_VALIDE_CDE_PREPARE_ZONE", outputParameterName = "p_msg")
     Integer setCommandeZonePrepared(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_ZONE") Integer zone, @Param("P_USER") String user);

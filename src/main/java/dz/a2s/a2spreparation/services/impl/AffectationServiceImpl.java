@@ -42,14 +42,14 @@ public class AffectationServiceImpl implements AffectationService {
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Récupération de la companyId : {}", companyId);
 
-        String preparationZone = this.customUserDetailsService.getPreparationZone();
-        log.info("Récupération de l'id de la zone de l'utilisateur authentifié : {}", preparationZone);
+//        String preparationZone = this.customUserDetailsService.getPreparationZone();
+//        log.info("Récupération de l'id de la zone de l'utilisateur authentifié : {}", preparationZone);
 
         Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
         log.info("Fetching the current user id to filter the orders {}", preparateurId);
 
         log.info("Récupération de la liste des commandes par zone à partir du repo");
-        List<CommandeZone> listeCommandes = this.commandeZoneRepository.getListCmdZones(companyId, preparationZone, preparateurId, date);
+        List<CommandeZone> listeCommandes = this.commandeZoneRepository.getListCmdZones(companyId, preparateurId, date);
         log.info("Commandes récupérées du repo avec size : {}", listeCommandes.size());
 
 

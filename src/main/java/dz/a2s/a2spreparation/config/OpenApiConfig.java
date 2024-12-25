@@ -3,7 +3,6 @@ package dz.a2s.a2spreparation.config;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.servers.Server;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "A2S LogiPharm Préparation",
                 version = "1.0",
-                description = "API Documentation for "
+                description = "API Documentation for A2S LogiPharm Preparation "
         ),
         servers = {
                 @Server(url = "http://localhost:8080", description = "Development Server")

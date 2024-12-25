@@ -59,10 +59,7 @@ public class CheckingServiceImpl implements CheckingService {
         Integer utilisateurId = this.customUserDetailsService.getUtilisateurId();
         log.info("Utilisateur ID fetched from the service {}", utilisateurId);
 
-        String zone = this.customUserDetailsService.getPreparationZone();
-        log.info("Fetching the preparation zone id for the logged user {}", zone);
-
-        List<CommandeZone> commandes = this.commandeZoneRepository.getPreparedCommandesZone(companyId, zone, utilisateurId, date);
+        List<CommandeZone> commandes = this.commandeZoneRepository.getPreparedCommandesZone(companyId, utilisateurId, date);
         log.info("Fetched the commande to check from the repo with length {}", commandes.size());
 
         List<CommandeZoneResponseDto> response = commandes.stream().map(CommandeZoneMapper::toCommandeZoneResponseDto).toList();
