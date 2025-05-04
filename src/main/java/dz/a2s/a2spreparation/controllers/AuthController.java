@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController implements AuthApi {
 
     private final AuthenticationManager authenticationManager;
-    private final UserEntityRepository userEntityRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final UserEntityRepository userEntityRepository;
+//    private final PasswordEncoder passwordEncoder;
     private final JWTGenerator jwtGenerator;
     private final CustomUserDetailsService customUserDetailsService;
 

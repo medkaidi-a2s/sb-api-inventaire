@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface UserEntityRepository extends JpaRepository<UserEntity, UserEntityId> {
 
-    @Query(value = "SELECT USR_CODE, USR_CMP_ID, USR_NOM_LOC, USR_PASSWORD FROM STP_USERS WHERE USR_CODE = :username AND USR_CMP_ID = :companyId", nativeQuery = true)
+    @Query(value = "SELECT USR_CODE, USR_CMP_ID, USR_NOM_LOC, USR_PASSWORD FROM STP_USERS WHERE LOWER(USR_CODE) = LOWER(:username) AND USR_CMP_ID = :companyId", nativeQuery = true)
     Optional<UserEntity> findByUsernameAndCompanyId(@Param("username") String username, @Param("companyId") int companyId);
 
     @Query(value = """
@@ -21,7 +21,7 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, UserEnti
             where u.tru_cmp_id = t.ter_cmp_id
               and u.tru_ter_type = t.ter_type
               and u.tru_ter_id = t.ter_id
-              and u.tru_usr_code = :username
+              and LOWER(u.tru_usr_code) = LOWER(:username)
               and t.ter_cmp_id = :companyId
             """, nativeQuery = true)
     String getPreparationZone(@Param("username") String username, @Param("companyId") Integer companyId);

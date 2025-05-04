@@ -31,6 +31,6 @@ public class LigneQteZoneDto {
     @NotNull(message = "Quantité de la préparation obligatoire")
     private Integer qte;
 
-    private String motif;
+    private Integer motif;
 
 }

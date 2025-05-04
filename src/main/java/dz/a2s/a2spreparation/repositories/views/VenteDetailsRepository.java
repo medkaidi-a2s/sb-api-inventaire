@@ -45,7 +45,7 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
             @Param("stkCode") String stkCode,
             @Param("no") Integer no,
             @Param("qte") Integer qte,
-            @Param("motif") String motif
+            @Param("motif") Integer motif
     );
 
     @Transactional
@@ -66,7 +66,7 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
             @Param("stkCode") String stkCode,
             @Param("no") Integer no,
             @Param("qte") Integer qte,
-            @Param("motif") String motif
+            @Param("motif") Integer motif
     );
 
 }

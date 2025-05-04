@@ -28,7 +28,7 @@ public interface CheckingService {
             String stkCode,
             Integer no,
             Integer qte,
-            String motif
+            Integer motif
     ) throws Exception;
 
     Integer setCommandeControlled(CmdIdDto id) throws Exception;

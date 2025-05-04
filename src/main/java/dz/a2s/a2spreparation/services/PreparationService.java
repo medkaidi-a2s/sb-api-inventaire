@@ -58,7 +58,7 @@ public interface PreparationService {
             String stkCode,
             Integer no,
             Integer qte,
-            String motif
+            Integer motif
     ) throws Exception;
 
     Integer setPreparedQuantityZone(LigneQteZoneDto ligne) throws Exception;

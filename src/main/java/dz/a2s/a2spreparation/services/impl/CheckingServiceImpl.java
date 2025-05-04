@@ -87,7 +87,7 @@ public class CheckingServiceImpl implements CheckingService {
     }
 
     @Override
-    public Integer setControlledQuantity(Integer cmpId, Integer id, String type, String stkCode, Integer no, Integer qte, String motif) throws Exception {
+    public Integer setControlledQuantity(Integer cmpId, Integer id, String type, String stkCode, Integer no, Integer qte, Integer motif) throws Exception {
         log.info("Entering the setControlledQuantity method from the CheckingService");
 
         Integer response = this.venteDetailsRepository.setControlledQuantity(

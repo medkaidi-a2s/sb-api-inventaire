@@ -227,7 +227,7 @@ public class PreparationServiceImpl implements PreparationService {
     }
 
     @Override
-    public Integer setPreparedQuantity(Integer cmpId, Integer id, String type, String stkCode, Integer no, Integer qte, String motif) throws Exception {
+    public Integer setPreparedQuantity(Integer cmpId, Integer id, String type, String stkCode, Integer no, Integer qte, Integer motif) throws Exception {
         log.info("Entering the setPreparedQuantity method from the PreparationService");
 
         Integer response = this.venteDetailsRepository.setPreparedQuantity(

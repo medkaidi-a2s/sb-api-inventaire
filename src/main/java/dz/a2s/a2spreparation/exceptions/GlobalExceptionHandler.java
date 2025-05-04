@@ -24,9 +24,9 @@ public class GlobalExceptionHandler {
 
         ErrorObject errorObject = ErrorObject.builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
-                        .timestamp(new Date())
-                                .message("La ressource demandée est introuvable")
-                                        .build();
+                .timestamp(new Date())
+                .message("La ressource demandée est introuvable")
+                .build();
 
         log.info("Returning the following error {}", errorObject.getMessage());
         return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
@@ -52,12 +52,12 @@ public class GlobalExceptionHandler {
         log.info("Entering handleValidationErrors method from GlobalErrorHandler with message {}", ex.getMessage());
 
         List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(fieldError -> {
-           return fieldError.getField() + " : " + fieldError.getDefaultMessage();
+            return fieldError.getField() + " : " + fieldError.getDefaultMessage();
         }).toList();
 
         log.info("Détails de l'erreur de validation {}", errors);
 
-        ErrorObject errorObject =  ErrorObject
+        ErrorObject errorObject = ErrorObject
                 .builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .timestamp(new Date())
@@ -74,9 +74,9 @@ public class GlobalExceptionHandler {
 
         ErrorObject errorObject = ErrorObject.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                        .message("Une erreur interne s'est produite, veuillez contacter votre administrateur.")
-                                .timestamp(new Date())
-                                        .build();
+                .message("Une erreur interne s'est produite, veuillez contacter votre administrateur.")
+                .timestamp(new Date())
+                .build();
 
         log.info("Returning the following error {}", errorObject.getMessage());
 
@@ -88,10 +88,10 @@ public class GlobalExceptionHandler {
         log.info("Entering handleRuntimeException from the GlobalHandleException with message {}", ex.getMessage());
 
         ErrorObject errorObject = ErrorObject.builder()
-                        .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                                .message("Une erreur interne s'est produite en cours d'exécution de l'application, veuillez contacter votre administrateur.")
-                                        .timestamp(new Date())
-                                                .build();
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message("Une erreur interne s'est produite en cours d'exécution de l'application, veuillez contacter votre administrateur.")
+                .timestamp(new Date())
+                .build();
 
         log.info("Returning the following error {}", ex.getMessage());
 
