@@ -132,10 +132,10 @@ public class CheckingServiceImpl implements CheckingService {
 
         if (response != 0) {
             if (response == 105)
-                throw new ActionNotAllowedException(AppErrorCodes.CDE_CONTROLE.getMessage());
+                throw new ActionNotAllowedException(AppErrorCodes.CDE_PREPARE.getMessage());
             else if (response == 106)
                 throw new ActionNotAllowedException(AppErrorCodes.PRESENCE_PRODUIT_INVALIDE.getMessage());
-            throw new RuntimeException("Le contrôle de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
+            throw new RuntimeException("La préparation de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
         }
 
         return response;
@@ -221,14 +221,8 @@ public class CheckingServiceImpl implements CheckingService {
                 username
         );
         log.info("Réponse de la procédure stockée pour marquer la commande zone comme contrôlée {}", response);
-
-        if (response != 0) {
-            if (response == 105)
-                throw new ActionNotAllowedException(AppErrorCodes.CDE_CONTROLE.getMessage());
-            else if (response == 106)
-                throw new ActionNotAllowedException(AppErrorCodes.PRESENCE_PRODUIT_INVALIDE.getMessage());
-            throw new RuntimeException("Le contrôle de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
-        }
+        if (response != 0)
+            throw new Exception("Erreur lors de la mise à jour de la commande par zone");
 
         return response;
     }

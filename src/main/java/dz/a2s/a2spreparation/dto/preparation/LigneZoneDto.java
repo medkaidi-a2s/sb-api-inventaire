@@ -24,13 +24,13 @@ public class LigneZoneDto {
     private String remarque;
     private Boolean prepareFlag;
     private Integer qtePrepare;
-    private String prepareMotif;
+    private Integer prepareMotif;
     private Boolean controlFlag;
     private Integer qteControl;
-    private String controleMotif;
+    private Integer controleMotif;
     private Boolean controlFlag2;
     private Integer qteControl2;
-    private String controleMotif2;
+    private Integer controleMotif2;
     private String commercialName;
     private BigDecimal ppa;
 

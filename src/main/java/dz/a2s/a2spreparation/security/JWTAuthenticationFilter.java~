@@ -31,10 +31,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info(" ");log.debug(" ");
-        log.info("**********************************************************************************************************************");
-        log.info("                    NEW REQUEST - URL : {} - ADRESSE : {}", request.getRequestURI(), request.getRemoteAddr());
-        log.info("**********************************************************************************************************************");
+        log.info("Entering the JWTAuthenticationFilter");
 
         String token = getJWTFromRequest(request);
 

@@ -7,6 +7,8 @@ import dz.a2s.a2spreparation.dto.preparation.*;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.*;
+import dz.a2s.a2spreparation.exceptions.ActionNotAllowedException;
+import dz.a2s.a2spreparation.exceptions.AppErrorCodes;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.CommandeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdePrlvUsrCodeMapper;
@@ -39,15 +41,15 @@ public class PreparationServiceImpl implements PreparationService {
 
     @Override
     public List<CommandeResponseDto> getCommandes(String date) {
-        log.info("Entering the getCommandes method from the PreparationService with date {}", date);
+        log.info("| Entry | PreparationService.getCommandes | Args | date : {}", date);
 
-        if(!date.isEmpty())
+        if (!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
-        Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
-        log.info("Récupération de l'id de préparateur à partir du service qui est de : {}", preparateurId);
+        var preparateurId = this.customUserDetailsService.getUtilisateurId();
+        log.info("ID du préparateur recuperé : {}", preparateurId);
 
-        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        var companyId = this.customUserDetailsService.getCurrentCompanyId();
 
         log.info("Fetching the liste of orders by preparateur from the repo");
         List<Commande> commandes = this.commandeRepository.getCommandesParPreparateur(preparateurId, companyId, date);
@@ -62,7 +64,7 @@ public class PreparationServiceImpl implements PreparationService {
     public List<PrpCmdPrlvUsrCodeDto> getCommandesPrlv(String date) {
         log.info("Entering the getCommandesPrlv method from the PreparationService with date {}", date);
 
-        if(!date.isEmpty())
+        if (!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
         String username = this.customUserDetailsService.getCurrentUserCode();
@@ -78,77 +80,83 @@ public class PreparationServiceImpl implements PreparationService {
     }
 
     @Override
-    public Integer startPreparePrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee) throws Exception {
+    public Integer startPreparePrlv(int cmdId, int id, String type, int annee) throws Exception {
         log.info("Entering the method startPreparePrlv from the PreparationService");
 
         Integer response = this.prpCdePrlvUsrCodeRepository.startPreparePrlv(
-                p_cmp,
-                p_slt_id,
-                p_slt_type,
-                p_slt_annee
+                cmdId,
+                id,
+                type,
+                annee
         );
 
         log.info("Valeur de retour de la stored procedure for starting preparation with prlv is {}", response);
 
-        if(response != 0)
-            throw new Exception("Erreur lors de la mise à jour de la commande");
+        if (response != 0)
+            throw new RuntimeException("La préparation de la commande (par prélèvement) n'a pas pu être démarrée");
 
         return response;
     }
 
     @Override
-    public Integer startPrepareCde(int p_vnt_cmp_id, int p_vnt_id, String p_vnt_type, String p_vnt_stk_code) throws Exception{
+    public Integer startPrepareCde(int cmpId, int id, String type, String stkCode) throws Exception {
         log.info("Entering the method startPrepareCde from the PreparationService");
 
         Integer response = this.commandeRepository.startPrepareCde(
-                p_vnt_cmp_id,
-                p_vnt_id,
-                p_vnt_type,
-                p_vnt_stk_code
+                cmpId,
+                id,
+                type,
+                stkCode
         );
 
-        log.info("Valeur de retour de la stored procedure for starting preparation with cde is {}", response);
+        log.info("Exécution de la procédure stockée pour débuter la préparation de commande : valeur de retour = {}", response);
 
-        if(response != 0)
-            throw new Exception("Erreur lors de la mise à jour de la commande");
+        if (response != 0) {
+            if (response == 1)
+                throw new ActionNotAllowedException(AppErrorCodes.CDE_EN_PREPARATION.getMessage());
+            throw new RuntimeException("La préparation de la commande n'a pas pu être commencée - [stored procedure return value : " + response + "]");
+        }
 
         return response;
     }
 
     @Override
-    public Integer startPrepareZone(int v_vbz_cmp_id, int v_vbz_vnt_id, String v_vbz_vnt_type, String v_vbz_stk_code, int v_vbz_zone) throws Exception{
+    public Integer startPrepareZone(int cmpId, int id, String type, String stkCode, int zone) throws Exception {
         log.info("Point d'entrée à la méthode startPrepareZone du PreparationService");
 
         Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
         log.info("Récupération de l'id du préparateur : {}", preparateurId);
 
-        Integer isPreparationStarted = this.commandeZoneRepository.isPreparationStartedByOther(
-                v_vbz_cmp_id,
-                v_vbz_vnt_id,
-                v_vbz_vnt_type,
-                v_vbz_stk_code,
-                v_vbz_zone,
-                preparateurId
-        );
-
-        log.info("Valeur de retour de la requête isPreparationStartedByOther : {}", isPreparationStarted);
-
-        if(isPreparationStarted != 0)
-            throw new Exception("La préparation a été déjà commencé par un autre préparateur.");
+//        Integer isPreparationStarted = this.commandeZoneRepository.isPreparationStartedByOther(
+//                cmpId,
+//                id,
+//                type,
+//                stkCode,
+//                zone,
+//                preparateurId
+//        );
+//
+//        log.info("Valeur de retour de la requête isPreparationStartedByOther : {}", isPreparationStarted);
+//
+//        if(isPreparationStarted != 0)
+//            throw new Exception("La préparation a été déjà commencé par un autre préparateur.");
 
         Integer response = this.commandeZoneRepository.startPrepareZone(
-                v_vbz_cmp_id,
-                v_vbz_vnt_id,
-                v_vbz_vnt_type,
-                v_vbz_stk_code,
-                v_vbz_zone,
+                cmpId,
+                id,
+                type,
+                stkCode,
+                zone,
                 preparateurId
         );
 
-        log.info("Valeur de retour de la procédure stockée pour marquer le début de préparation d'une commance par zone : {}", response);
+        log.info("Exécution de la procédure stockée pour débuter la préparation de commande (par zone) : valeur de retour = {}", response);
 
-        if(response != 0)
-            throw new Exception("Erreur lors de la mise à jour de la commande par zone");
+        if (response != 0) {
+            if (response == 1)
+                throw new ActionNotAllowedException(AppErrorCodes.CDE_EN_PREPARATION.getMessage());
+            throw new RuntimeException("La préparation de la commande n'a pas pu être commencée - [stored procedure return value : " + response + "]");
+        }
 
         return response;
     }
@@ -167,7 +175,7 @@ public class PreparationServiceImpl implements PreparationService {
                 annee
         );
 
-        if(commande == null)
+        if (commande == null)
             throw new RessourceNotFoundException("Commande demandée introuvable");
 
         PrpCmdPrlvUsrCodeDto response = PrpCdePrlvUsrCodeMapper.toPrpCmdPrlvUsrCodeDto(commande);
@@ -242,8 +250,8 @@ public class PreparationServiceImpl implements PreparationService {
 
         log.info("Réponse de la requête de mise à jour de la quantité préparée {}", response);
 
-        if(response == 0)
-            throw new Exception("Une erreur est survenu lors de la mise à jour de la quantité préparée pour la commande spécifiée");
+        if (response == 0)
+            throw new ActionNotAllowedException(AppErrorCodes.PRODUIT_VALIDE.getMessage());
 
         return response;
     }
@@ -265,8 +273,8 @@ public class PreparationServiceImpl implements PreparationService {
 
         log.info("Réponse de la requête de mise à jour de la quantité préparée {}", response);
 
-        if(response == 0)
-            throw new Exception("Une erreur est survenu lors de la mise à jour de la quantité préparé pour la commande spécifiée");
+        if (response == 0)
+            throw new ActionNotAllowedException(AppErrorCodes.PRODUIT_VALIDE.getMessage());
 
         return response;
     }
@@ -299,8 +307,13 @@ public class PreparationServiceImpl implements PreparationService {
 
         log.info("Réponse de la procédure stockée pour marquer la commande comme préparée {}", response);
 
-        if(response != 0)
-            throw new Exception("Erreur lors de la mise à jour de la commande");
+        if (response != 0) {
+            if (response == 105)
+                throw new ActionNotAllowedException(AppErrorCodes.CDE_PREPARE.getMessage());
+            else if (response == 106)
+                throw new ActionNotAllowedException(AppErrorCodes.PRESENCE_PRODUIT_INVALIDE.getMessage());
+            throw new RuntimeException("La préparation de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
+        }
 
         return response;
     }
@@ -321,8 +334,14 @@ public class PreparationServiceImpl implements PreparationService {
                 username
         );
         log.info("Réponse de la procédure stockée pour marquer la commande zone comme préparée {}", response);
-        if(response != 0)
-            throw new Exception("Erreur lors de la mise à jour de la commande par zone");
+
+        if (response != 0) {
+            if (response == 105)
+                throw new ActionNotAllowedException(AppErrorCodes.CDE_PREPARE.getMessage());
+            else if (response == 106)
+                throw new ActionNotAllowedException(AppErrorCodes.PRESENCE_PRODUIT_INVALIDE.getMessage());
+            throw new RuntimeException("La préparation de la commande n'a pas pu être terminée (par zone) - [stored procedure return value : " + response + "]");
+        }
 
         return response;
     }

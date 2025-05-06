@@ -57,8 +57,6 @@ public class GlobalExceptionHandler {
                 .message(ex.getMessage())
                 .timestamp(new Date())
                 .build();
-
-        return new ResponseEntity<>(errorObject, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,0 +1,4 @@
+package dz.a2s.a2spreparation.exceptions;
+
+public class ActionNotAllowedException {
+}

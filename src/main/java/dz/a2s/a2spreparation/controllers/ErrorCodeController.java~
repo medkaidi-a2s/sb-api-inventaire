@@ -35,8 +35,6 @@ public class ErrorCodeController implements ErrorCodeApi {
                 list
         );
 
-        log.info("Returning {}", response);
-
         return ResponseEntity.ok(response);
     }
 }

@@ -57,7 +57,7 @@ public class VenteZoneDetails {
     private Integer qtePrepare;
 
     @Column(name = "VND_PREPARE_MOTIF")
-    private String prepareMotif;
+    private Integer prepareMotif;
 
     @Column(name = "VND_CONTROLE_FLAG1")
     private Boolean controlFlag;
@@ -66,7 +66,7 @@ public class VenteZoneDetails {
     private Integer qteControle;
 
     @Column(name = "VND_CONTROLE_MOTIF1")
-    private String controlMotif;
+    private Integer controlMotif;
 
     @Column(name = "VND_CONTROLE_FLAG2")
     private Boolean controlFlag2;
@@ -75,7 +75,7 @@ public class VenteZoneDetails {
     private Integer qteControle2;
 
     @Column(name = "VND_CONTROLE_MOTIF2")
-    private String controlMotif2;
+    private Integer controlMotif2;
 
     @Column(name = "MED_COMMERCIAL_NAME")
     private String medCommercialName;

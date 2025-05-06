@@ -8,8 +8,11 @@ import lombok.RequiredArgsConstructor;
 public enum AppErrorCodes {
     PRODUIT_VALIDE("PRODUIT_VALIDE", "Le produit a été déjà validé"),
     PRODUIT_CONTROLE("PRODUIT_CONTROLE", "Le produit a été déjà controllé"),
-    BON_EN_PREPARATION("BON_EN_PREPARATION", "Le bon est déjà en cours de préparation"),
-    BON_EN_CONTROLE("BON_EN_CONTROLE", "Le bon est déjà en cours de contrôle");
+    PRESENCE_PRODUIT_INVALIDE("PRESENCE_PRODUIT_INVALIDE", "Présence de produits non validés dans la commande."),
+    CDE_EN_PREPARATION("CDE_EN_PREPARATION", "La commande est déjà en cours de préparation"),
+    CDE_EN_CONTROLE("CDE_EN_CONTROLE", "La commande est déjà en cours de contrôle"),
+    CDE_PREPARE("CDE_PREPARE", "La commande a été déjà préparée"),
+    CDE_CONTROLE("CDE_CONTROLE", "La commande a été déjà contrôlée");
 
     private final String code;
     private final String message;

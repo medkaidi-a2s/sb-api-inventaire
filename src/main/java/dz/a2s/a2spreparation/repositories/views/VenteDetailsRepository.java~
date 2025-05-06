@@ -54,16 +54,13 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
     @Transactional
     @Modifying
     @Query(value = """
-            UPDATE VNT_BON_DETAILS V
-               SET V.VND_CONTROLE_QTE1   = :qte,
-                   V.VND_CONTROLE_FLAG1  = 1,
-                   V.VND_CONTROLE_MOTIF1 = :motif
-             WHERE NVL(V.VND_CONTROLE_FLAG1, 0) <> 1
-               AND V.VND_VNT_ID = :id
-               AND V.VND_VNT_TYPE = :type
-               AND V.VND_CMP_ID = :cmpId
-               AND V.VND_STK_CODE = :stkCode
-               AND V.VND_NO = :no
+            UPDATE VNT_BON_DETAILS v
+            SET v.VND_CONTROLE_QTE1 = :qte, v.VND_CONTROLE_FLAG1 = 1, v.VND_CONTROLE_MOTIF1 = :motif
+            WHERE v.vnd_vnt_id = :id
+              AND v.vnd_vnt_type = :type
+              AND v.vnd_cmp_id = :cmpId
+              AND v.vnd_stk_code = :stkCode
+              AND v.vnd_no = :no
             """, nativeQuery = true)
     Integer setControlledQuantity(
             @Param("cmpId") Integer cmpId,
