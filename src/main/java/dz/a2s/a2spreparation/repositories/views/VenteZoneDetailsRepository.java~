@@ -47,13 +47,16 @@ public interface VenteZoneDetailsRepository extends JpaRepository<VenteZoneDetai
     @Transactional
     @Modifying
     @Query(value = """
-                    update vnt_bon_details v
-                      set vnd_controle_qte1   = :qte,
-                          vnd_controle_flag1  = 1,
-                          vnd_controle_motif1 = :motif
-                    where  v.vnd_vnt_id = :id and v.vnd_cmp_id = :cmpId and
-                     v.vnd_vnt_type = :type and v.vnd_stk_code = :stkCode and
-                     v.vnd_no = :no
+            UPDATE VNT_BON_DETAILS V
+               SET VND_CONTROLE_QTE1   = :qte,
+                   VND_CONTROLE_FLAG1  = 1,
+                   VND_CONTROLE_MOTIF1 = :motif
+             WHERE NVL(V.VND_CONTROLE_FLAG1, 0) <> 1
+               AND V.VND_VNT_ID = :id
+               AND V.VND_CMP_ID = :cmpId
+               AND V.VND_VNT_TYPE = :type
+               AND V.VND_STK_CODE = :stkCode
+               AND V.VND_NO = :no
             """, nativeQuery = true)
     Integer setControlledQuantityZone(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stkCode") String stkCode, @Param("no") Integer no, @Param("qte") Integer qte, @Param("motif") Integer motif);
 

@@ -32,7 +32,7 @@ public interface VenteZoneDetailsRepository extends JpaRepository<VenteZoneDetai
                SET VND_QTE_PREPARE   = :qte,
                    VND_PREPARE_FLAG  = 1,
                    VND_PREPARE_MOTIF = :motif
-             WHERE (V.VND_PREPARE_FLAG = 0 OR V.VND_PREPARE_FLAG IS NULL)
+             WHERE NVL(V.VND_PREPARE_FLAG, 0) = 0
                AND V.VND_VNT_ID = :id
                AND V.VND_CMP_ID = :cmpId
                AND V.VND_VNT_TYPE = :type
