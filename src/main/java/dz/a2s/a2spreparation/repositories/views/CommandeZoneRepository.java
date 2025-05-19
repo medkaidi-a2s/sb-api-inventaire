@@ -1,9 +1,7 @@
 package dz.a2s.a2spreparation.repositories.views;
 
 import dz.a2s.a2spreparation.entities.keys.VenteZoneId;
-import dz.a2s.a2spreparation.entities.views.Commande;
 import dz.a2s.a2spreparation.entities.views.CommandeZone;
-import dz.a2s.a2spreparation.entities.views.PrpCdeZone;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -13,7 +11,7 @@ import java.util.List;
 
 public interface CommandeZoneRepository extends JpaRepository<CommandeZone, VenteZoneId> {
 
-//    @Query(value = """
+    //    @Query(value = """
 //                SELECT *
 //                FROM PRP_LISTE_CDE_ZONES_GLOB
 //                WHERE VNT_CMP_ID = :companyId
@@ -78,7 +76,7 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
 //              AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
 //              AND (VBZ_STATUT_PREPARE = 3 OR (VBZ_STATUT_PREPARE > 3 AND VBZ_VERIF_ID = :utilisateurId))
 //            """, nativeQuery = true)
-    @Query(value= """
+    @Query(value = """
                 SELECT *
                   FROM PRP_LISTE_CDE_ZONE_CONTROLES T
                  WHERE EXISTS (SELECT 'X'

@@ -40,7 +40,7 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
                    AND (VNT_CMP_ID = :companyId)
                    AND (:date IS NULL OR
                        TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
-                   AND (VBZ_STATUT_PREPARE IS NULL OR VBZ_STATUT_PREPARE IN (0, 1, 2, 3))
+                   /*AND (VBZ_STATUT_PREPARE IS NULL OR VBZ_STATUT_PREPARE IN (0, 1, 2, 3))*/
                    AND ((VBZ_STATUT_PREPARE = 0 OR VBZ_STATUT_PREPARE IS NULL) OR
                        (VBZ_STATUT_PREPARE > 0 AND VBZ_PREPAR_ID = :preparId))
             """, nativeQuery = true)

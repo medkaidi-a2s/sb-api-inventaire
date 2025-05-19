@@ -251,7 +251,7 @@ public class PreparationServiceImpl implements PreparationService {
         log.info("Réponse de la requête de mise à jour de la quantité préparée {}", response);
 
         if (response == 0)
-            throw new ActionNotAllowedException(AppErrorCodes.PRODUIT_VALIDE.getMessage());
+            throw new ActionNotAllowedException(AppErrorCodes.PRODUIT_PREPARE.getMessage());
 
         return response;
     }
@@ -273,7 +273,7 @@ public class PreparationServiceImpl implements PreparationService {
         log.info("Réponse de la requête de mise à jour de la quantité préparée {}", response);
 
         if (response == 0)
-            throw new ActionNotAllowedException(AppErrorCodes.PRODUIT_VALIDE.getMessage());
+            throw new ActionNotAllowedException(AppErrorCodes.PRODUIT_PREPARE.getMessage());
 
         return response;
     }

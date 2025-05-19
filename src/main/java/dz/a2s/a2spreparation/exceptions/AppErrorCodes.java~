@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum AppErrorCodes {
     PRODUIT_PREPARE("PRODUIT_PREPARE", "Le produit a été déjà préparé"),
-    PRODUIT_CONTROLE("PRODUIT_CONTROLE", "Le produit a été déjà contrôlé"),
+    PRODUIT_CONTROLE("PRODUIT_CONTROLE", "Le produit a été déjà contrôllé"),
     PRESENCE_PRODUIT_INVALIDE("PRESENCE_PRODUIT_INVALIDE", "Présence de produits non validés dans la commande."),
     CDE_EN_PREPARATION("CDE_EN_PREPARATION", "La commande est déjà en cours de préparation"),
     CDE_EN_CONTROLE("CDE_EN_CONTROLE", "La commande est déjà en cours de contrôle"),
