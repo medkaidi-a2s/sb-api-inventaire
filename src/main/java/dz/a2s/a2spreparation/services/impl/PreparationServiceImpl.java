@@ -344,4 +344,24 @@ public class PreparationServiceImpl implements PreparationService {
 
         return response;
     }
+
+    @Override
+    public CommandeReceiptData getReceiptParCommande(CmdIdDto id) {
+        log.info("| Entry | PreparationService.getReceiptParCommande | Args | id={}", id);
+
+        var receiptProjection = this.commandeRepository.getReceiptData(id.getCmpId(), id.getId(), id.getType(), id.getStkCode());
+        log.info("Fetched the receipt data from the repo | receiptData={}", receiptProjection);
+
+        return CommandeMapper.toReceiptData(receiptProjection);
+    }
+
+    @Override
+    public CommandeReceiptData getReceiptParZone(CmdZoneIdDto id) {
+        log.info("| Entry | PreparationService.getReceiptParZone | Args | id={}", id);
+
+        var receiptProjection = this.commandeZoneRepository.getReceiptData(id.getCmpId(), id.getId(), id.getType(), id.getStkCode(), id.getZone());
+        log.info("Fetched the receipt data from the repo | receptData={}", receiptProjection);
+
+        return CommandeMapper.toReceiptData(receiptProjection);
+    }
 }

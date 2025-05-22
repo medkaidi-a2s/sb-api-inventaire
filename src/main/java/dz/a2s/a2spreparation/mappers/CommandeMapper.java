@@ -2,6 +2,8 @@ package dz.a2s.a2spreparation.mappers;
 
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
+import dz.a2s.a2spreparation.dto.preparation.CommandeReceiptData;
+import dz.a2s.a2spreparation.dto.preparation.CommandeReceiptProjection;
 import dz.a2s.a2spreparation.entities.views.Commande;
 
 public class CommandeMapper {
@@ -38,6 +40,19 @@ public class CommandeMapper {
         );
 
         return dto;
+    }
+
+    public static CommandeReceiptData toReceiptData(CommandeReceiptProjection projection) {
+        return new CommandeReceiptData(
+                projection.getVntReference(),
+                projection.getVntDate(),
+                projection.getTerNom(),
+                projection.getTerAdresse(),
+                projection.getTerRegionLib(),
+                projection.getXtable(),
+                projection.getZone() != null ? projection.getZone() : null,
+                projection.getNbr() != null ? projection.getNbr() : 0
+        );
     }
 
 }

@@ -296,4 +296,36 @@ public class PreparationController implements PreparationApi {
         return ResponseEntity.ok(successResponseDto);
     }
 
+    @Override
+    public ResponseEntity<SuccessResponseDto<CommandeReceiptData>> getCommandeReceiptData(@RequestBody @Valid CmdIdDto commande) {
+        log.info("| Entry | PreparationController.getCommandeReceiptData | Args | commande={}", commande);
+
+        var receiptData = this.preparationService.getReceiptParCommande(commande);
+        log.trace("Fetched receipt data from the service | receiptData={}", receiptData);
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Données du ticket récupérées avec succès",
+                receiptData
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<CommandeReceiptData>> getZoneReceiptData(@RequestBody @Valid CmdZoneIdDto commande) {
+        log.info("| Entry | PreparationController.getZoneReceiptData | Args | commende={}", commande);
+
+        var receiptData = this.preparationService.getReceiptParZone(commande);
+        log.trace("Fetched receipt data from the service | receptData={}", receiptData);
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Données du ticket récupérées avec succès",
+                receiptData
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
 }

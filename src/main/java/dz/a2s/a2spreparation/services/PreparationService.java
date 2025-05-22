@@ -3,16 +3,10 @@ package dz.a2s.a2spreparation.services;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
-import dz.a2s.a2spreparation.dto.affectation.PrpCmdPrlvDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
-import dz.a2s.a2spreparation.entities.keys.VentePrlvDetailsId;
 import dz.a2s.a2spreparation.entities.views.Motif;
-import dz.a2s.a2spreparation.entities.views.PrpCdeUsrCode;
-import dz.a2s.a2spreparation.entities.views.VenteDetails;
-import dz.a2s.a2spreparation.entities.views.VentePrlvDetails;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -68,5 +62,10 @@ public interface PreparationService {
     Integer setCommandePrepared(CmdIdDto id) throws Exception;
 
     Integer setCommandeZonePrepared(CmdZoneIdDto id) throws Exception;
+
+    CommandeReceiptData getReceiptParCommande(CmdIdDto id);
+
+    CommandeReceiptData getReceiptParZone(CmdZoneIdDto id);
+
 
 }

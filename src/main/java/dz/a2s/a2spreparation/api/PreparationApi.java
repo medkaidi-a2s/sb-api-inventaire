@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -136,5 +137,19 @@ public interface PreparationApi {
     @ApiResponse(responseCode = "200", description = "Commande marquée comme préparée")
     @PatchMapping("/commande-zone/set-prepared")
     public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZonePrepared(@RequestBody @Valid CmdZoneIdDto id) throws Exception;
+
+    @Operation(
+            summary = "Récupération des données du ticket d'une commande par facture",
+            description = "Récupératin des données du ticket en passant l'identifiant de la vente")
+    @ApiResponse(responseCode = "200", description = "Données récupérées avec succès")
+    @PostMapping("/commande/receipt-data")
+    public ResponseEntity<SuccessResponseDto<CommandeReceiptData>> getCommandeReceiptData(CmdIdDto commande);
+
+    @Operation(
+            summary = "Récupération des données du ticket d'une commande par zone",
+            description = "Récupératin des données du ticket en passant l'identifiant de la vente")
+    @ApiResponse(responseCode = "200", description = "Données récupérées avec succès")
+    @PostMapping("/commande-zone/receipt-data")
+    public ResponseEntity<SuccessResponseDto<CommandeReceiptData>> getZoneReceiptData(CmdZoneIdDto commande);
 
 }

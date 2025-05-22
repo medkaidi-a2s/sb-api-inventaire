@@ -1,8 +1,8 @@
 package dz.a2s.a2spreparation.repositories.views;
 
+import dz.a2s.a2spreparation.dto.preparation.CommandeReceiptProjection;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.Commande;
-import dz.a2s.a2spreparation.entities.views.PrpCommande;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -105,5 +105,24 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
             @Param("p_type") String p_type,
             @Param("p_user") String p_user
     );
+
+    @Query(value = """
+            SELECT v.vnt_reference,
+                   v.vnt_date,
+                   r.ter_nom,
+                   r.ter_adresse,
+                   r.ter_region_lib,
+                   v.VNT_REF_ASSOCIE2 AS xtable
+              FROM vnt_bons v
+              JOIN stp_tiers r
+                ON v.vnt_cmp_id = r.ter_cmp_id
+               AND v.vnt_ter_id = r.ter_id
+               AND v.vnt_ter_type = r.ter_type
+             WHERE v.vnt_cmp_id = :cmpId
+               AND v.vnt_id = :vntId
+               AND v.vnt_type = :type
+               AND v.vnt_stk_code = :stkCode
+            """, nativeQuery = true)
+    CommandeReceiptProjection getReceiptData(@Param("cmpId") Integer cmpId, @Param("vntId") Integer vntId, @Param("type") String type, @Param("stkCode") String stkCode);
 
 }
