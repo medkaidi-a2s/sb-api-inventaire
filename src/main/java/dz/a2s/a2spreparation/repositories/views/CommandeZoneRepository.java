@@ -99,7 +99,7 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
     Integer setCommandeZonePrepared(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_ZONE") Integer zone, @Param("P_USER") String user);
 
     @Query(value = """
-            select count(*) from PRP_LISTE_CDE_ZONES_GLOB t\s
+            select count(*) from PRP_LISTE_CDE_ZONES_GLOB t
             where t.VNT_CMP_ID = :V_VBZ_CMP_ID
               and t.VNT_ID = :V_VBZ_VNT_ID
               and t.VNT_TYPE = :V_VBZ_VNT_TYPE

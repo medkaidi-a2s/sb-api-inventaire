@@ -9,7 +9,9 @@ spring:
 #        url: jdbc:oracle:thin:@127.0.0.1:1521/xe
 #        username: bio
         url: jdbc:oracle:thin:@127.0.0.1:1521/xe
+#        url: jdbc:oracle:thin:@192.168.0.209:1521/xe
         username: pharm
+#        username: pharmtest93
         password: xeon
         driver-class-name: oracle.jdbc.OracleDriver
     jpa:

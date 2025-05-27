@@ -29,6 +29,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Integer getMethod() {
         int companyId = this.customUserDetailsService.getCurrentCompanyId();
+        var method = this.paramsRepository.getMethod(companyId);
+        log.info("companyId={}", companyId);
+        log.info("Fetched the preparation method from the repo | method={}", method);
         return this.paramsRepository.getMethod(companyId).orElseThrow(() -> new RessourceNotFoundException("Méthode non initialisée"));
     }
 }
