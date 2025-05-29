@@ -13,12 +13,4 @@ public interface ParamsRepository extends JpaRepository<Params, ParamsId> {
     @Query(value = "select PRM_METHODE_PREPARE from STP_PARAMS where PRM_CMP_ID=:companyId and PRM_TYPE=1", nativeQuery = true)
     Optional<Integer> getMethod(@Param("companyId") int companyId);
 
-    @Query(value = """
-            SELECT PRM_IMP_TECKET_TABLETTE
-              FROM STP_PARAMS
-             WHERE PRM_CMP_ID = :cmpId
-               AND PRM_TYPE = 1
-            """, nativeQuery = true)
-    Optional<Integer> getFormatImpression(@Param("cmpId") Integer cmpId);
-
 }

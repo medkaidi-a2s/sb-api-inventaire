@@ -23,8 +23,8 @@ public interface CompanyApi {
     @GetMapping("/api/company/method")
     public ResponseEntity<SuccessResponseDto<Integer>> getMethod();
 
-    @Operation(summary = "Récupération du format d'impression", description = "Récupération du format d'impression - 1: Impression sur ticket ordinaire - 2: Impression ticket autocollant 50Lx60H")
-    @ApiResponse(responseCode = "200", description = "Format d'impression récupéré avec succès")
+    @Operation(summary = "Récupération du format d'impression", description = "Récupération du format d'impression - 1: Impression sur ticket ordinaire - 2: Impression ticket autocollant ")
+    @ApiResponse(responseCode = "200", description = "Méthode de préparation récupérée avec succès")
     @GetMapping("/api/company/format-impression")
     public ResponseEntity<SuccessResponseDto<Integer>> getFormatImpression();
 

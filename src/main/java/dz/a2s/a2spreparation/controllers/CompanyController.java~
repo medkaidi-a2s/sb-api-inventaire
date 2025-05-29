@@ -53,7 +53,7 @@ public class CompanyController implements CompanyApi {
     @Override
     public ResponseEntity<SuccessResponseDto<Integer>> getFormatImpression() {
         log.info("| Entry | CompanyController.getFormatImpression");
-
+        
         var formatImpression = this.companyService.getFormatImpression();
         var response = new SuccessResponseDto<Integer>(
                 200,

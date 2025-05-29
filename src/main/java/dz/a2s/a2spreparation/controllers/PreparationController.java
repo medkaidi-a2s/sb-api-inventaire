@@ -314,7 +314,7 @@ public class PreparationController implements PreparationApi {
 
     @Override
     public ResponseEntity<SuccessResponseDto<CommandeReceiptData>> getZoneReceiptData(@RequestBody @Valid CmdZoneIdDto commande) {
-        log.info("| Entry | PreparationController.getZoneReceiptData | Args | commende={}", commande);
+        log.info("| Entry | PreparationController.getZoneReceiptData | Args | commande={}", commande);
 
         var receiptData = this.preparationService.getReceiptParZone(commande);
         log.trace("Fetched receipt data from the service | receptData={}", receiptData);

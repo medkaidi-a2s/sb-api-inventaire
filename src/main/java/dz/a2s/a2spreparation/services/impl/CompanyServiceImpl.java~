@@ -39,10 +39,6 @@ public class CompanyServiceImpl implements CompanyService {
     public Integer getFormatImpression() {
         log.info("| Entry | CompanyService.getFormatImpression");
 
-        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
-        var formatImpression = this.paramsRepository.getFormatImpression(companyId);
-        log.info("Fetched the format impression from the repo | formatImpression={}", formatImpression);
-
-        return formatImpression.orElseThrow(() -> new RessourceNotFoundException("Format impression non initialisé"));
+        return 0;
     }
 }
