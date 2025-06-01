@@ -4,6 +4,7 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteZoneDto;
 import dz.a2s.a2spreparation.entities.views.Commande;
 import dz.a2s.a2spreparation.entities.views.CommandeZone;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class CheckingServiceImpl implements CheckingService {
     private final CommandeZoneRepository commandeZoneRepository;
     private final VenteDetailsRepository venteDetailsRepository;
     private final VenteZoneDetailsRepository venteZoneDetailsRepository;
+    private final CommandeZoneMapper commandeZoneMapper;
 
     @Override
     public List<CommandeResponseDto> getAllPreparedCommandes(String date) {
@@ -65,6 +68,27 @@ public class CheckingServiceImpl implements CheckingService {
         log.info("Fetched the commande to check from the repo with length {}", commandes.size());
 
         List<CommandeZoneResponseDto> response = commandes.stream().map(CommandeZoneMapper::toCommandeZoneResponseDto).toList();
+
+        return response;
+    }
+
+    @Override
+    public List<BonCommandeZoneDto> getPreparedBonCommandesZone(String date) {
+        log.info("| Entry | CheckingService.getPreparedBonCommandesZone | Args | date : {}", date);
+
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        log.info("Company ID fetched from the service {}", companyId);
+
+        Integer utilisateurId = this.customUserDetailsService.getUtilisateurId();
+        log.info("Utilisateur ID fetched from the service {}", utilisateurId);
+
+        var commandes = this.commandeZoneRepository.getPreparedBonCommandeZone(companyId, utilisateurId, date);
+        log.info("Fetched the list of bon de commande par zone from the repo | commandes.size={}", commandes.size());
+
+        List<BonCommandeZoneDto> response = new ArrayList<>();
+
+        if(!commandes.isEmpty())
+            response = commandes.stream().map(commandeZoneMapper::toBonCommandeZone).toList();
 
         return response;
     }

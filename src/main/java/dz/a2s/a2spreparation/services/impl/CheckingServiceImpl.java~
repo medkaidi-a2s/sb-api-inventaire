@@ -4,6 +4,7 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteZoneDto;
 import dz.a2s.a2spreparation.entities.views.Commande;
 import dz.a2s.a2spreparation.entities.views.CommandeZone;
@@ -32,6 +33,7 @@ public class CheckingServiceImpl implements CheckingService {
     private final CommandeZoneRepository commandeZoneRepository;
     private final VenteDetailsRepository venteDetailsRepository;
     private final VenteZoneDetailsRepository venteZoneDetailsRepository;
+    private final CommandeZoneMapper commandeZoneMapper;
 
     @Override
     public List<CommandeResponseDto> getAllPreparedCommandes(String date) {
@@ -67,6 +69,25 @@ public class CheckingServiceImpl implements CheckingService {
         List<CommandeZoneResponseDto> response = commandes.stream().map(CommandeZoneMapper::toCommandeZoneResponseDto).toList();
 
         return response;
+    }
+
+    @Override
+    public List<BonCommandeZoneDto> getPreparedBonCommandesZone(String date) {
+        log.info("| Entry | CheckingService.getPreparedBonCommandesZone | Args | date : {}", date);
+
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        log.info("Company ID fetched from the service {}", companyId);
+
+        Integer utilisateurId = this.customUserDetailsService.getUtilisateurId();
+        log.info("Utilisateur ID fetched from the service {}", utilisateurId);
+
+        var commandes = this.commandeZoneRepository.getPreparedBonCommandeZone(companyId, utilisateurId, date);
+        log.info("Fetched the list of bon de commande par zone from the repo | commandes.size={}", commandes.size());
+
+        if (commandes.size() > 0) {
+            return commandes.stream().map().toList();
+
+        return List.of();
     }
 
     @Override
@@ -132,10 +153,10 @@ public class CheckingServiceImpl implements CheckingService {
 
         if (response != 0) {
             if (response == 105)
-                throw new ActionNotAllowedException(AppErrorCodes.CDE_PREPARE.getMessage());
+                throw new ActionNotAllowedException(AppErrorCodes.CDE_CONTROLE.getMessage());
             else if (response == 106)
                 throw new ActionNotAllowedException(AppErrorCodes.PRESENCE_PRODUIT_INVALIDE.getMessage());
-            throw new RuntimeException("La préparation de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
+            throw new RuntimeException("Le contrôle de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
         }
 
         return response;
@@ -221,8 +242,14 @@ public class CheckingServiceImpl implements CheckingService {
                 username
         );
         log.info("Réponse de la procédure stockée pour marquer la commande zone comme contrôlée {}", response);
-        if (response != 0)
-            throw new Exception("Erreur lors de la mise à jour de la commande par zone");
+
+        if (response != 0) {
+            if (response == 105)
+                throw new ActionNotAllowedException(AppErrorCodes.CDE_CONTROLE.getMessage());
+            else if (response == 106)
+                throw new ActionNotAllowedException(AppErrorCodes.PRESENCE_PRODUIT_INVALIDE.getMessage());
+            throw new RuntimeException("Le contrôle de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
+        }
 
         return response;
     }

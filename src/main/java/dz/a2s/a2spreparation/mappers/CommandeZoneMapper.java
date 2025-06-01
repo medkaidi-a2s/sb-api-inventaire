@@ -4,9 +4,13 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.controle.projections.MasterControleProjection;
+import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.entities.views.Commande;
 import dz.a2s.a2spreparation.entities.views.CommandeZone;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommandeZoneMapper {
 
     public static CommandeZoneResponseDto toCommandeZoneResponseDto(CommandeZone commande) {
@@ -43,6 +47,24 @@ public class CommandeZoneMapper {
         );
 
         return dto;
+    }
+
+    public BonCommandeZoneDto toBonCommandeZone(MasterControleProjection projection) {
+        return BonCommandeZoneDto
+                .builder()
+                .id(new CmdIdDto(projection.getCmpId(), projection.getId(), projection.getType(), projection.getStkCode()))
+                .reference(projection.getReference())
+                .date(projection.getVntDate())
+                .client(projection.getClient())
+                .region(projection.getRegion())
+                .totalTtc(projection.getTotalTtc())
+                .preparateur(projection.getPreparateur())
+                .controleur1(projection.getControleur1())
+                .controleur2(projection.getControleur2())
+                .statut(projection.getStatut())
+                .nbrLigne(projection.getNbrLigne())
+                .nbrLigneValid(projection.getNbrLigneValid())
+                .build();
     }
 
 }

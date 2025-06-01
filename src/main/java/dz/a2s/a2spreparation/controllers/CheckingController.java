@@ -5,6 +5,7 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteZoneDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
@@ -57,6 +58,22 @@ public class CheckingController implements CheckingApi {
         );
 
         return ResponseEntity.ok(successResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<List<BonCommandeZoneDto>>> getPreparedBonCommandeZone(Optional<String> date) {
+        log.info("| Entry | CheckingService.getPreparedBonCommandeZone | Args | date : {}", date);
+
+        var commandes = this.checkingService.getPreparedBonCommandesZone(date.orElse(""));
+        log.info("Fetched the list of bon de commande par zone from the service | commandes.size={}", commandes.size());
+
+        var response = new SuccessResponseDto<List<BonCommandeZoneDto>>(
+                200,
+                "Liste des bons de commande par zone à contrôler",
+                commandes
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     public ResponseEntity<SuccessResponseDto<Integer>> startControleCde(@RequestBody @Valid CmdIdDto commande) throws Exception {

@@ -4,7 +4,6 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
-import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteZoneDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
@@ -37,13 +36,6 @@ public interface CheckingApi {
     @ApiResponse(responseCode = "200", description = "Commandes à contrôler récupérées avec succès")
     @GetMapping("/commandes-zone")
     public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getAllPreparedCommandesZone(@RequestParam Optional<String> date);
-
-    @Operation(
-            summary = "Récupération des bons de commandes par zone à contrôler par contrôleur",
-            description = "Récupération des bons de commandes par zone à contrôler pour le contrôleur actuellement authentifié selon la date passée en paramètre, si une chaine vide est passée, on récupére toutes les commandes non contrôlées")
-    @ApiResponse(responseCode = "200", description = "Bons de commande à contrôler récupérées avec succès")
-    @GetMapping("/bons-commandes-zone")
-    public ResponseEntity<SuccessResponseDto<List<BonCommandeZoneDto>>> getPreparedBonCommandeZone(@RequestParam Optional<String> date);
 
     @Operation(
             summary = "Commencer le contrôle d'une commande",

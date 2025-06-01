@@ -21,7 +21,7 @@ public interface VenteZoneDetailsRepository extends JpaRepository<VenteZoneDetai
               AND VND_VNT_ID = :id
               AND VND_VNT_TYPE = :type
               AND VND_STK_CODE = :code
-              AND VBZ_ZONE = :zone
+              AND (:zone IS NULL OR VBZ_ZONE = :zone)
             """, nativeQuery = true)
     List<VenteZoneDetails> getDetailsByVenteZone(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("code") String code, @Param("zone") Integer zone);
 

@@ -109,7 +109,7 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
                    PREPARATEUR.TER_NOM AS PREPARATEUR,
                    CONTROLEUR1.TER_NOM AS CONTROLEUR1,
                    CONTROLEUR2.TER_NOM AS CONTROLEUR2,
-                   decode(B.VNT_STATUT_PREPARE,0,'Non affectée',1,'En attente de préparation',2,'En préparation',3, 'En attente de contrôle',4, 'En contrôle',5, 'En attente de facturation') AS STATUT,
+                   B.VNT_STATUT_PREPARE AS STATUT,
                    SUM(T.NBR_LIGNE) AS NBR_LIGNE,
                    SUM(T.NBR_LIGNE_VALID) AS NBR_LIGNE_VALID
               FROM PRP_LISTE_CDE_ZONE_CONTROLES T

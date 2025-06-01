@@ -136,11 +136,11 @@ public class PreparationController implements PreparationApi {
             @RequestParam Integer id,
             @RequestParam String type,
             @RequestParam String stkCode,
-            @RequestParam Integer zone
+            @RequestParam Optional<Integer> zone
     ) throws Exception {
         log.info("Entering the getDetailsVenteZone method from the PreparationController with cmpId : {} venteId : {} type : {} stkCode : {} zone : {}", cmpId, id, type, stkCode, zone);
 
-        if(cmpId == 0 || zone == 0 || id == 0 || type.isEmpty() || stkCode.isEmpty())
+        if(cmpId == 0 ||  id == 0 || type.isEmpty() || stkCode.isEmpty())
             throw new Exception("Paramètres manquant ou invalide");
 
         List<LigneZoneDto> details = this.preparationService.getDetailsVenteZone(new CmdZoneIdDto(
@@ -148,7 +148,7 @@ public class PreparationController implements PreparationApi {
                 id,
                 type,
                 stkCode,
-                zone
+                zone.orElse(null)
         ));
 
         SuccessResponseDto<List<LigneZoneDto>> response = new SuccessResponseDto<>(

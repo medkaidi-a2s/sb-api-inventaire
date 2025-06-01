@@ -79,7 +79,7 @@ public interface PreparationApi {
             @RequestParam Integer id,
             @RequestParam String type,
             @RequestParam String stkCode,
-            @RequestParam Integer zone
+            @RequestParam Optional<Integer> zone
     ) throws Exception;
 
     @Operation(

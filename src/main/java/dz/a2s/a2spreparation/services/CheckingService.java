@@ -4,6 +4,7 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteZoneDto;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface CheckingService {
     List<CommandeResponseDto> getAllPreparedCommandes(String date);
 
     List<CommandeZoneResponseDto> getAllPreparedCommandesZone(String date);
+
+    List<BonCommandeZoneDto> getPreparedBonCommandesZone(String date);
 
     Integer startControleCde(
             int p_vnt_cmp_id,
