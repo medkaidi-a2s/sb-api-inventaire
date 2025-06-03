@@ -150,6 +150,26 @@ public class CheckingController implements CheckingApi {
         return ResponseEntity.ok(successResponseDto);
     }
 
+    @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> startControleCommandeZone(CmdIdDto commande) throws Exception {
+        log.info("| Entry | CheckingController.startControleCommandeZone | Args | id={}", commande);
+
+        Integer response = this.checkingService.startControleCommandeZone(
+                commande.getCmpId(),
+                commande.getId(),
+                commande.getType(),
+                commande.getStkCode()
+        );
+
+        SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Contrôle commencé sur la commande globale par zone avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
     public ResponseEntity<SuccessResponseDto<Integer>> setControlledQuantityZone(@RequestBody @Valid LigneQteZoneDto ligne) throws Exception {
         log.info("Entering the setControlledQuantityZone method from the CheckingController with {}", ligne);
 
@@ -172,6 +192,21 @@ public class CheckingController implements CheckingApi {
         SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
                 200,
                 "Commande par zone contrôlée avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneGlobalControlled(CmdIdDto id) {
+        log.info("| Entry | CheckingController.setCommandeZoneGlobalControlled | Args | id={}", id);
+
+        Integer response = this.checkingService.setCommandeZoneGlobalControlled(id);
+
+        SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Commande globale par zone contrôlée avec succès",
                 response
         );
 

@@ -20,7 +20,9 @@ import dz.a2s.a2spreparation.services.CheckingService;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +95,7 @@ public class CheckingServiceImpl implements CheckingService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer startControleCde(int cmdId, int id, String type, String stkCode) throws Exception {
         log.info("Entering the method startControleCde from the CheckingService");
@@ -115,6 +118,7 @@ public class CheckingServiceImpl implements CheckingService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer setControlledQuantity(Integer cmpId, Integer id, String type, String stkCode, Integer no, Integer qte, Integer motif) throws Exception {
         log.info("Entering the setControlledQuantity method from the CheckingService");
@@ -137,6 +141,7 @@ public class CheckingServiceImpl implements CheckingService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer setCommandeControlled(CmdIdDto id) throws Exception {
         log.info("Entering the setCommandeControlled method from the CheckingService with {}", id);
@@ -165,26 +170,13 @@ public class CheckingServiceImpl implements CheckingService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer startControleZone(int cmdId, int id, String type, String stkCode, int zone) throws Exception {
         log.info("Entering the method startControleZone from the CheckingService");
 
         Integer verificateurId = this.customUserDetailsService.getUtilisateurId();
         log.info("Fetched the verificateur id from the repo {}", verificateurId);
-
-//        Integer isControlStarted = this.commandeZoneRepository.isControlStartedByOther(
-//                cmdId,
-//                id,
-//                type,
-//                stkCode,
-//                zone,
-//                verificateurId
-//        );
-//
-//        log.info("Valeur de retour de la requête isControlStartedByOther : {}", isControlStarted);
-//
-//        if (isControlStarted != 0)
-//            throw new Exception("Le contrôle a été déjà commencé par un autre contrôleur");
 
         Integer response = this.commandeZoneRepository.startControleZone(
                 cmdId,
@@ -206,6 +198,43 @@ public class CheckingServiceImpl implements CheckingService {
         return response;
     }
 
+    @Transactional
+    @Override
+    public Integer startControleCommandeZone(Integer cmpId, Integer id, String type, String stkCode) {
+        log.info("| Entry | CheckingService.startControleCommandeZone | Args | v_vbz_cmp_id={}, v_vbz_vnt_id={}, v_vbz_vnt_type={}, v_vbz_stk_code={}", cmpId, id, type, stkCode);
+
+        Integer verificateurId = this.customUserDetailsService.getUtilisateurId();
+        var username = this.customUserDetailsService.getCurrentUserCode();
+        log.info("Fetched the username and verificateur id from the repo username={}, verificateurId={}", username, verificateurId);
+
+        Integer response = 0;
+
+        try {
+            response = this.commandeZoneRepository.startControleCommandeZone(
+                    cmpId,
+                    id,
+                    type,
+                    stkCode,
+                    verificateurId,
+                    username
+            );
+        } catch(DataAccessException ex) {
+            log.info("Une erreur s'est produite lors du lancement du contrôle de la commande par zone | original message = {}", ex.getMessage());
+            throw new RuntimeException("Le contrôle de la commande globale n'a pas pu être commencé (par zone");
+        }
+
+        log.info("Valeur de retour de la procédure pour commencer le contrôle de la commande par zone est de : {}", response);
+
+        if (response != 0) {
+            if (response == 1)
+                throw new ActionNotAllowedException(AppErrorCodes.CDE_EN_CONTROLE.getMessage());
+            throw new RuntimeException("Le contrôle de la commande globale n'a pas pu être commencé (par zone) - [stored procedure return value : " + response + "]");
+        }
+
+        return response;
+    }
+
+    @Transactional
     @Override
     public Integer setControlledQuantityZone(LigneQteZoneDto ligne) throws Exception {
         log.info("Entering the setControlledQuantityZone method from the CheckingService with ligne {}", ligne);
@@ -229,6 +258,7 @@ public class CheckingServiceImpl implements CheckingService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer setCommandeZoneControlled(CmdZoneIdDto id) throws Exception {
         log.info("Entering the setCommandeZoneControlled method from the CheckingService with {}", id);
@@ -249,6 +279,41 @@ public class CheckingServiceImpl implements CheckingService {
         if (response != 0) {
             if (response == 105)
                 throw new ActionNotAllowedException(AppErrorCodes.CDE_CONTROLE.getMessage());
+            else if (response == 106)
+                throw new ActionNotAllowedException(AppErrorCodes.PRESENCE_PRODUIT_INVALIDE.getMessage());
+            throw new RuntimeException("Le contrôle de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
+        }
+
+        return response;
+    }
+
+    @Transactional
+    @Override
+    public Integer setCommandeZoneGlobalControlled(CmdIdDto id) {
+        log.info("| Entry | CheckingService.setCommandeZoneGlobalControlled | Args | id={}", id);
+
+        String username = this.customUserDetailsService.getCurrentUserCode();
+        log.info("Fetched the logged in user from the customUserDetailsService {}", username);
+
+        Integer response = 0;
+
+        try {
+            response = this.commandeZoneRepository.setCommandeZoneGlobalControlled(
+                    id.getCmpId(),
+                    id.getId(),
+                    id.getType(),
+                    id.getStkCode(),
+                    username
+            );
+            log.info("Réponse de la procédure stockée pour marquer la commande zone comme contrôlée {}", response);
+        } catch (DataAccessException ex) {
+            log.info("Une erreur s'est produite lors du contrôle de la commande par zone | original message = {}", ex.getMessage());
+            throw new RuntimeException("Une erreur liée à la base de données s'est produite");
+        }
+
+        if (response != 0) {
+            if (response == 105)
+                throw new ActionNotAllowedException(AppErrorCodes.BON_CDE_CONTROLE.getMessage());
             else if (response == 106)
                 throw new ActionNotAllowedException(AppErrorCodes.PRESENCE_PRODUIT_INVALIDE.getMessage());
             throw new RuntimeException("Le contrôle de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");

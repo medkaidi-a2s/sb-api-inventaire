@@ -44,8 +44,17 @@ public interface CheckingService {
             int v_vbz_zone
     ) throws Exception;
 
+    Integer startControleCommandeZone(
+            Integer v_vbz_cmp_id,
+            Integer v_vbz_vnt_id,
+            String v_vbz_vnt_type,
+            String v_vbz_stk_code
+    );
+
     Integer setControlledQuantityZone(LigneQteZoneDto ligne) throws Exception;
 
     Integer setCommandeZoneControlled(CmdZoneIdDto id) throws Exception;
+
+    Integer setCommandeZoneGlobalControlled(CmdIdDto id);
 
 }

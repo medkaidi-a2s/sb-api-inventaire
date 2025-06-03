@@ -109,7 +109,19 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
                    PREPARATEUR.TER_NOM AS PREPARATEUR,
                    CONTROLEUR1.TER_NOM AS CONTROLEUR1,
                    CONTROLEUR2.TER_NOM AS CONTROLEUR2,
-                   decode(B.VNT_STATUT_PREPARE,0,'Non affectée',1,'En attente de préparation',2,'En préparation',3, 'En attente de contrôle',4, 'En contrôle',5, 'En attente de facturation') AS STATUT,
+                   DECODE(B.VNT_STATUT_PREPARE,
+                          0,
+                          'Non affectée',
+                          1,
+                          'En attente de préparation',
+                          2,
+                          'En préparation',
+                          3,
+                          'En attente de contrôle',
+                          4,
+                          'En contrôle',
+                          5,
+                          'En attente de facturation') AS STATUT,
                    SUM(T.NBR_LIGNE) AS NBR_LIGNE,
                    SUM(T.NBR_LIGNE_VALID) AS NBR_LIGNE_VALID
               FROM PRP_LISTE_CDE_ZONE_CONTROLES T
@@ -118,24 +130,18 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
                AND B.VNT_ID = T.VNT_ID
                AND B.VNT_TYPE = T.VNT_TYPE
                AND B.VNT_STK_CODE = T.VNT_STK_CODE
-              LEFT JOIN VNT_BON_PREPARATIONS P
-                ON P.BPR_CMP_ID = B.VNT_CMP_ID
-               AND P.BPR_VNT_ID = B.VNT_ID
-               AND P.BPR_VNT_TYPE = B.VNT_TYPE
-               AND P.BPR_STK_CODE = B.VNT_STK_CODE
               LEFT JOIN STP_TIERS PREPARATEUR
-                ON PREPARATEUR.TER_ID = P.BPR_PRP_ID
-               AND PREPARATEUR.TER_TYPE = P.BPR_PRP_TYPE
+                ON PREPARATEUR.TER_ID = B.VNT_CONTROLEUR_ID
+               AND PREPARATEUR.TER_TYPE = B.VNT_CONTROLEUR_TYPE
               LEFT JOIN STP_TIERS CONTROLEUR1
-                ON CONTROLEUR1.TER_ID = P.BPR_CTL_ID1
-               AND CONTROLEUR1.TER_TYPE = P.BPR_CTL_TYPE1
+                ON CONTROLEUR1.TER_ID = B.VNT_VERIFICATEUR_ID
+               AND CONTROLEUR1.TER_TYPE = B.VNT_VERIFICATEUR_TYPE
               LEFT JOIN STP_TIERS CONTROLEUR2
-                ON CONTROLEUR2.TER_ID = P.BPR_CTL_ID2
-               AND CONTROLEUR2.TER_TYPE = P.BPR_CTL_TYPE2
+                ON CONTROLEUR2.TER_ID = B.VNT_VERIFICATEUR_ID2
              WHERE B.VNT_CMP_ID = :cmpId
                AND (:date IS NULL OR TRUNC(B.VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
                AND (B.VNT_STATUT_PREPARE = 3 OR
-                   (B.VNT_STATUT_PREPARE > 3 AND P.BPR_PRP_ID = :utilisateurId))
+                   (B.VNT_STATUT_PREPARE > 3 AND B.VNT_VERIFICATEUR_ID = :utilisateurId))
              GROUP BY B.VNT_CMP_ID,
                       B.VNT_ID,
                       B.VNT_TYPE,
@@ -171,8 +177,21 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
     @Procedure(procedureName = "logistiques.P_EDIT_START_CONTROL_ZONE", outputParameterName = "p_msg")
     Integer startControleZone(@Param("V_VBZ_CMP_ID") int v_vbz_cmp_id, @Param("V_VBZ_VNT_ID") int v_vbz_vnt_id, @Param("V_VBZ_VNT_TYPE") String v_vbz_vnt_type, @Param("V_VBZ_STK_CODE") String v_vbz_stk_code, @Param("V_VBZ_ZONE") int v_vbz_zone, @Param("V_VBZ_VERIF_ID") int v_vbz_verif_id);
 
+    @Procedure(procedureName = "logistiques.P_EDIT_START_CONTROL_CMD_ZONE", outputParameterName = "p_msg")
+    Integer startControleCommandeZone(
+            @Param("V_CMP_ID") int v_vbz_cmp_id,
+            @Param("V_VNT_ID") int v_vbz_vnt_id,
+            @Param("V_VNT_TYPE") String v_vbz_vnt_type,
+            @Param("V_STK_CODE") String v_vbz_stk_code,
+            @Param("V_VERIF_ID") int v_vbz_verif_id,
+            @Param("V_USER") String v_user
+    );
+
     @Procedure(procedureName = "logistiques.P_SET_ZONE_CONTROLLED", outputParameterName = "p_msg")
     Integer setCommandeZoneControlled(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_ZONE") Integer zone, @Param("P_USER") String username);
+
+    @Procedure(procedureName = "logistiques.P_SET_CDE_ZONE_CONTROLLED", outputParameterName = "p_msg")
+    Integer setCommandeZoneGlobalControlled(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_USER") String username);
 
     @Query(value = """
             SELECT v.vnt_reference, --Preparation par zone

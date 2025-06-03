@@ -20,6 +20,7 @@ import dz.a2s.a2spreparation.services.PreparationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -79,6 +80,7 @@ public class PreparationServiceImpl implements PreparationService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer startPreparePrlv(int cmdId, int id, String type, int annee) throws Exception {
         log.info("Entering the method startPreparePrlv from the PreparationService");
@@ -98,6 +100,7 @@ public class PreparationServiceImpl implements PreparationService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer startPrepareCde(int cmpId, int id, String type, String stkCode) throws Exception {
         log.info("Entering the method startPrepareCde from the PreparationService");
@@ -120,26 +123,13 @@ public class PreparationServiceImpl implements PreparationService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer startPrepareZone(int cmpId, int id, String type, String stkCode, int zone) throws Exception {
         log.info("Point d'entrée à la méthode startPrepareZone du PreparationService");
 
         Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
         log.info("Récupération de l'id du préparateur : {}", preparateurId);
-
-//        Integer isPreparationStarted = this.commandeZoneRepository.isPreparationStartedByOther(
-//                cmpId,
-//                id,
-//                type,
-//                stkCode,
-//                zone,
-//                preparateurId
-//        );
-//
-//        log.info("Valeur de retour de la requête isPreparationStartedByOther : {}", isPreparationStarted);
-//
-//        if(isPreparationStarted != 0)
-//            throw new Exception("La préparation a été déjà commencé par un autre préparateur.");
 
         Integer response = this.commandeZoneRepository.startPrepareZone(
                 cmpId,
@@ -234,6 +224,7 @@ public class PreparationServiceImpl implements PreparationService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer setPreparedQuantity(Integer cmpId, Integer id, String type, String stkCode, Integer no, Integer qte, Integer motif) throws Exception {
         log.info("Entering the setPreparedQuantity method from the PreparationService");
@@ -256,6 +247,7 @@ public class PreparationServiceImpl implements PreparationService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer setPreparedQuantityZone(LigneQteZoneDto ligne) throws Exception {
         log.info("Entering the setPreparedQuantity method from the PreparationService with ligne {}", ligne);
@@ -289,6 +281,7 @@ public class PreparationServiceImpl implements PreparationService {
         return motifs;
     }
 
+    @Transactional
     @Override
     public Integer setCommandePrepared(CmdIdDto id) throws Exception {
         log.info("Entering the setCommandePrepared method from the PreparationService with {}", id);
@@ -317,6 +310,7 @@ public class PreparationServiceImpl implements PreparationService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer setCommandeZonePrepared(CmdZoneIdDto id) throws Exception {
         log.info("Entering the setCommandeZonePrepared method from the PreparationService with {}", id);

@@ -12,7 +12,8 @@ public enum AppErrorCodes {
     CDE_EN_PREPARATION("CDE_EN_PREPARATION", "La commande est déjà en cours de préparation"),
     CDE_EN_CONTROLE("CDE_EN_CONTROLE", "La commande est déjà en cours de contrôle"),
     CDE_PREPARE("CDE_PREPARE", "La commande a été déjà préparée"),
-    CDE_CONTROLE("CDE_CONTROLE", "La commande a été déjà contrôlée");
+    CDE_CONTROLE("CDE_CONTROLE", "La commande a été déjà contrôlée"),
+    BON_CDE_CONTROLE("BON_CDE_CONTROLE", "Présence de bon de commande par zone qui ont été déjà contrôlés");
 
     private final String code;
     private final String message;

@@ -39,7 +39,7 @@ public interface CheckingApi {
     public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getAllPreparedCommandesZone(@RequestParam Optional<String> date);
 
     @Operation(
-            summary = "Récupération des bons de commandes par zone à contrôler par contrôleur",
+            summary = "Récupération des bons de commandes par zone à contrôler par contrôleur (méthode 4)",
             description = "Récupération des bons de commandes par zone à contrôler pour le contrôleur actuellement authentifié selon la date passée en paramètre, si une chaine vide est passée, on récupére toutes les commandes non contrôlées")
     @ApiResponse(responseCode = "200", description = "Bons de commande à contrôler récupérées avec succès")
     @GetMapping("/bons-commandes-zone")
@@ -74,6 +74,13 @@ public interface CheckingApi {
     public ResponseEntity<SuccessResponseDto<Integer>> startControleZone(@RequestBody @Valid CmdZoneIdDto commande) throws Exception;
 
     @Operation(
+            summary = "Commencer le contrôle d'une commande globale par zone",
+            description = "Commencer le contrôle d'une commande globale par zone via l'id de la vente (méthode 4)")
+    @ApiResponse(responseCode = "200", description = "Contrôle de la commande commencé avec succès")
+    @PatchMapping("/commande-zone/start-control-global")
+    public ResponseEntity<SuccessResponseDto<Integer>> startControleCommandeZone(@RequestBody @Valid CmdIdDto commande) throws Exception;
+
+    @Operation(
             summary = "Définition de la quantité contrôlée d'une commande par zone",
             description = "Définir la quantité de la ligne contrôlée d'une commande par zone")
     @ApiResponse(responseCode = "200", description = "Quantité définie avec succès")
@@ -86,5 +93,12 @@ public interface CheckingApi {
     @ApiResponse(responseCode = "200", description = "Commande contrôlée avec succès")
     @PatchMapping("/commande-zone/set-controlled")
     public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneControlled(@RequestBody @Valid CmdZoneIdDto id) throws Exception;
+
+    @Operation(
+            summary = "Marquer une commande globale par zone comme contrôlée",
+            description = "Terminer le contrôle d'une commande globale par zone")
+    @ApiResponse(responseCode = "200", description = "Commande globale contrôlée avec succès")
+    @PatchMapping("/commande-zone/set-controlled-global")
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneGlobalControlled(@RequestBody @Valid CmdIdDto id);
 
 }

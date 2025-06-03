@@ -15,6 +15,7 @@ import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -163,6 +164,7 @@ public class AffectationServiceImpl implements AffectationService {
         return controleurs;
     }
 
+    @Transactional
     @Override
     public AffectCmdResultDto affectCmdPrp(int p_cmp, int p_vnt, String p_stk, String p_type, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
         AffectCmdResultDto result;
@@ -193,6 +195,7 @@ public class AffectationServiceImpl implements AffectationService {
         return result;
     }
 
+    @Transactional
     @Override
     public PrpCdePrepCont editAffectCmdPrp(int p_cmp, int p_vnt, String p_stk, String p_type, int p_prp, int p_cnt1, int p_cnt2) throws Exception {
         log.info("Entering editAffectCmdPrp method from the AffectationService");
@@ -231,6 +234,7 @@ public class AffectationServiceImpl implements AffectationService {
         return entity;
     }
 
+    @Transactional
     @Override
     public AffectCmdResultDto affectCmdPrpPrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee, int p_prp, int p_cnt1, int p_cnt2, String p_user, String reference) {
         log.info("Entering the affectCmdPrpPrlv from the AffectationService");
@@ -261,6 +265,7 @@ public class AffectationServiceImpl implements AffectationService {
         return result;
     }
 
+    @Transactional
     @Override
     public PrpCdePrlvPrepCont editAffectCmdPrpPrlv(int p_cmp, int p_slt_id, String p_slt_type, int p_slt_annee, int p_prp, int p_cnt1, int p_cnt2) throws Exception {
         log.info("Entering the editAffectCmdPrpPrlv method from the AffectationService");
