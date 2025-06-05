@@ -4,6 +4,7 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
+import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.*;
@@ -47,7 +48,7 @@ public class PreparationServiceImpl implements PreparationService {
         if (!date.isEmpty())
             LocalDate.parse(date, DATE_FORMATTER);
 
-        var preparateurId = this.customUserDetailsService.getUtilisateurId();
+        var preparateurId = this.customUserDetailsService.getUtilisateurId(TIER_TYPES.PREPARATEUR.getType());
         log.info("ID du préparateur recuperé : {}", preparateurId);
 
         var companyId = this.customUserDetailsService.getCurrentCompanyId();
@@ -128,7 +129,7 @@ public class PreparationServiceImpl implements PreparationService {
     public Integer startPrepareZone(int cmpId, int id, String type, String stkCode, int zone) throws Exception {
         log.info("Point d'entrée à la méthode startPrepareZone du PreparationService");
 
-        Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
+        Integer preparateurId = this.customUserDetailsService.getUtilisateurId(TIER_TYPES.PREPARATEUR.getType());
         log.info("Récupération de l'id du préparateur : {}", preparateurId);
 
         Integer response = this.commandeZoneRepository.startPrepareZone(

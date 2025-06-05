@@ -3,6 +3,7 @@ package dz.a2s.a2spreparation.services.impl;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.*;
+import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.views.*;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.CommandeMapper;
@@ -46,7 +47,7 @@ public class AffectationServiceImpl implements AffectationService {
 //        String preparationZone = this.customUserDetailsService.getPreparationZone();
 //        log.info("Récupération de l'id de la zone de l'utilisateur authentifié : {}", preparationZone);
 
-        Integer preparateurId = this.customUserDetailsService.getUtilisateurId();
+        Integer preparateurId = this.customUserDetailsService.getUtilisateurId(TIER_TYPES.PREPARATEUR.getType());
         log.info("Fetching the current user id to filter the orders {}", preparateurId);
 
         log.info("Récupération de la liste des commandes par zone à partir du repo");

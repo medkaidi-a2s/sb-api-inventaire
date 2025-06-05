@@ -6,6 +6,7 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteZoneDto;
+import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.views.Commande;
 import dz.a2s.a2spreparation.entities.views.CommandeZone;
 import dz.a2s.a2spreparation.exceptions.ActionNotAllowedException;
@@ -45,7 +46,7 @@ public class CheckingServiceImpl implements CheckingService {
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Company ID fetched from the service {}", companyId);
 
-        Integer utilisateurId = this.customUserDetailsService.getUtilisateurId();
+        Integer utilisateurId = this.customUserDetailsService.getUtilisateurId(TIER_TYPES.CONTROLEUR.getType());
         log.info("Utilisateur ID fetched from the service {}", utilisateurId);
 
         List<Commande> commandes = this.commandeRepository.getPreparedCommandes(companyId, utilisateurId, date);
@@ -63,7 +64,7 @@ public class CheckingServiceImpl implements CheckingService {
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Company ID fetched from the service {}", companyId);
 
-        Integer utilisateurId = this.customUserDetailsService.getUtilisateurId();
+        Integer utilisateurId = this.customUserDetailsService.getUtilisateurId(TIER_TYPES.CONTROLEUR.getType());
         log.info("Utilisateur ID fetched from the service {}", utilisateurId);
 
         List<CommandeZone> commandes = this.commandeZoneRepository.getPreparedCommandesZone(companyId, utilisateurId, date);
@@ -81,7 +82,7 @@ public class CheckingServiceImpl implements CheckingService {
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Company ID fetched from the service {}", companyId);
 
-        Integer utilisateurId = this.customUserDetailsService.getUtilisateurId();
+        Integer utilisateurId = this.customUserDetailsService.getUtilisateurId(TIER_TYPES.CONTROLEUR.getType());
         log.info("Utilisateur ID fetched from the service {}", utilisateurId);
 
         var commandes = this.commandeZoneRepository.getPreparedBonCommandeZone(companyId, utilisateurId, date);
@@ -175,7 +176,7 @@ public class CheckingServiceImpl implements CheckingService {
     public Integer startControleZone(int cmdId, int id, String type, String stkCode, int zone) throws Exception {
         log.info("Entering the method startControleZone from the CheckingService");
 
-        Integer verificateurId = this.customUserDetailsService.getUtilisateurId();
+        Integer verificateurId = this.customUserDetailsService.getUtilisateurId(TIER_TYPES.CONTROLEUR.getType());
         log.info("Fetched the verificateur id from the repo {}", verificateurId);
 
         Integer response = this.commandeZoneRepository.startControleZone(
@@ -203,7 +204,7 @@ public class CheckingServiceImpl implements CheckingService {
     public Integer startControleCommandeZone(Integer cmpId, Integer id, String type, String stkCode) {
         log.info("| Entry | CheckingService.startControleCommandeZone | Args | v_vbz_cmp_id={}, v_vbz_vnt_id={}, v_vbz_vnt_type={}, v_vbz_stk_code={}", cmpId, id, type, stkCode);
 
-        Integer verificateurId = this.customUserDetailsService.getUtilisateurId();
+        Integer verificateurId = this.customUserDetailsService.getUtilisateurId(TIER_TYPES.CONTROLEUR.getType());
         var username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Fetched the username and verificateur id from the repo username={}, verificateurId={}", username, verificateurId);
 

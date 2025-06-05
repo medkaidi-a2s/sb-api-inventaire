@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserEntityRepository extends JpaRepository<UserEntity, UserEntityId> {
@@ -34,8 +35,9 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, UserEnti
               and u.tru_ter_id = t.ter_id
               and u.tru_usr_code = :username
               and t.ter_cmp_id = :companyId
+              and (:tierType is null or t.ter_type = :tierType)
             """, nativeQuery = true)
-    Integer getUtilisateurId(@Param("username") String username, @Param("companyId") Integer companyId);
+    List<Integer> getUtilisateurId(@Param("username") String username, @Param("companyId") Integer companyId, @Param("tierType") Integer tierType);
 
     @Query(value = """
                 SELECT USR_PASSWORD 

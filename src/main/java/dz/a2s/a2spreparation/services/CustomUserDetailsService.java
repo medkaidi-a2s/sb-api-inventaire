@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 
@@ -31,6 +32,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         log.info("The userCode is {}", userCode);
 
         UserEntity userEntity = this.userEntityRepository.findByUsernameAndCompanyId(userCode, companyId).orElseThrow(() -> new UsernameNotFoundException("Nom d'utilisateur ou mot de passe incorrecte"));
+//        var users = this.userEntityRepository.findByUsernameAndCompanyId(userCode, companyId);
+//        if(users.isEmpty())
+//            throw new UsernameNotFoundException("Nom d'utilisateur ou mot de passe incorrecte");
+//        UserEntity userEntity = users.get(0);
         return new AppUserDetails(userEntity.getUsername(), userEntity.getPassword(), userEntity.getNom(), Collections.emptyList(), userEntity.getCompanyId());
     }
 
@@ -46,24 +51,24 @@ public class CustomUserDetailsService implements UserDetailsService {
         return split[1];
     }
 
-    public String getPreparationZone() {
+//    public String getPreparationZone() {
+//        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String[] split = username.split(":");
+//        Integer companyId = Integer.parseInt(split[0]);
+//        String userCode = split[1];
+//
+//        String preparationZone = this.userEntityRepository.getPreparationZone(userCode, companyId);
+//
+//        return preparationZone;
+//    }
+
+    public Integer getUtilisateurId(Integer tierType) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String[] split = username.split(":");
         Integer companyId = Integer.parseInt(split[0]);
         String userCode = split[1];
 
-        String preparationZone = this.userEntityRepository.getPreparationZone(userCode, companyId);
-
-        return preparationZone;
-    }
-
-    public Integer getUtilisateurId() {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String[] split = username.split(":");
-        Integer companyId = Integer.parseInt(split[0]);
-        String userCode = split[1];
-
-        Integer id = this.userEntityRepository.getUtilisateurId(userCode, companyId);
+        Integer id = this.userEntityRepository.getUtilisateurId(userCode, companyId, tierType).get(0);
 
         return id;
     }
