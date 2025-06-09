@@ -2,7 +2,9 @@ package dz.a2s.a2spreparation.api;
 
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteDto;
@@ -64,7 +66,7 @@ public interface CheckingApi {
             description = "Marquer une commande comme étant contrôlée après avoir contrôlé toutes les lignes")
     @ApiResponse(responseCode = "200", description = "Commande contrôlée avec succès")
     @PatchMapping("/commande/set-controlled")
-    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeControlled(@RequestBody @Valid CmdIdDto id) throws Exception;
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeControlled(@RequestBody @Valid CmdColisageDto data) throws Exception;
 
     @Operation(
             summary = "Commencer le contrôle d'une commande par zone",
@@ -92,13 +94,13 @@ public interface CheckingApi {
             description = "Marquer une commande par zone comme étant contrôlée après avoir contrôlé toutes les lignes")
     @ApiResponse(responseCode = "200", description = "Commande contrôlée avec succès")
     @PatchMapping("/commande-zone/set-controlled")
-    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneControlled(@RequestBody @Valid CmdZoneIdDto id) throws Exception;
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneControlled(@RequestBody @Valid CmdZoneColisageDto data) throws Exception;
 
     @Operation(
             summary = "Marquer une commande globale par zone comme contrôlée",
             description = "Terminer le contrôle d'une commande globale par zone")
     @ApiResponse(responseCode = "200", description = "Commande globale contrôlée avec succès")
     @PatchMapping("/commande-zone/set-controlled-global")
-    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneGlobalControlled(@RequestBody @Valid CmdIdDto id);
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneGlobalControlled(@RequestBody @Valid CmdColisageDto data);
 
 }

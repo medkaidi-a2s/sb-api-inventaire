@@ -2,7 +2,9 @@ package dz.a2s.a2spreparation.services.impl;
 
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteZoneDto;
@@ -144,18 +146,25 @@ public class CheckingServiceImpl implements CheckingService {
 
     @Transactional
     @Override
-    public Integer setCommandeControlled(CmdIdDto id) throws Exception {
-        log.info("Entering the setCommandeControlled method from the CheckingService with {}", id);
+    public Integer setCommandeControlled(CmdColisageDto data) throws Exception {
+        log.info("Entering the setCommandeControlled method from the CheckingService with {}", data);
 
         String username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Getting the logged in user from the customUserDetailsService {}", username);
 
         Integer response = this.commandeRepository.setCommandeControlled(
-                id.getCmpId(),
-                id.getId(),
-                id.getStkCode(),
-                id.getType(),
-                username
+                data.getCmpId(),
+                data.getId(),
+                data.getStkCode(),
+                data.getType(),
+                username,
+                data.getColisV(),
+                data.getColisD(),
+                data.getFrigo(),
+                data.getPsycho(),
+                data.getChers(),
+                data.getSachet(),
+                null
         );
 
         log.info("Réponse de la procédure stockée pour marquer la commande comme contrôlée : {}", response);
@@ -261,19 +270,26 @@ public class CheckingServiceImpl implements CheckingService {
 
     @Transactional
     @Override
-    public Integer setCommandeZoneControlled(CmdZoneIdDto id) throws Exception {
-        log.info("Entering the setCommandeZoneControlled method from the CheckingService with {}", id);
+    public Integer setCommandeZoneControlled(CmdZoneColisageDto data) throws Exception {
+        log.info("| Entry | CheckingService.setCommandeZoneControlled | Args | CmdZoneColisageDto {}", data);
 
         String username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Getting the logged in user from the customUserDetailsService {}", username);
 
         Integer response = this.commandeZoneRepository.setCommandeZoneControlled(
-                id.getCmpId(),
-                id.getId(),
-                id.getType(),
-                id.getStkCode(),
-                id.getZone(),
-                username
+                data.getCmpId(),
+                data.getId(),
+                data.getType(),
+                data.getStkCode(),
+                data.getZone(),
+                username,
+                data.getColisV(),
+                data.getColisD(),
+                data.getFrigo(),
+                data.getPsycho(),
+                data.getChers(),
+                data.getSachet(),
+                null
         );
         log.info("Réponse de la procédure stockée pour marquer la commande zone comme contrôlée {}", response);
 
@@ -290,8 +306,8 @@ public class CheckingServiceImpl implements CheckingService {
 
     @Transactional
     @Override
-    public Integer setCommandeZoneGlobalControlled(CmdIdDto id) {
-        log.info("| Entry | CheckingService.setCommandeZoneGlobalControlled | Args | id={}", id);
+    public Integer setCommandeZoneGlobalControlled(CmdColisageDto data) {
+        log.info("| Entry | CheckingService.setCommandeZoneGlobalControlled | Args | id={}", data);
 
         String username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Fetched the logged in user from the customUserDetailsService {}", username);
@@ -300,11 +316,18 @@ public class CheckingServiceImpl implements CheckingService {
 
         try {
             response = this.commandeZoneRepository.setCommandeZoneGlobalControlled(
-                    id.getCmpId(),
-                    id.getId(),
-                    id.getType(),
-                    id.getStkCode(),
-                    username
+                    data.getCmpId(),
+                    data.getId(),
+                    data.getType(),
+                    data.getStkCode(),
+                    username,
+                    data.getColisV(),
+                    data.getColisD(),
+                    data.getFrigo(),
+                    data.getPsycho(),
+                    data.getChers(),
+                    data.getSachet(),
+                    null
             );
             log.info("Réponse de la procédure stockée pour marquer la commande zone comme contrôlée {}", response);
         } catch (DataAccessException ex) {

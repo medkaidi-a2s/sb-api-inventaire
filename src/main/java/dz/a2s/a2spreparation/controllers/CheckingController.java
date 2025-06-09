@@ -3,7 +3,9 @@ package dz.a2s.a2spreparation.controllers;
 import dz.a2s.a2spreparation.api.CheckingApi;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteDto;
@@ -117,10 +119,11 @@ public class CheckingController implements CheckingApi {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeControlled(@RequestBody @Valid CmdIdDto id) throws Exception {
-        log.info("Entering the setCommandeControlled method from the CheckingController with {}", id);
+    @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeControlled(@RequestBody @Valid CmdColisageDto data) throws Exception {
+        log.info("Entering the setCommandeControlled method from the CheckingController with {}", data);
 
-        Integer response = this.checkingService.setCommandeControlled(id);
+        Integer response = this.checkingService.setCommandeControlled(data);
         SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
                 200,
                 "Commande contrôlée avec succès",
@@ -184,10 +187,10 @@ public class CheckingController implements CheckingApi {
         return ResponseEntity.ok(successResponseDto);
     }
 
-    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneControlled(@RequestBody @Valid CmdZoneIdDto id) throws Exception {
-        log.info("Entering the setCommandeZoneControlled method from the CheckingController with {}", id);
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneControlled(@RequestBody @Valid CmdZoneColisageDto data) throws Exception {
+        log.info("| Entry | CheckingController.setCommandeZoneControlled | Args | CmdZoneColisageDto={}", data);
 
-        Integer response = this.checkingService.setCommandeZoneControlled(id);
+        Integer response = this.checkingService.setCommandeZoneControlled(data);
 
         SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
                 200,
@@ -199,10 +202,10 @@ public class CheckingController implements CheckingApi {
     }
 
     @Override
-    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneGlobalControlled(CmdIdDto id) {
-        log.info("| Entry | CheckingController.setCommandeZoneGlobalControlled | Args | id={}", id);
+    public ResponseEntity<SuccessResponseDto<Integer>> setCommandeZoneGlobalControlled(CmdColisageDto data) {
+        log.info("| Entry | CheckingController.setCommandeZoneGlobalControlled | Args | id={}", data);
 
-        Integer response = this.checkingService.setCommandeZoneGlobalControlled(id);
+        Integer response = this.checkingService.setCommandeZoneGlobalControlled(data);
 
         SuccessResponseDto<Integer> successResponseDto = new SuccessResponseDto<>(
                 200,

@@ -2,7 +2,9 @@ package dz.a2s.a2spreparation.services;
 
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.controle.response.BonCommandeZoneDto;
 import dz.a2s.a2spreparation.dto.preparation.LigneQteZoneDto;
@@ -34,7 +36,7 @@ public interface CheckingService {
             Integer motif
     ) throws Exception;
 
-    Integer setCommandeControlled(CmdIdDto id) throws Exception;
+    Integer setCommandeControlled(CmdColisageDto data) throws Exception;
 
     Integer startControleZone(
             int v_vbz_cmp_id,
@@ -53,8 +55,8 @@ public interface CheckingService {
 
     Integer setControlledQuantityZone(LigneQteZoneDto ligne) throws Exception;
 
-    Integer setCommandeZoneControlled(CmdZoneIdDto id) throws Exception;
+    Integer setCommandeZoneControlled(CmdZoneColisageDto data) throws Exception;
 
-    Integer setCommandeZoneGlobalControlled(CmdIdDto id);
+    Integer setCommandeZoneGlobalControlled(CmdColisageDto data);
 
 }

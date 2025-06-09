@@ -103,7 +103,14 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
             @Param("p_vnt") int p_vnt,
             @Param("p_stk") String p_stk,
             @Param("p_type") String p_type,
-            @Param("p_user") String p_user
+            @Param("p_user") String p_user,
+            @Param("P_COLIS_V") Integer colisV,
+            @Param("P_COLIS_D") Integer colisD,
+            @Param("P_FRIGO") Integer frigo,
+            @Param("P_PSYCHO") Integer psycho,
+            @Param("P_CHERS") Integer chers,
+            @Param("P_SACHET") Integer sachet,
+            @Param("P_BACS") Integer bacs
     );
 
     @Query(value = """

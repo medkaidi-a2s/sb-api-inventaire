@@ -188,10 +188,37 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
     );
 
     @Procedure(procedureName = "logistiques.P_SET_ZONE_CONTROLLED", outputParameterName = "p_msg")
-    Integer setCommandeZoneControlled(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_ZONE") Integer zone, @Param("P_USER") String username);
+    Integer setCommandeZoneControlled(
+            @Param("P_CMP") Integer cmpId,
+            @Param("P_VNT") Integer id,
+            @Param("P_TYPE") String type,
+            @Param("P_STK") String stkCode,
+            @Param("P_ZONE") Integer zone,
+            @Param("P_USER") String username,
+            @Param("P_COLIS_V") Integer colisV,
+            @Param("P_COLIS_D") Integer colisD,
+            @Param("P_FRIGO") Integer frigo,
+            @Param("P_PSYCHO") Integer psycho,
+            @Param("P_CHERS") Integer chers,
+            @Param("P_SACHET") Integer sachet,
+            @Param("P_BACS") Integer bacs
+    );
 
     @Procedure(procedureName = "logistiques.P_SET_CDE_ZONE_CONTROLLED", outputParameterName = "p_msg")
-    Integer setCommandeZoneGlobalControlled(@Param("P_CMP") Integer cmpId, @Param("P_VNT") Integer id, @Param("P_TYPE") String type, @Param("P_STK") String stkCode, @Param("P_USER") String username);
+    Integer setCommandeZoneGlobalControlled(
+            @Param("P_CMP") Integer cmpId,
+            @Param("P_VNT") Integer id,
+            @Param("P_TYPE") String type,
+            @Param("P_STK") String stkCode,
+            @Param("P_USER") String username,
+            @Param("P_COLIS_V") Integer colisV,
+            @Param("P_COLIS_D") Integer colisD,
+            @Param("P_FRIGO") Integer frigo,
+            @Param("P_PSYCHO") Integer psycho,
+            @Param("P_CHERS") Integer chers,
+            @Param("P_SACHET") Integer sachet,
+            @Param("P_BACS") Integer bacs
+    );
 
     @Query(value = """
             SELECT v.vnt_reference, --Preparation par zone
