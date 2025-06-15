@@ -79,4 +79,7 @@ public class Commande {
     @Column(name = "STATUT")
     private String statut;
 
+    @Column(name = "PRIORITE_REGION")
+    private String priorite;
+
 }

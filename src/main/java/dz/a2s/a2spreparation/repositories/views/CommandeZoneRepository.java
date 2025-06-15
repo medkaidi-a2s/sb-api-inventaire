@@ -255,4 +255,32 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
                       v.VNT_REF_ASSOCIE2
             """, nativeQuery = true)
     CommandeReceiptProjection getReceiptData (@Param("cmpId") Integer cmpId, @Param("vntId") Integer vntId, @Param("type") String type, @Param("stkCode") String stkCode, @Param("zone") Integer zone);
+
+    @Query(value = """
+            SELECT *
+              FROM PRP_LISTE_CDE_ZONE_CONTROLES T
+             WHERE VNT_CMP_ID = :companyId
+               AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+               AND VBZ_STATUT_PREPARE = 5
+            """, nativeQuery = true)
+    List<CommandeZone> getControlledCommandesZone(@Param("companyId") Integer companyId, @Param("date") String date);
+
+    @Procedure(procedureName = "logistiques.P_SAISI_COLISAGE", outputParameterName = "p_msg")
+    Integer saisirColisageCommande(
+            @Param("P_CMP_ID") int cmp,
+            @Param("P_VNT_ID") int vnt,
+            @Param("P_TYPE") String type,
+            @Param("P_STK_CODE") String stkCode,
+            @Param("P_ZONE") Integer zone,
+            @Param("P_ANNEE") Integer annee,
+            @Param("P_COLIS_V") Integer colisV,
+            @Param("P_COLIS_D") Integer colisD,
+            @Param("P_FRIGO") Integer frigo,
+            @Param("P_PSYCHO") Integer psycho,
+            @Param("P_CHERS") Integer chers,
+            @Param("P_SACHET") Integer sachet,
+            @Param("P_BACS") Integer bacs,
+            @Param("P_METHOD") Integer method
+    );
+
 }

@@ -7,7 +7,10 @@ public enum CommandeStatus {
 
     ASSIGNED(0, "Non affectée"),
     PREPARING(1, "En préparation"),
-    PREPARED(2,"Préparée");
+    PREPARED(2,"Préparée"),
+    PENDING_CONTROL(3, "En attente de contrôle"),
+    CONTROLLING(4, "En contrôle"),
+    CONTROLLED(5, "En attente de facturation");
 
     private final int code;
     private final String status;

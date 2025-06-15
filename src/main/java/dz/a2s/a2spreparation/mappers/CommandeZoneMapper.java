@@ -43,7 +43,8 @@ public class CommandeZoneMapper {
                 commande.getFrigPsycho(),
                 commande.getStatut(),
                 commande.getZone(),
-                commande.getReference() + " " + commande.getClient() + " " + commande.getRegion() + " " + commande.getFrigPsycho()
+                commande.getPriorite(),
+                commande.getReference() + " " + commande.getClient() + " " + commande.getRegion() + " " + commande.getFrigPsycho() + " " + commande.getZone()
         );
 
         return dto;

@@ -82,4 +82,7 @@ public class CommandeZone {
     @Column(name = "ZONE")
     private String zone;
 
+    @Column(name = "PRIORITE_REGION")
+    private String priorite;
+
 }

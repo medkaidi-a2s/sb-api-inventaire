@@ -1,6 +1,7 @@
 package dz.a2s.a2spreparation.services;
 
 import dz.a2s.a2spreparation.entities.UserEntity;
+import dz.a2s.a2spreparation.exceptions.ActionNotAllowedException;
 import dz.a2s.a2spreparation.repositories.UserEntityRepository;
 import dz.a2s.a2spreparation.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         String[] split = username.split(":");
         Integer companyId = Integer.parseInt(split[0]);
         String userCode = split[1];
+
+        var ids = this.userEntityRepository.getUtilisateurId(userCode, companyId, tierType);
+
+        if(ids.isEmpty())
+            throw new ActionNotAllowedException("Accès refusé : Action non autorisée.");
 
         Integer id = this.userEntityRepository.getUtilisateurId(userCode, companyId, tierType).get(0);
 

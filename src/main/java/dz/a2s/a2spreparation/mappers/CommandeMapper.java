@@ -36,6 +36,7 @@ public class CommandeMapper {
                 commande.getPrepare(),
                 commande.getFrigPsycho(),
                 commande.getStatut(),
+                commande.getPriorite(),
                 commande.getReference() + " " + commande.getClient() + " " + commande.getRegion() + " " + commande.getFrigPsycho()
         );
 

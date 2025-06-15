@@ -34,6 +34,7 @@ public class CommandeZoneResponseDto {
     private String frigPsycho;
     private String statut;
     private String zone;
+    private String priorite;
     private String search;
 
 }

@@ -23,14 +23,14 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
 
     @Procedure(procedureName = "logistiques.p_edit_affcte_cde_prepare", outputParameterName = "p_msg")
     Integer editAffectCommandePrp(
-            @Param("p_cmp") int p_cmp,
-            @Param("p_vnt") int p_vnt,
-            @Param("p_stk") String p_stk,
-            @Param("p_type") String p_type,
-            @Param("p_prp") int p_prp,
-            @Param("p_cnt1") int p_cnt1,
-            @Param("p_cnt2") int p_cnt2,
-            @Param("p_user") String p_user
+            @Param("p_cmp") int cmd,
+            @Param("p_vnt") int vnt,
+            @Param("p_stk") String stk,
+            @Param("p_type") String type,
+            @Param("p_prp") int prp,
+            @Param("p_cnt1") int cnt1,
+            @Param("p_cnt2") int cnt2,
+            @Param("p_user") String user
     );
 
     @Query(value = """
@@ -43,14 +43,14 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
 
     @Procedure(procedureName = "logistiques.p_affcte_cde_prepare", outputParameterName = "p_msg")
     Integer affectCommandePrp(
-            @Param("p_cmp") int p_cmp,
-            @Param("p_vnt") int p_vnt,
-            @Param("p_stk") String p_stk,
-            @Param("p_type") String p_type,
-            @Param("p_prp") int p_prp,
-            @Param("p_cnt1") int p_cnt1,
-            @Param("p_cnt2") int p_cnt2,
-            @Param("p_user") String p_user
+            @Param("p_cmp") int cmp,
+            @Param("p_vnt") int vnt,
+            @Param("p_stk") String stk,
+            @Param("p_type") String type,
+            @Param("p_prp") int prp,
+            @Param("p_cnt1") int cnt1,
+            @Param("p_cnt2") int cnt2,
+            @Param("p_user") String user
     );
 
     @Query(value = """
@@ -65,19 +65,19 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
 
     @Procedure(procedureName = "logistiques.P_VALIDE_CDE_PREPARE", outputParameterName = "p_msg")
     Integer setCommandePrepared(
-            @Param("p_cmp") int p_cmp,
-            @Param("p_vnt") int p_vnt,
-            @Param("p_stk") String p_stk,
-            @Param("p_type") String p_type,
-            @Param("p_user") String p_user
+            @Param("p_cmp") int cmp,
+            @Param("p_vnt") int vnt,
+            @Param("p_stk") String stk,
+            @Param("p_type") String type,
+            @Param("p_user") String user
     );
 
     @Procedure(procedureName = "logistiques.P_EDIT_START_PREPAR_CDE", outputParameterName = "p_msg")
     Integer startPrepareCde(
-            @Param("p_vnt_cmp_id") int p_vnt_cmp_id,
-            @Param("p_vnt_id") int p_vnt_id,
-            @Param("p_vnt_type") String p_vnt_type,
-            @Param("p_vnt_stk_code") String p_vnt_stk_code
+            @Param("p_vnt_cmp_id") int cmpId,
+            @Param("p_vnt_id") int vntId,
+            @Param("p_vnt_type") String type,
+            @Param("p_vnt_stk_code") String stkCode
     );
 
     @Query(value = """
@@ -91,19 +91,19 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
 
     @Procedure(procedureName = "logistiques.P_EDIT_START_CONTROL_CDE", outputParameterName = "p_msg")
     Integer startControleCde(
-            @Param("p_vnt_cmp_id") int p_vnt_cmp_id,
-            @Param("p_vnt_id") int p_vnt_id,
-            @Param("p_vnt_type") String p_vnt_type,
-            @Param("p_vnt_stk_code") String p_vnt_stk_code
+            @Param("p_vnt_cmp_id") int cmpId,
+            @Param("p_vnt_id") int vntId,
+            @Param("p_vnt_type") String type,
+            @Param("p_vnt_stk_code") String stkCode
     );
 
     @Procedure(procedureName = "logistiques.P_SET_CDE_CONTROLLED", outputParameterName = "p_msg")
     Integer setCommandeControlled(
-            @Param("p_cmp") int p_cmp,
-            @Param("p_vnt") int p_vnt,
-            @Param("p_stk") String p_stk,
-            @Param("p_type") String p_type,
-            @Param("p_user") String p_user,
+            @Param("p_cmp") int cmp,
+            @Param("p_vnt") int vnt,
+            @Param("p_stk") String stk,
+            @Param("p_type") String type,
+            @Param("p_user") String user,
             @Param("P_COLIS_V") Integer colisV,
             @Param("P_COLIS_D") Integer colisD,
             @Param("P_FRIGO") Integer frigo,
@@ -131,5 +131,32 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
                AND v.vnt_stk_code = :stkCode
             """, nativeQuery = true)
     CommandeReceiptProjection getReceiptData(@Param("cmpId") Integer cmpId, @Param("vntId") Integer vntId, @Param("type") String type, @Param("stkCode") String stkCode);
+
+    @Query(value = """
+                SELECT *
+                FROM PRP_LISTE_CDE_CONTROLES
+                WHERE VNT_CMP_ID = :companyId
+                  AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+                  AND STATUT = 'En attente de facturation'
+            """, nativeQuery = true)
+    List<Commande> getControlledCommandes(@Param("companyId") Integer companyId, @Param("date") String date);
+
+    @Procedure(procedureName = "logistiques.P_SAISI_COLISAGE", outputParameterName = "p_msg")
+    Integer saisirColisageCommande(
+            @Param("P_CMP_ID") int cmp,
+            @Param("P_VNT_ID") int vnt,
+            @Param("P_TYPE") String type,
+            @Param("P_STK_CODE") String stkCode,
+            @Param("P_ZONE") Integer zone,
+            @Param("P_ANNEE") Integer annee,
+            @Param("P_COLIS_V") Integer colisV,
+            @Param("P_COLIS_D") Integer colisD,
+            @Param("P_FRIGO") Integer frigo,
+            @Param("P_PSYCHO") Integer psycho,
+            @Param("P_CHERS") Integer chers,
+            @Param("P_SACHET") Integer sachet,
+            @Param("P_BACS") Integer bacs,
+            @Param("P_METHOD") Integer method
+    );
 
 }
