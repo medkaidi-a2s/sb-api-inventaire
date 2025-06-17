@@ -4,7 +4,9 @@ import dz.a2s.a2spreparation.entities.keys.VenteId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 
 import java.math.BigDecimal;
@@ -12,7 +14,8 @@ import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Entity
 @Immutable
 @Table(name = "PRP_LISTE_CDE_CONTROLES")
