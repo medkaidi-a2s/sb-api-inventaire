@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.api;
 
+import dz.a2s.a2spreparation.dto.auth.AuthorizationDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.Company;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,5 +28,10 @@ public interface CompanyApi {
     @ApiResponse(responseCode = "200", description = "Format d'impression récupéré avec succès")
     @GetMapping("/api/company/format-impression")
     public ResponseEntity<SuccessResponseDto<Integer>> getFormatImpression();
+
+    @Operation(summary = "Récupération des autorisations", description = "Récupération des autorisations selon la liste définie dans la config de l'application (yml)")
+    @ApiResponse(responseCode = "200", description = "Autorisations récupérées avec succès")
+    @GetMapping("/api/company/authorizations")
+    public ResponseEntity<SuccessResponseDto<List<AuthorizationDto>>> getAuthorizations();
 
 }

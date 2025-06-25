@@ -1,6 +1,6 @@
 package dz.a2s.a2spreparation.services.impl;
 
-import dz.a2s.a2spreparation.dto.AuthorizationDto;
+import dz.a2s.a2spreparation.dto.auth.AuthorizationDto;
 import dz.a2s.a2spreparation.repositories.StpUserRolesRepository;
 import dz.a2s.a2spreparation.services.AuthorizationService;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;

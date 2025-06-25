@@ -1,6 +1,7 @@
 package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.api.CompanyApi;
+import dz.a2s.a2spreparation.dto.auth.AuthorizationDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.Company;
 import dz.a2s.a2spreparation.services.CompanyService;
@@ -59,6 +60,20 @@ public class CompanyController implements CompanyApi {
                 200,
                 "Format d'impression récupéré avec succès",
                 formatImpression
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<List<AuthorizationDto>>> getAuthorizations() {
+        log.info("| Entry | CompanyController.getAuthorizations");
+
+        var authorizations = this.companyService.getAuthorizations();
+        var response = new SuccessResponseDto<List<AuthorizationDto>>(
+                200,
+                "Autorisations récupérées avec succès",
+                authorizations
         );
 
         return ResponseEntity.ok(response);

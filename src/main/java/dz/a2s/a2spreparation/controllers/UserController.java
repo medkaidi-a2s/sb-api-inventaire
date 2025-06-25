@@ -1,7 +1,7 @@
 package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.api.UserApi;
-import dz.a2s.a2spreparation.dto.AuthorizationDto;
+import dz.a2s.a2spreparation.dto.auth.AuthorizationDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.services.AuthorizationService;
 import lombok.RequiredArgsConstructor;

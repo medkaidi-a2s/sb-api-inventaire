@@ -1,6 +1,6 @@
 package dz.a2s.a2spreparation.api;
 
-import dz.a2s.a2spreparation.dto.AuthorizationDto;
+import dz.a2s.a2spreparation.dto.auth.AuthorizationDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
