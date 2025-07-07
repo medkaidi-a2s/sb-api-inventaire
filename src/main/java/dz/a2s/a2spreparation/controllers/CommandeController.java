@@ -4,7 +4,10 @@ import dz.a2s.a2spreparation.api.CommandeApi;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.services.CheckingService;
 import dz.a2s.a2spreparation.services.CommandeService;
@@ -76,6 +79,20 @@ public class CommandeController implements CommandeApi {
     }
 
     @Override
+    public ResponseEntity<SuccessResponseDto<ColisageDto>> getColisageCommande(@RequestBody CmdIdDto id) {
+        log.info("| Entry | CommandeController.getColisageCommande | Args | id={}", id);
+
+        var colisage = this.commandeService.getColisageCommande(id);
+        log.info("Fetched the colisage from the service | colisage={}", colisage);
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Colisage récupéré avec succès",
+                colisage);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
     public ResponseEntity<SuccessResponseDto<Integer>> saisirColisageZone(@RequestBody CmdZoneColisageDto cmdZoneColisageDto) {
         log.info("| Entry | CommandeController.saisirColisageZone | Args | cmdZoneColisageDto={}", cmdZoneColisageDto);
 
@@ -89,5 +106,21 @@ public class CommandeController implements CommandeApi {
         );
 
         return ResponseEntity.ok(successResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<ColisageDto>> getColisageZone(@RequestBody CmdZoneIdDto id) {
+        log.info("| Entry | CommandeController.getColisageZone | Args | id={}", id);
+
+        var colisage = this.commandeService.getColisageZone(id);
+        log.info("Fetched the colisage from the service | colisage={}", colisage);
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Colisage récupéré avec succès",
+                colisage
+        );
+
+        return ResponseEntity.ok(response);
     }
 }

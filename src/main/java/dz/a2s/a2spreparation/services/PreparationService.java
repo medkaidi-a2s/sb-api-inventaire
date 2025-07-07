@@ -67,5 +67,7 @@ public interface PreparationService {
 
     CommandeReceiptData getReceiptParZone(CmdZoneIdDto id);
 
+    Integer deleteLigneCommande(LigneVenteDto ligne);
+    Integer editQuantityCommande(LigneQteDto ligne);
 
 }

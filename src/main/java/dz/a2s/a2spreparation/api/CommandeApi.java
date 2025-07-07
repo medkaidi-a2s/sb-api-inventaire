@@ -3,7 +3,10 @@ package dz.a2s.a2spreparation.api;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,9 +37,19 @@ public interface CommandeApi {
     @PostMapping("/commandes/saisir-colisage")
     public ResponseEntity<SuccessResponseDto<Integer>> saisirColisageCommande(CmdColisageDto cmdColisageDto);
 
+    @Operation(summary = "Récupération du colisage d'une commande", description = "Récupération du colisage d'une commande")
+    @ApiResponse(responseCode = "200", description = "Colisage récupéré avec succès")
+    @PostMapping("/commandes/get-colisage")
+    public ResponseEntity<SuccessResponseDto<ColisageDto>> getColisageCommande(CmdIdDto id);
+
     @Operation(summary = "Saisi du colisage d'une commande par zone", description = "Saisi du colisage d'une commande par zone")
     @ApiResponse(responseCode = "200", description = "Colisage saisi avec succès")
     @PostMapping("/commandes-zones/saisir-colisage")
     public ResponseEntity<SuccessResponseDto<Integer>> saisirColisageZone(CmdZoneColisageDto cmdZoneColisageDto);
+
+    @Operation(summary = "Récupération du colisage d'une commande par zone", description = "Récupération du colisage d'une commande par zone")
+    @ApiResponse(responseCode = "200", description = "Colisage récupéré avec succès")
+    @PostMapping("/commandes-zones/get-colisage")
+    public ResponseEntity<SuccessResponseDto<ColisageDto>> getColisageZone(CmdZoneIdDto id);
 
 }

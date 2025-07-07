@@ -1,5 +1,6 @@
 package dz.a2s.a2spreparation.repositories.views;
 
+import dz.a2s.a2spreparation.dto.commande.projections.ColisageProjection;
 import dz.a2s.a2spreparation.dto.preparation.CommandeReceiptProjection;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.Commande;
@@ -158,5 +159,36 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
             @Param("P_BACS") Integer bacs,
             @Param("P_METHOD") Integer method
     );
+
+    @Query(value = """
+            SELECT NVL(VBZ_COLIS_D, 0) AS COLIS_D,
+                   NVL(VBZ_COLIS_F, 0) AS COLIS_F,
+                   NVL(VBZ_COLIS_V, 0) AS COLIS_V,
+                   NVL(VBZ_SACHET, 0)  AS SACHET,
+                   NVL(VBZ_PSYCHO, 0)  AS PSYCHO,
+                   NVL(VBZ_CHERS, 0)   AS CHERS
+              FROM VNT_BON_ZONES Z
+             WHERE VBZ_CMP_ID = :cmpId
+               AND VBZ_VNT_ID = :id
+               AND VBZ_VNT_TYPE = :type
+               AND VBZ_STK_CODE = :stkCode
+               AND VBZ_ZONE = :zone
+            """, nativeQuery = true)
+    ColisageProjection getColisageZone(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stkCode") String stkCode, @Param("zone") Integer zone);
+
+    @Query(value = """
+             SELECT NVL(T.VNT_COLIS, 0) AS COLIS_D,
+                    NVL(T.VNT_NBR_FRIGO, 0) AS COLIS_F,
+                    NVL(T.VNT_NBR_PSYCHO, 0) AS PSYCHO,
+                    NVL(T.VNT_COLIS_VRAG, 0) AS COLIS_V,
+                    NVL(T.VNT_NBR_CHERS, 0) AS CHERS,
+                    NVL(T.VNT_NBR_SACHETS, 0) AS SACHET
+               FROM VNT_BONS T
+              WHERE VNT_CMP_ID = :cmpId
+                AND VNT_ID = :id
+                AND VNT_TYPE = :type
+                AND VNT_STK_CODE = :stkCode
+            """, nativeQuery = true)
+    ColisageProjection getColisageCommande(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stkCode") String stkCode);
 
 }

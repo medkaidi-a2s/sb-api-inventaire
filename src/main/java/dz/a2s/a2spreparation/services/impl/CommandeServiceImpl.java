@@ -3,7 +3,10 @@ package dz.a2s.a2spreparation.services.impl;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.CommandeZoneResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
+import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.views.Commande;
 import dz.a2s.a2spreparation.mappers.CommandeMapper;
@@ -130,5 +133,38 @@ public class CommandeServiceImpl implements CommandeService {
             throw new RuntimeException("L'action n'a pas pu été accomplie");
 
         return response;
+    }
+
+    @Override
+    public ColisageDto getColisageZone(CmdZoneIdDto id) {
+        log.info("| Entry | CommandeService.getColisageZone | Args | id={}", id);
+
+        var projection = this.commandeRepository.getColisageZone(
+                id.getCmpId(),
+                id.getId(),
+                id.getType(),
+                id.getStkCode(),
+                id.getZone()
+        );
+        log.info("Fetched the colisage projection from the repo | projection={}", projection);
+
+        return new ColisageDto(
+                projection.getColisV(),
+                projection.getColisD(),
+                projection.getColisF(),
+                projection.getPsycho(),
+                projection.getChers(),
+                projection.getSachet()
+        );
+    }
+
+    @Override
+    public ColisageDto getColisageCommande(CmdIdDto id) {
+        log.info("| Entry | CommandeService.getColisageCommande | Args | id={}", id);
+
+        var projection = this.commandeRepository.getColisageCommande(id.getCmpId(), id.getId(), id.getType(), id.getStkCode());
+        log.info("Fetched the colisage from the repo | projection={}", projection);
+
+        return new ColisageDto(projection.getColisV(), projection.getColisD(), projection.getColisF(), projection.getPsycho(), projection.getChers(), projection.getSachet());
     }
 }

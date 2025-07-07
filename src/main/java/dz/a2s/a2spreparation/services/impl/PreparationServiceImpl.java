@@ -20,6 +20,7 @@ import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import dz.a2s.a2spreparation.services.PreparationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -358,5 +359,67 @@ public class PreparationServiceImpl implements PreparationService {
         log.info("Fetched the receipt data from the repo | receptData={}", receiptProjection);
 
         return CommandeMapper.toReceiptData(receiptProjection);
+    }
+
+    @Transactional
+    @Override
+    public Integer deleteLigneCommande(LigneVenteDto ligne) {
+        log.info("| Entry | PreparationService.deleteLigneCommande | Args | ligne={}", ligne);
+
+        log.info("Récupération du user code de l'utilisateur authentifié");
+        String username = this.customUserDetailsService.getCurrentUserCode();
+
+        var response = 0;
+
+        try {
+            response = this.venteDetailsRepository.deleteLigneCommande(
+                    ligne.getCmpId(),
+                    ligne.getId(),
+                    ligne.getStkCode(),
+                    ligne.getType(),
+                    ligne.getNo(),
+                    username
+            );
+        } catch (DataAccessException exception) {
+            log.info("Une erreur s'est produite lors de la suppression de la ligne de commande | Original message: {}", exception.getMessage());
+            throw new RuntimeException("Une erreur s'est produite lors de la suppression de la ligne de commande");
+        }
+        log.info("Réponse de la procédure stockée pour supprimer une ligne de commande {}", response);
+
+        if(response != 0)
+            throw new ActionNotAllowedException("La suppression de la ligne de commande n'a pas pu avoir lieu");
+
+        return response;
+    }
+
+    @Override
+    public Integer editQuantityCommande(LigneQteDto ligne) {
+        log.info("| Entry | PreparationService.editQuantityCommande | Args | ligne={}", ligne);
+
+        log.info("Récupération du user code de l'utilisateur authentifié");
+        String username = this.customUserDetailsService.getCurrentUserCode();
+
+        var response = 0;
+
+        try {
+            response = this.venteDetailsRepository.editQuantityCommande(
+                    ligne.getCmpId(),
+                    ligne.getId(),
+                    ligne.getStkCode(),
+                    ligne.getType(),
+                    ligne.getNo(),
+                    ligne.getQte(),
+                    username
+            );
+        } catch (DataAccessException exception) {
+            log.info("Une erreur s'est produite lors de la modification de la quantité de la ligne de commande | Original message: {}", exception.getMessage());
+            throw new RuntimeException("Une erreur s'est produite lors de la modification de la quantité de la ligne de commande");
+        }
+        log.info("Réponse de la procédure stockée pour modifier la quantité d'une ligne de commande {}", response);
+
+        if(response != 0)
+            throw new ActionNotAllowedException("La modification de la quantité de la ligne de commande n'a pas pu avoir lieu");
+
+        return response;
     }
 }

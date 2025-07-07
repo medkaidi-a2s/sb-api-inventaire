@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -73,6 +74,27 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
             @Param("no") Integer no,
             @Param("qte") Integer qte,
             @Param("motif") Integer motif
+    );
+
+    @Procedure(procedureName = "logistiques.p_del_ligne_cde", outputParameterName = "p_msg")
+    Integer deleteLigneCommande(
+            @Param("p_cmp") int cmd,
+            @Param("p_vnt") int vnt,
+            @Param("p_stk") String stk,
+            @Param("p_type") String type,
+            @Param("p_vnd_no") int no,
+            @Param("p_user") String user
+    );
+
+    @Procedure(procedureName = "logistiques.p_update_qte_cde", outputParameterName = "p_msg")
+    Integer editQuantityCommande(
+            @Param("p_cmp") int cmd,
+            @Param("p_vnt") int vnt,
+            @Param("p_stk") String stk,
+            @Param("p_type") String type,
+            @Param("p_vnd_no") int no,
+            @Param("p_qte") int qte,
+            @Param("p_user") String user
     );
 
 }

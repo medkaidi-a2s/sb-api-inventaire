@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -151,5 +152,19 @@ public interface PreparationApi {
     @ApiResponse(responseCode = "200", description = "Données récupérées avec succès")
     @PostMapping("/commande-zone/receipt-data")
     public ResponseEntity<SuccessResponseDto<CommandeReceiptData>> getZoneReceiptData(CmdZoneIdDto commande);
+
+    @Operation(
+            summary = "Suppression d'une ligne de commande",
+            description = "Supprimer une ligne ou un produit d'une commande")
+    @ApiResponse(responseCode = "200", description = "Ligne supprimée avec succès")
+    @PatchMapping("/commande/delete-line")
+    public ResponseEntity<SuccessResponseDto<Integer>> deleteLigneCommande(@RequestBody @Valid LigneVenteDto id);
+
+    @Operation(
+            summary = "Modification de la quantité d'une ligne de commande",
+            description = "Modifier la quantité d'une ligne ou un produit d'une commande")
+    @ApiResponse(responseCode = "200", description = "Quantité modifiée avec succès")
+    @PatchMapping("/commande/edit-quantity")
+    public ResponseEntity<SuccessResponseDto<Integer>> editQuantityCommande(@RequestBody @Valid LigneQteDto id);
 
 }

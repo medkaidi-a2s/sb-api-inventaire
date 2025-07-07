@@ -328,4 +328,36 @@ public class PreparationController implements PreparationApi {
         return ResponseEntity.ok(response);
     }
 
+    @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> deleteLigneCommande(@RequestBody @Valid LigneVenteDto id) {
+        log.info("| Entry | PreparationController.deleteLigneCommande | Args | id={}", id);
+
+        var response = this.preparationService.deleteLigneCommande(id);
+        log.info("Fetched the response from the service | response={}", response);
+
+        var successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Ligne de commande supprimée avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> editQuantityCommande(@RequestBody @Valid LigneQteDto id) {
+        log.info("| Entry | PreparationController.editQuantityCommande | Args | id={}", id);
+
+        var response = this.preparationService.editQuantityCommande(id);
+        log.info("Fetched the response from the service | response={}", response);
+
+        var successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Quantité de la ligne modifiée avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
 }
