@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
-    @Query(value = "Select CMP_ID, CMP_NOM_LOC,CMP_VIL_ID from STP_COMPAGNIES order by CMP_ID", nativeQuery = true)
+    @Query(value = "Select CMP_ID, CMP_NOM_ETR,CMP_VIL_ID from STP_COMPAGNIES order by CMP_ID", nativeQuery = true)
     List<Company> findAllCompanies();
 
 }

@@ -32,6 +32,9 @@ public class VenteZoneDetails {
     @Column(name = "VND_NLOT")
     private String vndNLot;
 
+    @Column(name = "VND_PRD_ID")
+    private Integer prdId;
+
     @Column(name = "VND_DATE_PEREMPTION")
     private Date datePeremption;
 

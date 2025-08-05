@@ -5,6 +5,8 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
+import dz.a2s.a2spreparation.dto.preparation.request.ReplaceLotRequest;
+import dz.a2s.a2spreparation.dto.preparation.response.ProductLotDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.views.Motif;
 import io.swagger.v3.oas.annotations.Operation;
@@ -166,5 +168,12 @@ public interface PreparationApi {
     @ApiResponse(responseCode = "200", description = "Quantité modifiée avec succès")
     @PatchMapping("/commande/edit-quantity")
     public ResponseEntity<SuccessResponseDto<Integer>> editQuantityCommande(@RequestBody @Valid LigneQteDto id);
+
+    @Operation(
+            summary = "Récupération des lots disponibles",
+            description = "Récupération des lots disponibles pour remplacement")
+    @ApiResponse(responseCode = "200", description = "Lots récupérés avec succès")
+    @PostMapping("/commande/available-lots")
+    public ResponseEntity<SuccessResponseDto<List<ProductLotDto>>> getAvailableLots(ReplaceLotRequest request);
 
 }

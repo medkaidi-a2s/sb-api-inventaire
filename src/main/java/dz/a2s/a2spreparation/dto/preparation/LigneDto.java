@@ -18,6 +18,7 @@ public class LigneDto {
     private Integer vndAnnee;
     private Integer medId;
     private String prdNLot;
+    private Integer prdId;
     private Date datePeremption;
     private Integer qteCommande;
     private BigDecimal montantTtc;

@@ -6,6 +6,8 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
+import dz.a2s.a2spreparation.dto.preparation.request.ReplaceLotRequest;
+import dz.a2s.a2spreparation.dto.preparation.response.ProductLotDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
@@ -355,6 +357,22 @@ public class PreparationController implements PreparationApi {
                 200,
                 "Quantité de la ligne modifiée avec succès",
                 response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<List<ProductLotDto>>> getAvailableLots(@RequestBody ReplaceLotRequest request) {
+        log.info("| Entry | PreparationController.getAvailableLots | Args | request={}", request);
+
+        var lots = this.preparationService.getAvailableLots(request.getCmpId(), request.getMedId(), request.getOldLotId(), request.getQte());
+        log.info("Fetched the available lots from the service | lots.size={}", lots.size());
+
+        var successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Lots disponibles",
+                lots
         );
 
         return ResponseEntity.ok(successResponseDto);

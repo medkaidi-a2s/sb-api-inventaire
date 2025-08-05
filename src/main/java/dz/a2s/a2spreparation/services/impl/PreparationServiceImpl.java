@@ -4,6 +4,7 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
+import dz.a2s.a2spreparation.dto.preparation.response.ProductLotDto;
 import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
@@ -12,6 +13,7 @@ import dz.a2s.a2spreparation.exceptions.ActionNotAllowedException;
 import dz.a2s.a2spreparation.exceptions.AppErrorCodes;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.CommandeMapper;
+import dz.a2s.a2spreparation.mappers.StockMapper;
 import dz.a2s.a2spreparation.mappers.preparation.PrpCdePrlvUsrCodeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.VenteDetailsMapper;
 import dz.a2s.a2spreparation.mappers.preparation.VentePrlvDetailsMapper;
@@ -41,6 +43,8 @@ public class PreparationServiceImpl implements PreparationService {
     private final CommandeRepository commandeRepository;
     private final CommandeZoneRepository commandeZoneRepository;
     private final MotifRepository motifRepository;
+    private final StockRepository stockRepository;
+    private final StockMapper stockMapper;
 
     @Override
     public List<CommandeResponseDto> getCommandes(String date) {
@@ -421,5 +425,18 @@ public class PreparationServiceImpl implements PreparationService {
             throw new ActionNotAllowedException("La modification de la quantité de la ligne de commande n'a pas pu avoir lieu");
 
         return response;
+    }
+
+    @Override
+    public List<ProductLotDto> getAvailableLots(Integer cmpId, Integer medId, Integer oldLotId, Integer qte) {
+        log.info("| Entry | PreparationService.getAvailableLots | Args | cmpId={}, medId={}, oldLotId={}", cmpId, medId, oldLotId);
+
+        var projections = this.stockRepository.getAvailableLots(cmpId, medId, oldLotId, qte);
+        log.info("Fetched the available lots from the repo | projections.size={}", projections.size());
+
+        var lots = projections.stream().map(this.stockMapper::fromProductLotProjection).toList();
+        log.info("Mapped the projections to DTOs | lots.size={}", lots.size());
+
+        return lots;
     }
 }

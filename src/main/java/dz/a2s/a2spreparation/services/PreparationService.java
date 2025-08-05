@@ -4,6 +4,7 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
+import dz.a2s.a2spreparation.dto.preparation.response.ProductLotDto;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.Motif;
@@ -69,5 +70,6 @@ public interface PreparationService {
 
     Integer deleteLigneCommande(LigneVenteDto ligne);
     Integer editQuantityCommande(LigneQteDto ligne);
+    List<ProductLotDto> getAvailableLots(Integer cmpId, Integer medId, Integer oldLotId, Integer qte);
 
 }

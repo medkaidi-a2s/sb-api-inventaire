@@ -19,7 +19,7 @@ public class Company {
     @Column(name = "CMP_ID")
     private Integer id;
 
-    @Column(name="CMP_NOM_LOC")
+    @Column(name="CMP_NOM_ETR")
     private String label;
 
     @Column(name="CMP_VIL_ID")
