@@ -5,6 +5,8 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
+import dz.a2s.a2spreparation.dto.preparation.request.AddLotRequest;
+import dz.a2s.a2spreparation.dto.preparation.request.AvailableLotsRequest;
 import dz.a2s.a2spreparation.dto.preparation.request.ReplaceLotRequest;
 import dz.a2s.a2spreparation.dto.preparation.response.ProductLotDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
@@ -14,7 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -174,6 +175,20 @@ public interface PreparationApi {
             description = "Récupération des lots disponibles pour remplacement")
     @ApiResponse(responseCode = "200", description = "Lots récupérés avec succès")
     @PostMapping("/commande/available-lots")
-    public ResponseEntity<SuccessResponseDto<List<ProductLotDto>>> getAvailableLots(ReplaceLotRequest request);
+    public ResponseEntity<SuccessResponseDto<List<ProductLotDto>>> getAvailableLots(AvailableLotsRequest request);
+
+    @Operation(
+            summary = "Remplacement du lot d'une ligne de commande",
+            description = "Remplacer le lot d'une ligne ou un produit d'une commande")
+    @ApiResponse(responseCode = "200", description = "Lot remplacé avec succès")
+    @PatchMapping("/commande/replace-lot")
+    public ResponseEntity<SuccessResponseDto<Integer>> replaceProductLot(@RequestBody @Valid ReplaceLotRequest request);
+
+    @Operation(
+            summary = "Ajout d'un lot à la commande",
+            description = "Ajout d'un nouveau lot de produit à la commande")
+    @ApiResponse(responseCode = "200", description = "Lot ajouté avec succès")
+    @PatchMapping("/commande/add-lot")
+    public ResponseEntity<SuccessResponseDto<Integer>> addProductLot(@RequestBody @Valid AddLotRequest request);
 
 }

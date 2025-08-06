@@ -97,4 +97,27 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
             @Param("p_user") String user
     );
 
+    @Procedure(procedureName = "logistiques.p_replace_lot_cde", outputParameterName = "p_msg")
+    Integer replaceProductLot(
+            @Param("p_cmp") int cmd,
+            @Param("p_vnt") int vnt,
+            @Param("p_stk") String stk,
+            @Param("p_type") String type,
+            @Param("p_vnd_no") int no,
+            @Param("p_new_prd") int newLotId,
+            @Param("p_user") String user
+    );
+
+    @Procedure(procedureName = "logistiques.p_add_lot_cde", outputParameterName = "p_msg")
+    Integer addProductLot(
+            @Param("p_cmp") int cmd,
+            @Param("p_vnt") int vnt,
+            @Param("p_stk") String stk,
+            @Param("p_type") String type,
+            @Param("p_new_prd") int lotId,
+            @Param("p_new_med") int medId,
+            @Param("p_new_qte") int qte,
+            @Param("p_user") String user
+    );
+
 }

@@ -28,6 +28,8 @@ public class LigneQteDto {
     @NotNull(message = "Quantité de la préparation obligatoire")
     private Integer qte;
 
+    private Integer newLotId;
+
     private Integer motif;
 
 }

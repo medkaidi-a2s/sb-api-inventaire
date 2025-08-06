@@ -6,6 +6,8 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdPrlvIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
+import dz.a2s.a2spreparation.dto.preparation.request.AddLotRequest;
+import dz.a2s.a2spreparation.dto.preparation.request.AvailableLotsRequest;
 import dz.a2s.a2spreparation.dto.preparation.request.ReplaceLotRequest;
 import dz.a2s.a2spreparation.dto.preparation.response.ProductLotDto;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
@@ -363,7 +365,7 @@ public class PreparationController implements PreparationApi {
     }
 
     @Override
-    public ResponseEntity<SuccessResponseDto<List<ProductLotDto>>> getAvailableLots(@RequestBody ReplaceLotRequest request) {
+    public ResponseEntity<SuccessResponseDto<List<ProductLotDto>>> getAvailableLots(@RequestBody AvailableLotsRequest request) {
         log.info("| Entry | PreparationController.getAvailableLots | Args | request={}", request);
 
         var lots = this.preparationService.getAvailableLots(request.getCmpId(), request.getMedId(), request.getOldLotId(), request.getQte());
@@ -373,6 +375,38 @@ public class PreparationController implements PreparationApi {
                 200,
                 "Lots disponibles",
                 lots
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> replaceProductLot(@RequestBody @Valid ReplaceLotRequest request) {
+        log.info("| Entry | PreparationController.replaceProductLot | Args | request={}", request);
+
+        var response = this.preparationService.replaceProductLot(request);
+        log.info("Fetched the response from the service | response={}", response);
+
+        var successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Lot remplacé avec succès",
+                response
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> addProductLot(@RequestBody @Valid AddLotRequest request) {
+        log.info("| Entry | PreparationController.addProductLot | Args | request={}", request);
+
+        var response = this.preparationService.addProductLot(request);
+        log.info("Fetched the response from the service | response={}", response);
+
+        var successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Lot ajouté avec succès",
+                response
         );
 
         return ResponseEntity.ok(successResponseDto);

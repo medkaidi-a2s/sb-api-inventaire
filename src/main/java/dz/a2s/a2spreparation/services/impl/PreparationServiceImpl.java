@@ -4,6 +4,8 @@ import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.preparation.*;
+import dz.a2s.a2spreparation.dto.preparation.request.AddLotRequest;
+import dz.a2s.a2spreparation.dto.preparation.request.ReplaceLotRequest;
 import dz.a2s.a2spreparation.dto.preparation.response.ProductLotDto;
 import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
@@ -11,6 +13,7 @@ import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.*;
 import dz.a2s.a2spreparation.exceptions.ActionNotAllowedException;
 import dz.a2s.a2spreparation.exceptions.AppErrorCodes;
+import dz.a2s.a2spreparation.exceptions.DatabaseErrorException;
 import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.CommandeMapper;
 import dz.a2s.a2spreparation.mappers.StockMapper;
@@ -386,7 +389,7 @@ public class PreparationServiceImpl implements PreparationService {
             );
         } catch (DataAccessException exception) {
             log.info("Une erreur s'est produite lors de la suppression de la ligne de commande | Original message: {}", exception.getMessage());
-            throw new RuntimeException("Une erreur s'est produite lors de la suppression de la ligne de commande");
+            throw new DatabaseErrorException("Une erreur s'est produite lors de la suppression de la ligne de commande");
         }
         log.info("Réponse de la procédure stockée pour supprimer une ligne de commande {}", response);
 
@@ -417,7 +420,7 @@ public class PreparationServiceImpl implements PreparationService {
             );
         } catch (DataAccessException exception) {
             log.info("Une erreur s'est produite lors de la modification de la quantité de la ligne de commande | Original message: {}", exception.getMessage());
-            throw new RuntimeException("Une erreur s'est produite lors de la modification de la quantité de la ligne de commande");
+            throw new DatabaseErrorException("Une erreur s'est produite lors de la modification de la quantité de la ligne de commande");
         }
         log.info("Réponse de la procédure stockée pour modifier la quantité d'une ligne de commande {}", response);
 
@@ -438,5 +441,68 @@ public class PreparationServiceImpl implements PreparationService {
         log.info("Mapped the projections to DTOs | lots.size={}", lots.size());
 
         return lots;
+    }
+
+    @Override
+    public Integer replaceProductLot(ReplaceLotRequest request) {
+        log.info("| Entry | PreparationService.replaceProductLot | Args | request={}", request);
+
+        log.info("Récupération du user code de l'utilisateur authentifié");
+        String username = this.customUserDetailsService.getCurrentUserCode();
+
+        var response = 0;
+
+        try {
+            response = this.venteDetailsRepository.replaceProductLot(
+                    request.getCmpId(),
+                    request.getId(),
+                    request.getStkCode(),
+                    request.getType(),
+                    request.getNo(),
+                    request.getNewLotId(),
+                    username
+            );
+        } catch (DataAccessException exception) {
+            log.info("Une erreur s'est produite lors du remplacement du lot de la ligne de commande | Original message: {}", exception.getMessage());
+            throw new DatabaseErrorException("Une erreur s'est produite lors du remplacement du lot de la ligne de commande");
+        }
+        log.info("Réponse de la procédure stockée pour remplacer le lot d'une ligne de commande {}", response);
+
+        if(response != 0)
+            throw new ActionNotAllowedException("Le remplacement du lot de la ligne de commande n'a pas pu avoir lieu");
+
+        return response;
+    }
+
+    @Override
+    public Integer addProductLot(AddLotRequest request) {
+        log.info("| Entry | PreparationService.addProductLot | Args | request={}", request);
+
+        log.info("Récupération du user code de l'utilisateur authentifié");
+        String username = this.customUserDetailsService.getCurrentUserCode();
+
+        var response = 0;
+
+        try {
+            response = this.venteDetailsRepository.addProductLot(
+                    request.getCmpId(),
+                    request.getId(),
+                    request.getStkCode(),
+                    request.getType(),
+                    request.getLotId(),
+                    request.getMedId(),
+                    request.getQuantity(),
+                    username
+            );
+        } catch (DataAccessException exception) {
+            log.info("Une erreur s'est produite lors de l'ajout du lot à la commande | Original message: {}", exception.getMessage());
+            throw new DatabaseErrorException("Une erreur s'est produite lors de l'ajout du lot à la commande");
+        }
+        log.info("Réponse de la procédure stockée pour ajouter un lot à une commande {}", response);
+
+        if(response != 0)
+            throw new ActionNotAllowedException("L'ajout du lot à la commande n'a pas pu avoir lieu");
+
+        return response;
     }
 }

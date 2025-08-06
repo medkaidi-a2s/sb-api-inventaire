@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ReplaceLotRequest {
+public class AddLotRequest {
 
-    @NotNull(message = "Identifiant du site obligatoire")
+    @NotNull(message = "L'identifiant du site obligatoire")
     private Integer cmpId;
 
-    @NotNull(message = "Identifiant de la commande obligatoire")
+    @NotNull(message = "L'identifiant de la commande obligatoire")
     private Integer id;
 
     @NotNull(message = "Type de la commande obligatoire")
@@ -22,10 +22,13 @@ public class ReplaceLotRequest {
     @NotNull(message = "Code stock obligatoire")
     private String stkCode;
 
-    @NotNull(message = "Numéro de la ligne obligatoire")
-    private Integer no;
+    @NotNull(message = "Le numéro de lot est obligatoire")
+    private Integer lotId;
 
-    @NotNull(message = "Le nouveau numéro de lot est obligatoire")
-    private Integer newLotId;
+    @NotNull(message = "L'identifiant du produit est obligatoire")
+    private Integer medId;
+
+    @NotNull(message = "La quantité du produit est obligatoire")
+    private Integer quantity;
 
 }

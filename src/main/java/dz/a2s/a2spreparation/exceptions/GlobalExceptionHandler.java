@@ -82,6 +82,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(DatabaseErrorException.class)
+    public ResponseEntity<ErrorObject> handleDatabaseErrorException(DatabaseErrorException ex) {
+        log.info("Entering handleDatabaseErrorException from the GloablHandleExceptions with message {}", ex.getMessage());
+
+        ErrorObject errorObject = new ErrorObject();
+
+        errorObject.setMessage(ex.getMessage());
+        errorObject.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        errorObject.setTimestamp(new Date());
+
+        return new ResponseEntity<>(errorObject, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorObject> handleRuntimeException(RuntimeException ex) {
         log.info("| Entry | GlobalExceptionHandler.handleRuntimeException | Args | errorMessage : {}", ex.getMessage());
