@@ -114,8 +114,8 @@ public interface VenteDetailsRepository extends JpaRepository<VenteDetails, Vent
             @Param("p_vnt") int vnt,
             @Param("p_stk") String stk,
             @Param("p_type") String type,
-            @Param("p_new_prd") int lotId,
             @Param("p_new_med") int medId,
+            @Param("p_new_prd") int lotId,
             @Param("p_new_qte") int qte,
             @Param("p_user") String user
     );

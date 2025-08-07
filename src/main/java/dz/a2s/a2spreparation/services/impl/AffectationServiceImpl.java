@@ -44,9 +44,6 @@ public class AffectationServiceImpl implements AffectationService {
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Récupération de la companyId : {}", companyId);
 
-//        String preparationZone = this.customUserDetailsService.getPreparationZone();
-//        log.info("Récupération de l'id de la zone de l'utilisateur authentifié : {}", preparationZone);
-
         Integer preparateurId = this.customUserDetailsService.getUtilisateurId(TIER_TYPES.PREPARATEUR.getType());
         log.info("Fetching the current user id to filter the orders {}", preparateurId);
 

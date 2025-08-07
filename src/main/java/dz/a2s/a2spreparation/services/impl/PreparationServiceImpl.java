@@ -399,6 +399,7 @@ public class PreparationServiceImpl implements PreparationService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer editQuantityCommande(LigneQteDto ligne) {
         log.info("| Entry | PreparationService.editQuantityCommande | Args | ligne={}", ligne);
@@ -443,6 +444,7 @@ public class PreparationServiceImpl implements PreparationService {
         return lots;
     }
 
+    @Transactional
     @Override
     public Integer replaceProductLot(ReplaceLotRequest request) {
         log.info("| Entry | PreparationService.replaceProductLot | Args | request={}", request);
@@ -474,6 +476,7 @@ public class PreparationServiceImpl implements PreparationService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer addProductLot(AddLotRequest request) {
         log.info("| Entry | PreparationService.addProductLot | Args | request={}", request);
@@ -489,8 +492,8 @@ public class PreparationServiceImpl implements PreparationService {
                     request.getId(),
                     request.getStkCode(),
                     request.getType(),
-                    request.getLotId(),
                     request.getMedId(),
+                    request.getLotId(),
                     request.getQuantity(),
                     username
             );

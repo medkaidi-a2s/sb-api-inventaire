@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class CommandeServiceImpl implements CommandeService {
         return commandes.stream().map(CommandeZoneMapper::toCommandeZoneResponseDto).toList();
     }
 
+    @Transactional
     @Override
     public Integer saisirColisageCommande(CmdColisageDto cmdColisageDto) {
         log.info("| Entry | CommandeService.saisirColisageCommande | Args | cmdColisageDto={}", cmdColisageDto);
@@ -97,6 +99,7 @@ public class CommandeServiceImpl implements CommandeService {
         return response;
     }
 
+    @Transactional
     @Override
     public Integer saisirColisageZone(CmdZoneColisageDto cmdZoneColisageDto) {
         log.info("| Entry | CommandeService.saisirColisageZone | Args | cmdZoneColisageDto={}", cmdZoneColisageDto);
