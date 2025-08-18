@@ -21,6 +21,14 @@ spring:
 #                dialect: org.hibernate.dialect.Oracle10gDialect
         #hibernate:
             #ddl-auto: none
+        show-sql: true
+        properties:
+            hibernate:
+                format_sql: true   # pour formater joliment les requêtes
+    logging:
+        level:
+            org.hibernate.SQL: debug          # affiche les requêtes SQL
+            org.hibernate.type.descriptor.sql.BasicBinder: trace  # affiche les valeurs bindées aux paramètres
 params:
     security:
         jwt:
@@ -32,4 +40,5 @@ params:
         control: 482
         statistics: 489
         stocks: 790
-        order-edit: 38
+        commandes-edit: 38
+        commandes-list: 513

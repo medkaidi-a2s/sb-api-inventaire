@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final ParamsRepository paramsRepository;
-    private final ParamsProperties paramsProperties;
     private final CustomUserDetailsService customUserDetailsService;
 
     @Override
@@ -49,23 +48,5 @@ public class CompanyServiceImpl implements CompanyService {
         log.info("Fetched the format impression from the repo | formatImpression={}", formatImpression);
 
         return formatImpression.orElseThrow(() -> new RessourceNotFoundException("Format impression non initialisé"));
-    }
-
-    @Override
-    public List<AuthorizationDto> getAuthorizations() {
-        log.info("| Entry | CompanyService.getAuthorizations");
-
-        var cmpId = this.customUserDetailsService.getCurrentCompanyId();
-        var username = this.customUserDetailsService.getCurrentUserCode();
-        var codes = this.paramsProperties.getAuthorizations().values().stream().toList();
-        log.info("Fetching authorizations for cmpId={} and username={} - authorizations list : {}", cmpId, username, codes);
-
-        var projections = this.paramsRepository.getAuthorizations(cmpId, codes, username);
-        log.info("Fetched authorizations for cmpId={} and username={} - authorizations size : {}", cmpId, username, projections.size());
-
-        var authorizations = projections.stream().map(item -> new AuthorizationDto(item.getCode(), item.getValeur())).toList();
-        log.info("Mapped authorizations into DTOs : {}", authorizations);
-
-        return authorizations;
     }
 }

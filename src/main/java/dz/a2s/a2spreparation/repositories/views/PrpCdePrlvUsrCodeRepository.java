@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface PrpCdePrlvUsrCodeRepository extends JpaRepository<PrpCdePrlvUsrCode, StkListesId> {
 
     @Query(value = "SELECT * FROM PRP_LISTE_PLVS_AFFECTE_USRCODE WHERE PREPARATEUR_CODE = :userCode AND (:date IS NULL OR TRUNC(SLT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))", nativeQuery = true)

@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +21,7 @@ import java.util.Optional;
 @Tag(name = "Gestion des commandes en général", description = "APIs pour la gestion des opération communes et générales relatives aux commandes")
 public interface CommandeApi {
 
-    @Operation(summary = "Récupération des commandes préparées par zones", description = "Récupération des commandes déjà préparéespar zones")
+    @Operation(summary = "Récupération des commandes préparées par zones", description = "Récupération des commandes déjà préparées par zones")
     @ApiResponse(responseCode = "200", description = "Commandes par zones récupérées avec succès")
     @GetMapping("/commandes-zones")
     public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getCommandesZone(Optional<String> date);
@@ -30,7 +29,17 @@ public interface CommandeApi {
     @Operation(summary = "Récupération des commandes préparées", description = "Récupération des commandes déjà préparées")
     @ApiResponse(responseCode = "200", description = "Commandes récupérées avec succès")
     @GetMapping("/commandes")
-    public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getCommandes(Optional<String> date);
+    public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getControlledCommandes(Optional<String> date);
+
+    @Operation(summary = "Récupération de toutes les commandes", description = "Récupération de toutes les commandes")
+    @ApiResponse(responseCode = "200", description = "Commandes récupérées avec succès")
+    @GetMapping("/all-commandes")
+    public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getAllCommandes(Optional<String> date, Optional<String> search);
+
+    @Operation(summary = "Récupération de toutes les commandes par zone", description = "Récupération de toutes les commandes par zone")
+    @ApiResponse(responseCode = "200", description = "Commandes récupérées avec succès")
+    @GetMapping("/all-commandes-zones")
+    public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getAllCommandesZone(Optional<String> date, Optional<String> search);
 
     @Operation(summary = "Saisi du colisage d'une commande", description = "Saisi du colisage d'une commande")
     @ApiResponse(responseCode = "200", description = "Colisage saisi avec succès")

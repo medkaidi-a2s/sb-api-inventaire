@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface CommandeService {
 
+    List<CommandeResponseDto> getAllCommandes(String search, String date);
+    List<CommandeZoneResponseDto> getAllCommandesZone(String search, String date);
     List<CommandeResponseDto> getControlledCommandes(String date);
     List<CommandeZoneResponseDto> getControlledCommandesZone(String date);
     Integer saisirColisageCommande(CmdColisageDto cmdColisageDto);

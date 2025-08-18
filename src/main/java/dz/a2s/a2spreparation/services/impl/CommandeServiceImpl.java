@@ -21,6 +21,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,6 +33,43 @@ public class CommandeServiceImpl implements CommandeService {
     private final CustomUserDetailsService customUserDetailsService;
     private final CommandeRepository commandeRepository;
     private final CommandeZoneRepository commandeZoneRepository;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    @Override
+    public List<CommandeResponseDto> getAllCommandes(String search, String date) {
+        log.info("| Entry | CommandeService.getAllCommandes | Args | date : {}, search : {}", date, search);
+
+        if(search == null || search.isEmpty()) return List.of();
+
+        var cmpId = this.customUserDetailsService.getCurrentCompanyId();
+        log.info("Company ID fetched from the service {}", cmpId);
+
+        var commandes = this.commandeRepository.getAllCommandes(cmpId, date, search);
+        log.info("Fetched the orders from the repo | commandes.size={}", commandes.size());
+
+        var response = commandes.stream().map(CommandeMapper::toCommandeResponseDto).toList();
+        log.info("Mapped the orders to the response | response.size={}", response.size());
+
+        return response;
+    }
+
+    @Override
+    public List<CommandeZoneResponseDto> getAllCommandesZone(String search, String date) {
+        log.info("| Entry | CommandeService.getAllCommandesZone | Args | date : {}, search : {}", date, search);
+
+        if(search == null || search.isEmpty()) return List.of();
+
+        var cmpId = this.customUserDetailsService.getCurrentCompanyId();
+        log.info("Company ID fetched from the service {}", cmpId);
+
+        var commandes = this.commandeZoneRepository.getAllCommandesZone(cmpId, date, search);
+        log.info("Fetched the orders from the repo | commandes.size={}", commandes.size());
+
+        var response = commandes.stream().map(CommandeZoneMapper::toCommandeZoneResponseDto).toList();
+        log.info("Mapped the orders to the response | response.size={}", response.size());
+
+        return response;
+    }
 
     @Override
     public List<CommandeResponseDto> getControlledCommandes(String date) {

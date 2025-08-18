@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PrpCdePrlvPrepContRepository extends JpaRepository<PrpCdePrlvPrepCont, StkListesId> {
 
     @Query(value = "SELECT * FROM PRP_CDE_PRLV_PREP_CONT WHERE SLT_CMP_ID = :cmpId AND SLT_ID = :id AND SLT_TYPE = :type AND SLT_ANNEE = :annee", nativeQuery = true)

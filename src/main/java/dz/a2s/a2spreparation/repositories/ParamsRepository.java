@@ -5,11 +5,14 @@ import dz.a2s.a2spreparation.entities.Params;
 import dz.a2s.a2spreparation.entities.keys.ParamsId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface ParamsRepository extends JpaRepository<Params, ParamsId> {
 
     @Query(value = "select PRM_METHODE_PREPARE from STP_PARAMS where PRM_CMP_ID=:companyId and PRM_TYPE=1", nativeQuery = true)
@@ -34,5 +37,17 @@ public interface ParamsRepository extends JpaRepository<Params, ParamsId> {
                                       AND LOWER(USR_CODE) = LOWER(:username))
             """, nativeQuery = true)
     List<AuthorizationProjection> getAuthorizations(@Param("cmpId") Integer cmpId, @Param("codes") List<Integer> codes, @Param("username") String username);
+
+    @Procedure(procedureName = "logistiques.p_edit_affcte_cde_prepare", outputParameterName = "p_msg")
+    Integer editAffectCommandePrp(
+            @Param("p_cmp") int cmd,
+            @Param("p_vnt") int vnt,
+            @Param("p_stk") String stk,
+            @Param("p_type") String type,
+            @Param("p_prp") int prp,
+            @Param("p_cnt1") int cnt1,
+            @Param("p_cnt2") int cnt2,
+            @Param("p_user") String user
+    );
 
 }

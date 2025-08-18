@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
 
     @Query(value = """
@@ -21,6 +23,18 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
                   AND REFERENCE IS NOT NULL
             """, nativeQuery = true)
     List<Commande> getListCommande(@Param("companyId") Integer companyId, @Param("date") String date);
+
+    @Query(value = """
+            SELECT *
+              FROM PRP_LISTE_CDES T
+             WHERE VNT_CMP_ID = :cmp_id
+               AND (:date IS NULL OR TRUNC(VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+               AND REFERENCE IS NOT NULL
+               AND (:search IS NULL OR
+                   LOWER(T.REFERENCE || ' ' || T.CLIENT || ' ' || T.PORTEFEUILLE || ' ' || T.REGION) LIKE
+                   LOWER('%' || :search || '%'))
+            """, nativeQuery = true)
+    List<Commande> getAllCommandes(@Param("cmp_id") Integer companyId, @Param("date") String date, @Param("search") String search);
 
     @Procedure(procedureName = "logistiques.p_edit_affcte_cde_prepare", outputParameterName = "p_msg")
     Integer editAffectCommandePrp(

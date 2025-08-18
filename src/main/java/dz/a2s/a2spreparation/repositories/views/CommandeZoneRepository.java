@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface CommandeZoneRepository extends JpaRepository<CommandeZone, VenteZoneId> {
 
     //    @Query(value = """
@@ -45,6 +47,18 @@ public interface CommandeZoneRepository extends JpaRepository<CommandeZone, Vent
                        (VBZ_STATUT_PREPARE > 0 AND VBZ_PREPAR_ID = :preparId))
             """, nativeQuery = true)
     List<CommandeZone> getListCmdZones(@Param("companyId") Integer companyId, @Param("preparId") Integer preparId, @Param("date") String date);
+
+    @Query(value = """
+            SELECT *
+              FROM PRP_LISTE_CDE_ZONES_GLOB T
+             WHERE T.VNT_CMP_ID = :cmp_id
+               AND (:date IS NULL OR TRUNC(T.VNT_DATE) = TO_DATE(:date, 'yyyy-MM-dd'))
+               AND REFERENCE IS NOT NULL
+               AND (:search IS NULL OR
+                   LOWER(T.REFERENCE || ' ' || T.CLIENT || ' ' || T.PORTEFEUILLE || ' ' ||
+                          T.REGION || ' ' || T.ZONE) LIKE LOWER('%' || :search || '%'))
+            """, nativeQuery = true)
+    List<CommandeZone> getAllCommandesZone(@Param("cmp_id") Integer companyId, @Param("date") String date, @Param("search") String search);
 
     @Query(value = """
                 select count(*) from PRP_LISTE_CDE_ZONES_GLOB t

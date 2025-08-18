@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
                 .message("La ressource demandée est introuvable")
                 .build();
 
-        log.info("Returning the following error {}", errorObject.getMessage());
+        log.error("Returning the following error {}", errorObject.getMessage());
         return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
     }
 
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
         errorObject.setTimestamp(new Date());
 //        errorObject.setError(ex);
 
-        log.info("Returning the following error {}", errorObject.getMessage());
+        log.error("Returning the following error {}", errorObject.getMessage());
         return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
     }
 
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
             return fieldError.getField() + " : " + fieldError.getDefaultMessage();
         }).toList();
 
-        log.info("Détails de l'erreur de validation {}", errors);
+        log.error("Détails de l'erreur de validation {}", errors);
 
         ErrorObject errorObject = ErrorObject
                 .builder()

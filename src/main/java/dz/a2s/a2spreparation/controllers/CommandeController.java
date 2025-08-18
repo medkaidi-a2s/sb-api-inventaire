@@ -47,7 +47,7 @@ public class CommandeController implements CommandeApi {
     }
 
     @Override
-    public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getCommandes(Optional<String> date) {
+    public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getControlledCommandes(Optional<String> date) {
         log.info("| Entry | CommandeController.getCommandes | Args | date : {}", date);
 
         List<CommandeResponseDto> commandes = this.commandeService.getControlledCommandes(date.orElse(""));
@@ -56,6 +56,38 @@ public class CommandeController implements CommandeApi {
         SuccessResponseDto<List<CommandeResponseDto>> successResponseDto = new SuccessResponseDto<>(
                 200,
                 "Liste des commandes déjà contrôlées",
+                commandes
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<List<CommandeResponseDto>>> getAllCommandes(@RequestParam("date") Optional<String> date, @RequestParam("search") Optional<String> search) {
+        log.info("| Entry | CommandeController.getAllCommandes | Args | date : {}, search : {}", date, search);
+
+        var commandes = this.commandeService.getAllCommandes(search.orElse("").trim(), date.orElse(""));
+        log.info("Fetched the orders from the service | commandes.size={}", commandes.size());
+
+        SuccessResponseDto<List<CommandeResponseDto>> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Liste des commandes",
+                commandes
+        );
+
+        return ResponseEntity.ok(successResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getAllCommandesZone(@RequestParam("date") Optional<String> date, @RequestParam("search") Optional<String> search) {
+        log.info("| Entry | CommandeController.getAllCommandesZone | Args | date : {}, search : {}", date, search);
+
+        var commandes = this.commandeService.getAllCommandesZone(search.orElse("").trim(), date.orElse(""));
+        log.info("Fetched the orders from the service | commandes.size={}", commandes.size());
+
+        SuccessResponseDto<List<CommandeZoneResponseDto>> successResponseDto = new SuccessResponseDto<>(
+                200,
+                "Liste des commandes par zone",
                 commandes
         );
 
