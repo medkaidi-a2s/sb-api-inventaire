@@ -78,8 +78,6 @@ public class CompanyController implements CompanyApi {
                 authorizations
         );
 
-        this.authorizationService.testProcedure();
-
         return ResponseEntity.ok(response);
     }
 

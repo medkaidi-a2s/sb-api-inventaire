@@ -3,10 +3,12 @@ package dz.a2s.a2spreparation.services.impl;
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.auth.AuthorizationTypes;
 import dz.a2s.a2spreparation.dto.preparation.*;
 import dz.a2s.a2spreparation.dto.preparation.request.AddLotRequest;
 import dz.a2s.a2spreparation.dto.preparation.request.ReplaceLotRequest;
 import dz.a2s.a2spreparation.dto.preparation.response.ProductLotDto;
+import dz.a2s.a2spreparation.entities.enums.AuthorizationCodes;
 import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.keys.StkListesId;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
@@ -21,6 +23,7 @@ import dz.a2s.a2spreparation.mappers.preparation.PrpCdePrlvUsrCodeMapper;
 import dz.a2s.a2spreparation.mappers.preparation.VenteDetailsMapper;
 import dz.a2s.a2spreparation.mappers.preparation.VentePrlvDetailsMapper;
 import dz.a2s.a2spreparation.repositories.views.*;
+import dz.a2s.a2spreparation.services.AuthorizationService;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;
 import dz.a2s.a2spreparation.services.PreparationService;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +51,7 @@ public class PreparationServiceImpl implements PreparationService {
     private final MotifRepository motifRepository;
     private final StockRepository stockRepository;
     private final StockMapper stockMapper;
+    private final AuthorizationService authorizationService;
 
     @Override
     public List<CommandeResponseDto> getCommandes(String date) {
@@ -373,6 +377,21 @@ public class PreparationServiceImpl implements PreparationService {
     public Integer deleteLigneCommande(LigneVenteDto ligne) {
         log.info("| Entry | PreparationService.deleteLigneCommande | Args | ligne={}", ligne);
 
+        if (!this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationTypes.READ) &&
+                !this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_LIST.getCode(), AuthorizationTypes.READ)) {
+            log.error("Action not allowed - code : {} or {}", AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationCodes.COMMANDES_LIST.getCode());
+            throw new ActionNotAllowedException("Action refusée : droit non accordé (code : " + AuthorizationCodes.COMMANDES_EDIT.getCode() + " ou " + AuthorizationCodes.COMMANDES_LIST.getCode() + " - Lecture)");
+        }
+
+        Integer code = this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationTypes.READ) ?
+                AuthorizationCodes.COMMANDES_EDIT.getCode() : AuthorizationCodes.COMMANDES_LIST.getCode();
+
+        if (!this.authorizationService.hasAuthorization(code, AuthorizationTypes.DELETE)) {
+
+            log.error("Action not allowed - code : {} - DELETE", code);
+            throw new ActionNotAllowedException("Action refusée : droit non accordé (code : " + code + " - Suppression)");
+        }
+
         log.info("Récupération du user code de l'utilisateur authentifié");
         String username = this.customUserDetailsService.getCurrentUserCode();
 
@@ -393,7 +412,7 @@ public class PreparationServiceImpl implements PreparationService {
         }
         log.info("Réponse de la procédure stockée pour supprimer une ligne de commande {}", response);
 
-        if(response != 0)
+        if (response != 0)
             throw new ActionNotAllowedException("La suppression de la ligne de commande n'a pas pu avoir lieu");
 
         return response;
@@ -403,6 +422,21 @@ public class PreparationServiceImpl implements PreparationService {
     @Override
     public Integer editQuantityCommande(LigneQteDto ligne) {
         log.info("| Entry | PreparationService.editQuantityCommande | Args | ligne={}", ligne);
+
+        if (!this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationTypes.READ) &&
+                !this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_LIST.getCode(), AuthorizationTypes.READ)) {
+            log.error("Action not allowed - code : {} or {}", AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationCodes.COMMANDES_LIST.getCode());
+            throw new ActionNotAllowedException("Action refusée : droit non accordé (code : " + AuthorizationCodes.COMMANDES_EDIT.getCode() + " ou " + AuthorizationCodes.COMMANDES_LIST.getCode() + " - Lecture)");
+        }
+
+        Integer code = this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationTypes.READ) ?
+                AuthorizationCodes.COMMANDES_EDIT.getCode() : AuthorizationCodes.COMMANDES_LIST.getCode();
+
+        if (!this.authorizationService.hasAuthorization(code, AuthorizationTypes.UPDATE)) {
+
+            log.error("Action not allowed - code : {} - UPDATE", code);
+            throw new ActionNotAllowedException("Action refusée : droit non accordé (code : " + code + " - Modification)");
+        }
 
         log.info("Récupération du user code de l'utilisateur authentifié");
         String username = this.customUserDetailsService.getCurrentUserCode();
@@ -425,7 +459,7 @@ public class PreparationServiceImpl implements PreparationService {
         }
         log.info("Réponse de la procédure stockée pour modifier la quantité d'une ligne de commande {}", response);
 
-        if(response != 0)
+        if (response != 0)
             throw new ActionNotAllowedException("La modification de la quantité de la ligne de commande n'a pas pu avoir lieu");
 
         return response;
@@ -449,6 +483,21 @@ public class PreparationServiceImpl implements PreparationService {
     public Integer replaceProductLot(ReplaceLotRequest request) {
         log.info("| Entry | PreparationService.replaceProductLot | Args | request={}", request);
 
+        if (!this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationTypes.READ) &&
+                !this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_LIST.getCode(), AuthorizationTypes.READ)) {
+            log.error("Action not allowed - code : {} or {}", AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationCodes.COMMANDES_LIST.getCode());
+            throw new ActionNotAllowedException("Action refusée : droit non accordé (code : " + AuthorizationCodes.COMMANDES_EDIT.getCode() + " ou " + AuthorizationCodes.COMMANDES_LIST.getCode() + " - Lecture)");
+        }
+
+        Integer code = this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationTypes.READ) ?
+                AuthorizationCodes.COMMANDES_EDIT.getCode() : AuthorizationCodes.COMMANDES_LIST.getCode();
+
+        if (!this.authorizationService.hasAuthorization(code, AuthorizationTypes.RUN)) {
+
+            log.error("Action not allowed - code : {} - RUN", code);
+            throw new ActionNotAllowedException("Action refusée : droit non accordé (code : " + code + " - Exécution)");
+        }
+
         log.info("Récupération du user code de l'utilisateur authentifié");
         String username = this.customUserDetailsService.getCurrentUserCode();
 
@@ -470,7 +519,7 @@ public class PreparationServiceImpl implements PreparationService {
         }
         log.info("Réponse de la procédure stockée pour remplacer le lot d'une ligne de commande {}", response);
 
-        if(response != 0)
+        if (response != 0)
             throw new ActionNotAllowedException("Le remplacement du lot de la ligne de commande n'a pas pu avoir lieu");
 
         return response;
@@ -480,6 +529,20 @@ public class PreparationServiceImpl implements PreparationService {
     @Override
     public Integer addProductLot(AddLotRequest request) {
         log.info("| Entry | PreparationService.addProductLot | Args | request={}", request);
+
+        if (!this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationTypes.READ) &&
+                !this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_LIST.getCode(), AuthorizationTypes.READ)) {
+            log.error("Action not allowed - code : {} or {}", AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationCodes.COMMANDES_LIST.getCode());
+            throw new ActionNotAllowedException("Action refusée : droit non accordé (code : " + AuthorizationCodes.COMMANDES_EDIT.getCode() + " ou " + AuthorizationCodes.COMMANDES_LIST.getCode() + " - Lecture)");
+        }
+
+        Integer code = this.authorizationService.hasAuthorization(AuthorizationCodes.COMMANDES_EDIT.getCode(), AuthorizationTypes.READ) ?
+                AuthorizationCodes.COMMANDES_EDIT.getCode() : AuthorizationCodes.COMMANDES_LIST.getCode();
+
+        if (!this.authorizationService.hasAuthorization(code, AuthorizationTypes.INSERT)) {
+            log.error("Action not allowed - code : {} - INSERT", code);
+            throw new ActionNotAllowedException("Action refusée : droit non accordé (code : " + code + " - Ajout)");
+        }
 
         log.info("Récupération du user code de l'utilisateur authentifié");
         String username = this.customUserDetailsService.getCurrentUserCode();
@@ -503,7 +566,7 @@ public class PreparationServiceImpl implements PreparationService {
         }
         log.info("Réponse de la procédure stockée pour ajouter un lot à une commande {}", response);
 
-        if(response != 0)
+        if (response != 0)
             throw new ActionNotAllowedException("L'ajout du lot à la commande n'a pas pu avoir lieu");
 
         return response;

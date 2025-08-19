@@ -2,6 +2,7 @@ package dz.a2s.a2spreparation.services.impl;
 
 import dz.a2s.a2spreparation.config.ParamsProperties;
 import dz.a2s.a2spreparation.dto.auth.AuthorizationDto;
+import dz.a2s.a2spreparation.dto.auth.AuthorizationTypes;
 import dz.a2s.a2spreparation.dto.auth.ParamMeta;
 import dz.a2s.a2spreparation.repositories.ParamsRepository;
 import dz.a2s.a2spreparation.repositories.ProcedureCaller;
@@ -120,12 +121,33 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     }
 
     @Override
-    public void testProcedure() {
+    public Boolean hasAuthorization(Integer code, AuthorizationTypes type) {
+        log.info("| Entry | AuthorizationService.hasAuthorization | Args | code={}, type={}", code, type);
+
+        var result = this.callAuthorizationProcedure(code);
+
+        return switch (type) {
+            case READ -> result.containsKey("XLIRE") && (Integer) result.get("XLIRE") == 1;
+            case INSERT -> result.containsKey("XINSERT") && (Integer) result.get("XINSERT") == 1;
+            case UPDATE -> result.containsKey("XUPDATE") && (Integer) result.get("XUPDATE") == 1;
+            case DELETE -> result.containsKey("XDELETE") && (Integer) result.get("XDELETE") == 1;
+            case PRINT -> result.containsKey("XIMPRIME") && (Integer) result.get("XIMPRIME") == 1;
+            case RUN -> result.containsKey("XEXECUTE") && (Integer) result.get("XEXECUTE") == 1;
+            case EXPORT -> result.containsKey("XEXPORT") && (Integer) result.get("XEXPORT") == 1;
+            default -> false;
+        };
+    }
+
+    public Map<String, Object> callAuthorizationProcedure(Integer code) {
+        log.info("| Entry | AuthorizationService.callAuthorizationProcedure | Args | code={}", code);
+
+        var cmpId = this.customUserDetailsService.getCurrentCompanyId();
+        var username = this.customUserDetailsService.getCurrentUserCode();
 
         // OUT params
         List<ParamMeta> params = new ArrayList<>();
-        params.add(new ParamMeta("P_CMP", Integer.class, ParameterMode.IN, 1));
-        params.add(new ParamMeta("XFRM", Integer.class, ParameterMode.IN, 513));
+        params.add(new ParamMeta("P_CMP", Integer.class, ParameterMode.IN, cmpId));
+        params.add(new ParamMeta("XFRM", Integer.class, ParameterMode.IN, code));
         params.add(new ParamMeta("XLIRE", Integer.class, ParameterMode.OUT, null));
         params.add(new ParamMeta("XINSERT", Integer.class, ParameterMode.OUT, null));
         params.add(new ParamMeta("XUPDATE", Integer.class, ParameterMode.OUT, null));
@@ -133,12 +155,14 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         params.add(new ParamMeta("XIMPRIME", Integer.class, ParameterMode.OUT, null));
         params.add(new ParamMeta("XEXECUTE", Integer.class, ParameterMode.OUT, null));
         params.add(new ParamMeta("XEXPORT", Integer.class, ParameterMode.OUT, null));
-        params.add(new ParamMeta("xuser", String.class, ParameterMode.IN, "s.benmammar"));
+        params.add(new ParamMeta("xuser", String.class, ParameterMode.IN, username));
         params.add(new ParamMeta("XMSG", String.class, ParameterMode.OUT, null));
 
         Map<String, Object> result = procedureCaller.callProcedure("TROLES1", params);
 
-        System.out.println(result);
+        log.info("Fetched the stored procedure result {}", result);
+
+        return result;
     }
 
 }
