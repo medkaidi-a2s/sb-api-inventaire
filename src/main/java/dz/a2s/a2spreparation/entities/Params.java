@@ -3,10 +3,13 @@ package dz.a2s.a2spreparation.entities;
 import dz.a2s.a2spreparation.entities.keys.ParamsId;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "STP_PARAMS")
 public class Params {

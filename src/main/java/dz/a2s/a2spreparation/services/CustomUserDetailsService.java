@@ -43,6 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public Integer getCurrentCompanyId() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String[] split = username.split(":");
+        log.info("Fetched the current company | companyId={}", Integer.parseInt(split[0]));
         return Integer.parseInt(split[0]);
     }
 
