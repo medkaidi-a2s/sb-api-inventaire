@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
         ErrorObject errorObject = ErrorObject.builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .timestamp(new Date())
-                .message("La ressource demandée est introuvable")
+                .message(ex.getMessage())
                 .build();
 
         log.error("Returning the following error {}", errorObject.getMessage());

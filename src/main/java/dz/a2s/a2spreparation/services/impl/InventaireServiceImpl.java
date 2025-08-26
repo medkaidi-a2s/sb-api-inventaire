@@ -2,9 +2,12 @@ package dz.a2s.a2spreparation.services.impl;
 
 import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
+import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
 import dz.a2s.a2spreparation.entities.Inventaire;
 import dz.a2s.a2spreparation.exceptions.ActionNotAllowedException;
 import dz.a2s.a2spreparation.exceptions.DatabaseErrorException;
+import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.InventaireMappers;
 import dz.a2s.a2spreparation.repositories.InventaireRepository;
 import dz.a2s.a2spreparation.services.CustomUserDetailsService;
@@ -75,7 +78,7 @@ public class InventaireServiceImpl implements InventaireService {
         try {
             var projection = this.inventaireRepository.getComptageAccess(companyId, invId, username);
 
-            if(projection == null) {
+            if (projection == null) {
                 log.error("Projection is null | user does not have access to the inventory");
                 throw new ActionNotAllowedException("Accès refusé : Vous n'avez pas accès à cette campagne d'inventaire");
             }
@@ -88,5 +91,44 @@ public class InventaireServiceImpl implements InventaireService {
             log.error("Failed to fetch the comptage access from the repo | error={}", ex.getMessage());
             throw new DatabaseErrorException("Une erreur est survenue lors de la récupération des droits d'accès au comptage");
         }
+    }
+
+    @Override
+    public String checkEmplacement(String emplacement) {
+        log.info("| Entry | InventaireService.checkEmplacement() | Args | emplacement={}", emplacement);
+
+        var companyId = this.customUserDetailsService.getCurrentCompanyId();
+
+        var response = this.inventaireRepository.checkEmplacement(companyId, emplacement.trim());
+        log.info("Checked the inventory placement | response = {}", response);
+
+        if (response == null) {
+            log.error("Emplacement is null | emplacement does not exist");
+            throw new RessourceNotFoundException("L'emplacement spécifié est introuvable");
+        }
+
+        return response;
+    }
+
+    @Override
+    public PaginatedDataDto<InventaireLineResponse> getInventaireLines(Integer invId, Integer comptage, String emplacement, Integer stockZero, String search, Integer page) {
+        log.info("| Entry | InventaireService.getInventaireLines() | Args | invId={}, comptage={}, emplacement={}, stockZero={}, search={}, page={}", invId, comptage, emplacement, stockZero, search, page);
+
+        Integer cmpId = this.customUserDetailsService.getCurrentCompanyId();
+
+        var size = 10;
+        int start = (page * size) - size + 1;
+        int end = page * size;
+
+        var projections = this.inventaireRepository.getInventaireLines(cmpId, invId, comptage, emplacement, stockZero, search, start, end);
+        log.info("Fetched the list of inventaire lines from the repo | projections.size={}", projections.size());
+
+        var totalRecords = projections.isEmpty() ? 0 : projections.stream().findFirst().get().getTotalRecords();
+        log.info("Fetched the total records from the projections | totalRecords={}", totalRecords);
+
+        var lines = projections.stream().map(InventaireMappers::fromInventaireLineProjection).toList();
+        log.info("Mapped projections to inventaire line responses | lines.size={}", lines.size());
+
+        return new PaginatedDataDto<>(lines, totalRecords, (totalRecords + size - 1) / size, page, size);
     }
 }

@@ -2,7 +2,10 @@ package dz.a2s.a2spreparation.controllers;
 
 import dz.a2s.a2spreparation.api.InventaireApi;
 import dz.a2s.a2spreparation.dto.common.ListResponse;
+import dz.a2s.a2spreparation.dto.inventaire.request.InventaireLineRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
+import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.Inventaire;
 import dz.a2s.a2spreparation.services.InventaireService;
@@ -10,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -68,6 +72,48 @@ public class InventaireController implements InventaireApi {
                 access
         );
 
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<String>> checkEmplacement(@PathVariable("emplacement") String emplacement) {
+        log.info("| Entry | InventaireController.checkEmplacement | Args | emplacement={}", emplacement);
+
+        var value = this.inventaireService.checkEmplacement(emplacement);
+        log.info("Checked the inventory placement via the service | value = {}", value);
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Emplacement existant",
+                value
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<PaginatedResponse<InventaireLineResponse>> getInventaireLines(@RequestBody InventaireLineRequest request) {
+        log.info("| Entry | InventaireController.getInventaireLines | Args | request={}", request);
+
+        var lines = this.inventaireService.getInventaireLines(
+                request.getInvId(),
+                request.getComptage(),
+                request.getEmplacement(),
+                request.getStockZero(),
+                request.getSearch(),
+                request.getPage()
+        );
+        log.info("Fetched the inventory lines from the service | lines.size={}", lines.data().size());
+
+        var response = new PaginatedResponse<>(
+                200,
+                "Stocks récupéré avec succès - page = " + request.getPage() + " - size = " + 10,
+                lines.data(),
+                lines.totalRecords(),
+                lines.totalPages(),
+                lines.currentPage(),
+                lines.pageSize()
+        );
         return ResponseEntity.ok(response);
     }
 }

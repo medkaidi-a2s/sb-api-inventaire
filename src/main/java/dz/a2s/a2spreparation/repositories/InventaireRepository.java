@@ -2,6 +2,7 @@ package dz.a2s.a2spreparation.repositories;
 
 import dz.a2s.a2spreparation.dto.common.ListProjection;
 import dz.a2s.a2spreparation.dto.inventaire.projections.ComptageAccessProjection;
+import dz.a2s.a2spreparation.dto.inventaire.projections.InventaireLineProjection;
 import dz.a2s.a2spreparation.dto.inventaire.projections.InventaireProjection;
 import dz.a2s.a2spreparation.entities.Inventaire;
 import dz.a2s.a2spreparation.entities.keys.InventaireId;
@@ -49,5 +50,71 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Inventai
                AND LOWER(T.INU_USR_CODE) = LOWER(:username)
             """, nativeQuery = true)
     ComptageAccessProjection getComptageAccess(@Param("cmp_id") Integer cmpId, @Param("inv_id") Integer invId, @Param("username") String username);
+
+    @Query(value = """
+            SELECT SIE_REFERENCE
+              FROM STP_INVENTAIRE_EMPLACEMENTS T
+             WHERE SIE_ACTIVE_FLAG = 1
+               AND SIE_CMP_ID = :cmp_id
+               AND LOWER(T.SIE_REFERENCE) = LOWER(:emplacement)
+            """, nativeQuery = true)
+    String checkEmplacement(@Param("cmp_id") Integer cmpId, @Param("emplacement") String emplacement);
+
+    @Query(value = """
+            SELECT *
+              FROM (SELECT COUNT(*) OVER() AS TOTAL_RECORDS,
+                           IND_CMP_ID SITE,
+                           IND_INV_ID INVENTAIRE,
+                           IND_STK_CODE DEPOT,
+                           IND_MED_ID NUM_PRODUIT,
+                           IND_ID NLOT_INTERNE,
+                           IND_LIGNE NUM_LIGNE,
+                           MED_AMM CODE,
+                           M.MED_COMMERCIAL_NAME NOM_PRODUIT,
+                           T.IND_NLOT NLOT,
+                           T.IND_DATE_PEREMPTION DATE_PEREMPTION,
+                           T.IND_PRIX_PPA PPA,
+                           IND_PRIX_SHP SHP,
+                           (SELECT GFM_NOM
+                              FROM STP_GALENICFORMS T
+                             WHERE GFM_CMP_ID = MED_CMP_ID
+                               AND GFM_CODE = MED_GFM_CODE) FORME,
+                           (SELECT TER_NOM
+                              FROM STP_TIERS
+                             WHERE TER_CMP_ID = IND_CMP_ID
+                               AND TER_ID = IND_TER_ID
+                               AND TER_TYPE = IND_TER_TYPE) LABO,
+                           (SELECT T.ZNS_NOM FROM STP_ZONES T WHERE T.ZNS_ID = MED_ZNS_ID) ZONE_PRODUIT,
+                           IND_ATTRIBUT3 MOTIF_SAISIE,
+                           (SELECT SUM(D.INS_QTE)
+                              FROM STP_INVENTAIRE_SAISIES D
+                             WHERE T.IND_CMP_ID = D.INS_CMP_ID
+                               AND T.IND_INV_ID = INS_INV_ID
+                               AND T.IND_STK_CODE = INS_STK_CODE
+                               AND T.IND_MED_ID = INS_MED_ID
+                               AND T.IND_ID = D.INS_PRD_ID
+                               AND T.IND_LIGNE = D.INS_IND_LIGNE
+                               AND D.INS_TYPE = :comptage
+                               AND D.INS_CREER_USER = :emplacement) QTE_SAISIE,
+                           ROW_NUMBER() OVER(ORDER BY M.MED_COMMERCIAL_NAME) AS RNUM
+                      FROM STP_INVENTAIRE_DETAILS T, STP_MEDICAMENT M
+                     WHERE IND_CMP_ID = M.MED_CMP_ID
+                       AND IND_MED_ID = M.MED_ID
+                       AND IND_INV_ID = :inv_id
+                       AND T.IND_CMP_ID = :cmp_id
+                       AND NVL(IND_ATTRIBUT5, 0) > :stock_zero
+                       AND LOWER(M.MED_COMMERCIAL_NAME) LIKE
+                           LOWER('%' || :search || '%'))
+             WHERE RNUM BETWEEN :start AND :end
+            """, nativeQuery = true)
+    List<InventaireLineProjection> getInventaireLines(
+            @Param("cmp_id") Integer cmpId,
+            @Param("inv_id") Integer invId,
+            @Param("comptage") Integer comptage,
+            @Param("emplacement") String emplacement,
+            @Param("stock_zero") Integer stockZero,
+            @Param("search") String search,
+            @Param("start") Integer start,
+            @Param("end") Integer end);
 
 }

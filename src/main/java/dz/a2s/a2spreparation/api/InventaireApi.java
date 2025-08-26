@@ -1,7 +1,9 @@
 package dz.a2s.a2spreparation.api;
 
 import dz.a2s.a2spreparation.dto.common.ListResponse;
+import dz.a2s.a2spreparation.dto.inventaire.request.InventaireLineRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.dto.stock.response.StockDto;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +35,16 @@ public interface InventaireApi {
     @ApiResponse(responseCode = "200", description = "Droits récupérés avec succès")
     @GetMapping("/{id}/comptages-access")
     public ResponseEntity<SuccessResponseDto<ComptageAccessResponse>> getComptageAccess(Integer invId);
+
+    @Operation(summary = "Vérification de l'emplacement d'inventaire", description = "Vérifier si l'emplacement d'un inventaire existe")
+    @ApiResponse(responseCode = "200", description = "Emplacement existant")
+    @ApiResponse(responseCode = "204", description = "Emplacement inexistant")
+    @GetMapping("/emplacements/{emplacement}")
+    public ResponseEntity<SuccessResponseDto<String>> checkEmplacement(String emplacement);
+
+    @Operation(summary = "Récupération des produits à inventorier", description = "Récupération des produits à inventorier")
+    @ApiResponse(responseCode = "200", description = "Produits récupérés avec succès")
+    @PostMapping("/details")
+    public ResponseEntity<PaginatedResponse<InventaireLineResponse>> getInventaireLines(InventaireLineRequest request);
 
 }

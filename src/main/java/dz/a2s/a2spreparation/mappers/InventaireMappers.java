@@ -3,8 +3,10 @@ package dz.a2s.a2spreparation.mappers;
 import dz.a2s.a2spreparation.dto.common.ListProjection;
 import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.projections.ComptageAccessProjection;
+import dz.a2s.a2spreparation.dto.inventaire.projections.InventaireLineProjection;
 import dz.a2s.a2spreparation.dto.inventaire.projections.InventaireProjection;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
 import dz.a2s.a2spreparation.entities.Inventaire;
 
 public class InventaireMappers {
@@ -30,6 +32,28 @@ public class InventaireMappers {
                 projection.getComptage1(),
                 projection.getComptage2(),
                 projection.getComptage3()
+        );
+    }
+
+    public static InventaireLineResponse fromInventaireLineProjection(InventaireLineProjection projection) {
+        return new InventaireLineResponse(
+                projection.getSite(),
+                projection.getInventaire(),
+                projection.getDepot(),
+                projection.getNumProduit(),
+                projection.getNlotInterne(),
+                projection.getNumLigne(),
+                projection.getCode(),
+                projection.getNomProduit(),
+                projection.getNlot(),
+                projection.getDatePeremption(),
+                projection.getPpa(),
+                projection.getShp(),
+                projection.getForme(),
+                projection.getLabo(),
+                projection.getZoneProduit(),
+                projection.getMotifSaisie(),
+                projection.getQteSaisie()
         );
     }
 
