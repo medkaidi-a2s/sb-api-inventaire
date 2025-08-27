@@ -37,7 +37,8 @@ public class CommandeMapper {
                 commande.getFrigPsycho(),
                 commande.getStatut(),
                 commande.getPriorite(),
-                commande.getReference() + " " + commande.getClient() + " " + commande.getRegion() + " " + commande.getFrigPsycho()
+                commande.getReference() + " " + commande.getClient() + " " + commande.getRegion() + " " + commande.getFrigPsycho(),
+                commande.getId().getVntCmpId() + "-" + commande.getId().getVntId() + "-" + commande.getId().getVntType() + "-" + commande.getId().getVntStkCode()
         );
 
         return dto;

@@ -29,7 +29,8 @@ public class StockMapper {
                 projection.getUgVente(),
                 projection.getEtat(),
                 projection.getDateArrivage(),
-                projection.getColisage()
+                projection.getColisage(),
+                projection.getId() + "-" + projection.getLot() + "-" + projection.getMedId() + "-" + projection.getStkCode()
         );
     }
 

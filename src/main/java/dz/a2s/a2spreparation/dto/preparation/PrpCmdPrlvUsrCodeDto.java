@@ -30,5 +30,6 @@ public class PrpCmdPrlvUsrCodeDto {
     private String verificateur2;
     private String statut;
     private String creerPar;
+    private String key;
 
 }

@@ -53,7 +53,8 @@ public class InventaireMappers {
                 projection.getLabo(),
                 projection.getZoneProduit(),
                 projection.getMotifSaisie(),
-                projection.getQteSaisie()
+                projection.getQteSaisie(),
+                projection.getCode() + "-" + projection.getNlot() + "-" + projection.getNlotInterne() + "-" + projection.getNumLigne() + "-" + projection.getNumProduit() + "-" + (projection.getZoneProduit() != null ? projection.getZoneProduit() : null)
         );
     }
 

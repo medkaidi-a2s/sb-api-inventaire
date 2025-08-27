@@ -34,5 +34,6 @@ public class LigneZoneDto {
     private Integer controleMotif2;
     private String commercialName;
     private BigDecimal ppa;
+    private String key;
 
 }

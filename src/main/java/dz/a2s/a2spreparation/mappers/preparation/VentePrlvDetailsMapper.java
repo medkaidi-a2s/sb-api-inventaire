@@ -23,7 +23,8 @@ public class VentePrlvDetailsMapper {
                 ligne.getPpa(),
                 ligne.getQteCde(),
                 ligne.getQtePrlv(),
-                ligne.getEmplacement()
+                ligne.getEmplacement(),
+                ligne.getId().getCmpId() + "-" + ligne.getId().getId() + "-" + ligne.getId().getType() + "-" + ligne.getId().getAnnee() + "-" + ligne.getVntId() + "-" + ligne.getVntType() + "-" + ligne.getStkCode() + "-" + ligne.getVndNo() + "-" + ligne.getMedId() + "-" + ligne.getPrdId()
         );
 
         return dto;

@@ -20,5 +20,6 @@ public class PrpCmdPrlvDto {
     private Integer nbrLigne;
     private String statut;
     private String creerPar;
+    private String key;
 
 }

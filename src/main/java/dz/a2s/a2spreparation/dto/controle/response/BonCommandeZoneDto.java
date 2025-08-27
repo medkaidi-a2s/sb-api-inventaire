@@ -29,6 +29,7 @@ public class BonCommandeZoneDto {
     private String statut;
     private Integer nbrLigne;
     private Integer nbrLigneValid;
+    private String key;
 
 
 }

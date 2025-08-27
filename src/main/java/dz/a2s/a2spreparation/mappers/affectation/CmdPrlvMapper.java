@@ -24,7 +24,8 @@ public class CmdPrlvMapper {
                 commande.getRegion(),
                 commande.getNbrLigne(),
                 commande.getStatut(),
-                commande.getCreerUser()
+                commande.getCreerUser(),
+                commande.getId().getSltCmpId() + "-" + commande.getId().getSltId() + "-" + commande.getId().getSltType() + "-" + commande.getId().getSltAnnee()
         );
 
         return dto;
@@ -50,7 +51,8 @@ public class CmdPrlvMapper {
                 commande.getVerificateur(),
                 commande.getVerificateur2(),
                 commande.getStatut(),
-                commande.getCreerUser()
+                commande.getCreerUser(),
+                commande.getId().getSltCmpId() + "-" + commande.getId().getSltId() + "-" + commande.getId().getSltType() + "-" + commande.getId().getSltAnnee()
         );
 
         return dto;

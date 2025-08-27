@@ -44,7 +44,8 @@ public class CommandeZoneMapper {
                 commande.getStatut(),
                 commande.getZone(),
                 commande.getPriorite(),
-                commande.getReference() + " " + commande.getClient() + " " + commande.getRegion() + " " + commande.getFrigPsycho() + " " + commande.getZone()
+                commande.getReference() + " " + commande.getClient() + " " + commande.getRegion() + " " + commande.getFrigPsycho() + " " + commande.getZone(),
+                commande.getId().getVntCmpId() + "-" + commande.getId().getVntId() + "-" + commande.getId().getVntType() + "-" + commande.getId().getVntStkCode() + "-" + commande.getId().getVbzZone()
         );
 
         return dto;
@@ -65,6 +66,7 @@ public class CommandeZoneMapper {
                 .statut(projection.getStatut())
                 .nbrLigne(projection.getNbrLigne())
                 .nbrLigneValid(projection.getNbrLigneValid())
+                .key(projection.getCmpId() + "-" + projection.getId() + "-" + projection.getType() + "-" + projection.getStkCode())
                 .build();
     }
 

@@ -32,5 +32,6 @@ public class LignePrlvDto {
     private Integer qteCommande;
     private Integer qtePrepare;
     private String emplacement;
+    private String key;
 
 }

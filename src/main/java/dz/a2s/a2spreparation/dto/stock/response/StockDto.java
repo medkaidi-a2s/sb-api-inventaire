@@ -21,6 +21,7 @@ public record StockDto(
         Integer ugVente,
         Integer etat,
         LocalDateTime dateArrivage,
-        Integer colisage
+        Integer colisage,
+        String key
 ) {
 }

@@ -33,7 +33,8 @@ public class PrpCdePrlvUsrCodeMapper {
                 commande.getVerificateur2Code(),
                 commande.getVerificateur2(),
                 commande.getStatut(),
-                commande.getCreerUser()
+                commande.getCreerUser(),
+                commande.getId().getSltCmpId() + "-" + commande.getId().getSltId() + "-" + commande.getId().getSltType() + "-" + commande.getId().getSltAnnee()
         );
 
         return prpCmdPrlvUsrCodeDto;

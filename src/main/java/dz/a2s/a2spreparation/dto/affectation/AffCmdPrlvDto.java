@@ -23,5 +23,6 @@ public class AffCmdPrlvDto {
     private String verificateur2;
     private String statut;
     private String creerPar;
+    private String key;
 
 }

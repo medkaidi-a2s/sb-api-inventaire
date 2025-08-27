@@ -20,6 +20,7 @@ public record InventaireLineResponse(
         String labo,
         String zoneProduit,
         String motifSaisie,
-        Integer qteSaisie
+        Integer qteSaisie,
+        String key
 ) {
 }

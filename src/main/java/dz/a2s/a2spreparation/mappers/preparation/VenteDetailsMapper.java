@@ -29,7 +29,8 @@ public class VenteDetailsMapper {
                 ligne.getQteControle2(),
                 ligne.getControlMotif2(),
                 ligne.getMedCommercialName(),
-                ligne.getPpa()
+                ligne.getPpa(),
+                ligne.getId().getCmpId() + "-" + ligne.getId().getId() + "-" + ligne.getId().getType() + "-" + ligne.getId().getStkCode() + "-" + ligne.getId().getNo() + "-"  + ligne.getVndMedId() + "-" + ligne.getVndNLot() + "-" + ligne.getPrdId()
         );
 
         return dto;
@@ -56,7 +57,8 @@ public class VenteDetailsMapper {
                 ligne.getQteControle2(),
                 ligne.getControlMotif2(),
                 ligne.getMedCommercialName(),
-                ligne.getPpa()
+                ligne.getPpa(),
+                ligne.getId().getCmpId() + "-" + ligne.getId().getId() + "-" + ligne.getId().getType() + "-" + ligne.getId().getStkCode() + "-" + ligne.getId().getNo() + "-" + ligne.getId().getZone() + "-"  + ligne.getVndMedId() + "-" + ligne.getVndNLot() + "-" + ligne.getPrdId()
         );
 
         return dto;

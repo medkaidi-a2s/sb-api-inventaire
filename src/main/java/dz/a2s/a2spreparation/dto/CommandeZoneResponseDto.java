@@ -36,5 +36,6 @@ public class CommandeZoneResponseDto {
     private String zone;
     private String priorite;
     private String search;
+    private String key;
 
 }

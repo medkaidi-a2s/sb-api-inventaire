@@ -35,5 +35,6 @@ public class CommandeResponseDto {
     private String statut;
     private String priorite;
     private String search;
+    private String key;
 
 }
