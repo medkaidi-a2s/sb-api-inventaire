@@ -2,8 +2,10 @@ package dz.a2s.a2spreparation.api;
 
 import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.request.InventaireLineRequest;
+import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.SaisiResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.dto.stock.response.StockDto;
@@ -46,5 +48,10 @@ public interface InventaireApi {
     @ApiResponse(responseCode = "200", description = "Produits récupérés avec succès")
     @PostMapping("/details")
     public ResponseEntity<PaginatedResponse<InventaireLineResponse>> getInventaireLines(InventaireLineRequest request);
+
+    @Operation(summary = "Saisir une ligne d'inventaire", description = "Saisir la quantité et le motif d'un produit pour l'inventaire")
+    @ApiResponse(responseCode = "200", description = "Inventaire saisi avec succès")
+    @PostMapping("/saisir")
+    public ResponseEntity<SuccessResponseDto<SaisiResponse>> saisirInventaire(SaisiRequest request);
 
 }

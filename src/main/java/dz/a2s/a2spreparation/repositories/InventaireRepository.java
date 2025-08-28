@@ -8,6 +8,7 @@ import dz.a2s.a2spreparation.entities.Inventaire;
 import dz.a2s.a2spreparation.entities.keys.InventaireId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -116,5 +117,20 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Inventai
             @Param("search") String search,
             @Param("start") Integer start,
             @Param("end") Integer end);
+
+    @Procedure(procedureName = "stocks_new.saisie_inv")
+    void saisirInventaire(
+            @Param("P_CMP") Integer cmpId,
+            @Param("P_INV") Integer invId,
+            @Param("P_PRD_ID") Integer nlotInterne,
+            @Param("P_MED_ID") Integer medId,
+            @Param("P_DEPOT") String depot,
+            @Param("P_TYPE") Integer comptage,
+            @Param("P_QTE") Integer quantite,
+            @Param("P_MOTIF") String motif,
+            @Param("XUSER") String emplacement,
+            @Param("P_LIGNE") Integer noLigne,
+            @Param("P_USR") String username
+    );
 
 }

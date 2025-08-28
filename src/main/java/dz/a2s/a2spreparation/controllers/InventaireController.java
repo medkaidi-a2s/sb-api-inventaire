@@ -3,12 +3,15 @@ package dz.a2s.a2spreparation.controllers;
 import dz.a2s.a2spreparation.api.InventaireApi;
 import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.request.InventaireLineRequest;
+import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.SaisiResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.Inventaire;
 import dz.a2s.a2spreparation.services.InventaireService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -114,6 +117,22 @@ public class InventaireController implements InventaireApi {
                 lines.currentPage(),
                 lines.pageSize()
         );
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<SaisiResponse>> saisirInventaire(@RequestBody @Valid SaisiRequest request) {
+        log.info("| Entry | InventaireController.saisirInventaire | Args | request={}", request);
+
+        var data = this.inventaireService.saisirInventaire(request);
+        log.info("Persisted inventaire data via the service | data={}", data);
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Inventaire saisi avec succès",
+                data
+        );
+
         return ResponseEntity.ok(response);
     }
 }

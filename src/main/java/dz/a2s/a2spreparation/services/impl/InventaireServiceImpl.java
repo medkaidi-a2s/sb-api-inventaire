@@ -1,8 +1,10 @@
 package dz.a2s.a2spreparation.services.impl;
 
 import dz.a2s.a2spreparation.dto.common.ListResponse;
+import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.SaisiResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
 import dz.a2s.a2spreparation.entities.Inventaire;
 import dz.a2s.a2spreparation.exceptions.ActionNotAllowedException;
@@ -130,5 +132,60 @@ public class InventaireServiceImpl implements InventaireService {
         log.info("Mapped projections to inventaire line responses | lines.size={}", lines.size());
 
         return new PaginatedDataDto<>(lines, totalRecords, (totalRecords + size - 1) / size, page, size);
+    }
+
+    @Override
+    public SaisiResponse saisirInventaire(SaisiRequest request) {
+        log.info("| Entry | InventaireService.saisirInventaire() | Args | request={}", request);
+
+        var access = this.getComptageAccess(request.getInvId());
+        log.info("Fetched inventaire access rights from the service | access={}", access);
+
+        Integer comptageAccess = 0;
+
+        switch (request.getComptage()) {
+            case 1:
+                comptageAccess = access.comptage1();
+                break;
+            case 2:
+                comptageAccess = access.comptage2();
+                break;
+            case 3:
+                comptageAccess = access.comptage3();
+                break;
+            default:
+                comptageAccess = 0;
+                break;
+        }
+
+        if (comptageAccess == 0) {
+            log.error("User does not have access to the comptage");
+            throw new ActionNotAllowedException("Accès refusé : Vous n'avez pas accès à ce comptage");
+        }
+
+        var username = this.customUserDetailsService.getCurrentUserCode();
+        var companyId = this.customUserDetailsService.getCurrentCompanyId();
+
+        try {
+            this.inventaireRepository.saisirInventaire(
+                    companyId,
+                    request.getInvId(),
+                    request.getNlotInterne(),
+                    request.getMedId(),
+                    request.getDepot(),
+                    request.getComptage(),
+                    request.getQuantite(),
+                    request.getMotif(),
+                    request.getEmplacement(),
+                    request.getNoLigne(),
+                    username
+            );
+            log.info("Persisted saisi de l'inventaire into the database");
+
+            return new SaisiResponse(request.getQuantite(), request.getMotif());
+        } catch (DataAccessException ex) {
+            log.error("Failed to save the inventaire line to the repo | error={}", ex.getMessage());
+            throw new DatabaseErrorException("Une erreur est survenue lors de la saisie de la ligne d'inventaire");
+        }
     }
 }
