@@ -68,6 +68,20 @@ public class CompanyController implements CompanyApi {
     }
 
     @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> getMethodInventaire() {
+        log.info("| Entry | CompanyController.getMethodInventaire");
+
+        var methodInventaire = this.companyService.getMethodInventaire();
+        var response = new SuccessResponseDto<Integer>(
+                200,
+                "Méthode d'inventaire récupérée avec succès",
+                methodInventaire
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
     public ResponseEntity<SuccessResponseDto<List<AuthorizationDto>>> getAuthorizations() {
         log.info("| Entry | CompanyController.getAuthorizations");
 

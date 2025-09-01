@@ -104,7 +104,7 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Inventai
                        AND IND_INV_ID = :inv_id
                        AND T.IND_CMP_ID = :cmp_id
                        AND NVL(IND_ATTRIBUT5, 0) > :stock_zero
-                       AND LOWER(M.MED_COMMERCIAL_NAME) LIKE
+                       AND LOWER(M.MED_COMMERCIAL_NAME || ' ' || T.IND_NLOT) LIKE
                            LOWER('%' || :search || '%'))
              WHERE RNUM BETWEEN :start AND :end
             """, nativeQuery = true)

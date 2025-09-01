@@ -10,5 +10,6 @@ public interface CompanyService {
     List<Company> findAll();
     Integer getMethod();
     Integer getFormatImpression();
+    Integer getMethodInventaire();
 
 }

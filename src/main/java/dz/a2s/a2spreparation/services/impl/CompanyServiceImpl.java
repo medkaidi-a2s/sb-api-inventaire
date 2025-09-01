@@ -49,4 +49,15 @@ public class CompanyServiceImpl implements CompanyService {
 
         return formatImpression.orElseThrow(() -> new RessourceNotFoundException("Format impression non initialisé"));
     }
+
+    @Override
+    public Integer getMethodInventaire() {
+        log.info("| Entry | CompanyService.getMethodInventaire");
+
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        var methodInventaire = this.paramsRepository.getMethodInventaire(companyId);
+        log.info("Fetched the inventaire method from the repo | methodInventaire={}", methodInventaire);
+
+        return methodInventaire.orElseThrow(() -> new RessourceNotFoundException("Méthode d'inventaire non initialisée"));
+    }
 }

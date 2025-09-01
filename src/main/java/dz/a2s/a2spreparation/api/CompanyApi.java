@@ -29,6 +29,12 @@ public interface CompanyApi {
     @GetMapping("/api/company/format-impression")
     public ResponseEntity<SuccessResponseDto<Integer>> getFormatImpression();
 
+    @Operation(summary = "Récupération de la méthode d'inventaire", description = "Récupération de la méthode d'inventaire (1: par emplacement, 2: par utilisateur)")
+    @ApiResponse(responseCode = "200", description = "Méthode d'inventaire récupéré avec succès")
+    @ApiResponse(responseCode = "404", description = "Méthode d'inventaire non initialisée")
+    @GetMapping("/api/company/method-inventaire")
+    public ResponseEntity<SuccessResponseDto<Integer>> getMethodInventaire();
+
     @Operation(summary = "Récupération des autorisations", description = "Récupération des autorisations selon la liste définie dans la config de l'application (yml)")
     @ApiResponse(responseCode = "200", description = "Autorisations récupérées avec succès")
     @GetMapping("/api/company/authorizations")

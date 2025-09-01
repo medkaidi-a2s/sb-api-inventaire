@@ -27,6 +27,14 @@ public interface ParamsRepository extends JpaRepository<Params, ParamsId> {
     Optional<Integer> getFormatImpression(@Param("cmpId") Integer cmpId);
 
     @Query(value = """
+            SELECT PRM_METHODE_INVENTAIRE
+              FROM STP_PARAMS
+             WHERE PRM_CMP_ID = :cmp_id
+               AND PRM_TYPE = 1
+            """, nativeQuery = true)
+    Optional<Integer> getMethodInventaire(@Param("cmp_id") Integer cmpId);
+
+    @Query(value = """
             SELECT URL_FORME_CODE AS CODE, NVL(URL_LECTURE, 0) AS VALEUR
               FROM STP_USER_ROLES
              WHERE URL_CMP_ID = :cmpId
