@@ -7,11 +7,14 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
+import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
+import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
 
 import java.util.List;
 
 public interface CommandeService {
 
+    PaginatedDataDto<CommandeColisageResponse> getCommandesColisage(String dateDebut, String dateFin, Integer statutPrepare, Integer page, String search);
     List<CommandeResponseDto> getAllCommandes(String search, String date);
     List<CommandeZoneResponseDto> getAllCommandesZone(String search, String date);
     List<CommandeResponseDto> getControlledCommandes(String date);

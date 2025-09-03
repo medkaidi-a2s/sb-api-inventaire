@@ -7,7 +7,10 @@ import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.commande.request.CommandeColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
+import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
+import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.services.CheckingService;
 import dz.a2s.a2spreparation.services.CommandeService;
@@ -29,6 +32,31 @@ import java.util.Optional;
 public class CommandeController implements CommandeApi {
 
     private final CommandeService commandeService;
+
+    @Override
+    public ResponseEntity<PaginatedResponse<CommandeColisageResponse>> getCommandesColisage(@RequestBody CommandeColisageRequest request) {
+        log.info("| Entry | CommandeController.getCommandesColisage | Args | request : {}", request);
+
+        var commandes = this.commandeService.getCommandesColisage(
+                request.getDateDebut(),
+                request.getDateFin(),
+                request.getStatutPrepare() ? 1 : 0,
+                request.getPage(),
+                request.getSearch()
+        );
+        log.info("Fetched the orders from the service | commandes.size={}", commandes.data().size());
+
+        var response = new PaginatedResponse<>(
+                200,
+                "Liste des commandes récupérée avec succès - page = " + request.getPage() + " - size = " + commandes.pageSize(),
+                commandes.data(),
+                commandes.totalRecords(),
+                commandes.totalPages(),
+                commandes.currentPage(),
+                commandes.pageSize()
+        );
+        return ResponseEntity.ok(response);
+    }
 
     @Override
     public ResponseEntity<SuccessResponseDto<List<CommandeZoneResponseDto>>> getCommandesZone(@RequestParam Optional<String> date) {

@@ -1,6 +1,7 @@
 package dz.a2s.a2spreparation.repositories.views;
 
 import dz.a2s.a2spreparation.dto.commande.projections.ColisageProjection;
+import dz.a2s.a2spreparation.dto.commande.projections.CommandeColisageProjection;
 import dz.a2s.a2spreparation.dto.preparation.CommandeReceiptProjection;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.Commande;
@@ -204,5 +205,54 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
                 AND VNT_STK_CODE = :stkCode
             """, nativeQuery = true)
     ColisageProjection getColisageCommande(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stkCode") String stkCode);
+
+    @Query(value = """
+            SELECT *
+              FROM (SELECT COUNT(*) OVER() AS TOTAL_RECORDS,
+                           VNT_CMP_ID,
+                           VNT_ID,
+                           VNT_TYPE,
+                           VNT_DATE,
+                           VNT_STK_CODE,
+                           VNT_REFERENCE,
+                           VNT_TOTAL_TTC,
+                           R.TER_NOM LIBELLE_TIER,
+                           TER_REGION_LIB REGION,
+                           VNT_TOTAL_COLIS,
+                           VNT_BACS,
+                           (SELECT COUNT(*)
+                              FROM VNT_COLIS
+                             WHERE VCO_CMP_ID = VNT_CMP_ID
+                               AND VCO_VNT_ID = VNT_ID
+                               AND VCO_STK_CODE = VNT_STK_CODE
+                               AND VCO_VNT_TYPE = VNT_TYPE) NBR_ETIQUETE,
+                           NVL(VNT_PREP_FLAG, 0) VNT_PREP_FLAG,
+                           ROW_NUMBER() OVER(ORDER BY VNT_ID) AS RNUM
+                      FROM VNT_BONS T, STP_TIERS R
+                     WHERE VNT_CMP_ID = :cmp_id
+                       AND VNT_TYPE = 1
+                       AND VNT_CMP_ID = TER_CMP_ID
+                       AND VNT_TER_ID = TER_ID
+                       AND VNT_TER_TYPE = TER_TYPE
+                       AND NVL(VNT_ETAT_FLAG, 0) = 1
+                       AND NVL(VNT_AVOIR_FLAG, 0) = 0
+                       AND NVL(VNT_ANNULE_FLAG, 0) = 0
+                       AND TO_DATE(VNT_DATE, 'DD/MM/RRRR') BETWEEN
+                           TO_DATE(:date_debut, 'DD/MM/RRRR') AND
+                           TO_DATE(:date_fin, 'DD/MM/RRRR')
+                       AND NVL(NVL(VNT_PREP_FLAG, 0), 0) IN (0, NVL(:statut_prepare, 0))
+                       AND (:search IS NULL OR
+                           LOWER(VNT_REFERENCE || ' ' || R.TER_NOM || ' ' ||
+                                  TER_REGION_LIB) LIKE LOWER('%' || :search || '%')))
+             WHERE RNUM BETWEEN :start AND :end
+            """, nativeQuery = true)
+    List<CommandeColisageProjection> getListeCommandesColisage(
+            @Param("cmp_id") Integer cmpId,
+            @Param("date_debut") String dateDebut,
+            @Param("date_fin") String dateFin,
+            @Param("statut_prepare") Integer statutPrepare,
+            @Param("start") Integer start,
+            @Param("end") Integer end,
+            @Param("search") String search);
 
 }

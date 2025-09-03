@@ -6,7 +6,10 @@ import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.commande.request.CommandeColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
+import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
+import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,6 +23,11 @@ import java.util.Optional;
 
 @Tag(name = "Gestion des commandes en général", description = "APIs pour la gestion des opération communes et générales relatives aux commandes")
 public interface CommandeApi {
+
+    @Operation(summary = "Récupération de la liste des commandes", description = "Récupération de la liste des commandes pour génération des étiquettes")
+    @ApiResponse(responseCode = "200", description = "Liste des commandes récupérée avec succès")
+    @PostMapping("/liste-commandes")
+    public ResponseEntity<PaginatedResponse<CommandeColisageResponse>> getCommandesColisage(CommandeColisageRequest request);
 
     @Operation(summary = "Récupération des commandes préparées par zones", description = "Récupération des commandes déjà préparées par zones")
     @ApiResponse(responseCode = "200", description = "Commandes par zones récupérées avec succès")

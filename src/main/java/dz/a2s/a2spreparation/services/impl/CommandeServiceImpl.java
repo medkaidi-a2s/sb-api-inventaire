@@ -7,6 +7,8 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
+import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
+import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
 import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.views.Commande;
 import dz.a2s.a2spreparation.mappers.CommandeMapper;
@@ -34,6 +36,30 @@ public class CommandeServiceImpl implements CommandeService {
     private final CommandeRepository commandeRepository;
     private final CommandeZoneRepository commandeZoneRepository;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    @Override
+    public PaginatedDataDto<CommandeColisageResponse> getCommandesColisage(String dateDebut, String dateFin, Integer statutPrepare, Integer page, String search) {
+        log.info("| Entry | CommandeService.getCommandesColisage | Args | dateDebut : {}, dateFin : {}, statutPrepare : {}, page : {}", dateDebut, dateFin, statutPrepare, page);
+
+        var size = 10;
+
+        int start = (page * size) - size + 1;
+        int end = page * size;
+
+        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        log.info("Company ID fetched from the service {}", companyId);
+
+        var projections = this.commandeRepository.getListeCommandesColisage(companyId, dateDebut, dateFin, statutPrepare, start, end, search);
+        log.info("Fetched the orders from the repo | projections.size={}", projections.size());
+
+        var totalRecords = projections.isEmpty() ? 0 : projections.stream().findFirst().get().getTotalRecords();
+        log.info("Fetched the total records from the projections | totalRecords={}", totalRecords);
+
+        var listeCommandes = projections.stream().map(CommandeMapper::toCommandeColisageResponse).toList();
+        log.info("Mapped the orders to the response | listeCommandes.size={}", listeCommandes.size());
+
+        return new PaginatedDataDto<>(listeCommandes, totalRecords, (totalRecords + size - 1) / size, page, size);
+    }
 
     @Override
     public List<CommandeResponseDto> getAllCommandes(String search, String date) {

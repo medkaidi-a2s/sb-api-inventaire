@@ -2,6 +2,8 @@ package dz.a2s.a2spreparation.mappers;
 
 import dz.a2s.a2spreparation.dto.CommandeResponseDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
+import dz.a2s.a2spreparation.dto.commande.projections.CommandeColisageProjection;
+import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
 import dz.a2s.a2spreparation.dto.preparation.CommandeReceiptData;
 import dz.a2s.a2spreparation.dto.preparation.CommandeReceiptProjection;
 import dz.a2s.a2spreparation.entities.views.Commande;
@@ -54,6 +56,25 @@ public class CommandeMapper {
                 projection.getXtable(),
                 projection.getZone() != null ? projection.getZone() : null,
                 projection.getNbr() != null ? projection.getNbr() : 0
+        );
+    }
+
+    public static CommandeColisageResponse toCommandeColisageResponse(CommandeColisageProjection projection) {
+        return new CommandeColisageResponse(
+                projection.getVntCmpId(),
+                projection.getVntId(),
+                projection.getVntType(),
+                projection.getVntStkCode(),
+                projection.getVntDate(),
+                projection.getVntReference(),
+                projection.getVntTotalTtc(),
+                projection.getLibelleTier(),
+                projection.getRegion(),
+                projection.getVntTotalColis(),
+                projection.getVntBacs(),
+                projection.getNbrEtiquete(),
+                projection.getVntPrepFlag() == 1,
+                projection.getVntCmpId() + "-" + projection.getVntId() + "-" + projection.getVntType() + "-" + projection.getVntStkCode() + "-" + projection.getVntReference()
         );
     }
 
