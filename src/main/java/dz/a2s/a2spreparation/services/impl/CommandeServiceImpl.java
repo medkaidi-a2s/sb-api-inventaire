@@ -6,13 +6,20 @@ import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
+import dz.a2s.a2spreparation.entities.Bac;
+import dz.a2s.a2spreparation.entities.Colis;
 import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.views.Commande;
+import dz.a2s.a2spreparation.exceptions.DatabaseErrorException;
+import dz.a2s.a2spreparation.exceptions.ResourceNotUpdatedException;
 import dz.a2s.a2spreparation.mappers.CommandeMapper;
 import dz.a2s.a2spreparation.mappers.CommandeZoneMapper;
+import dz.a2s.a2spreparation.repositories.BacRepository;
+import dz.a2s.a2spreparation.repositories.ColisRepository;
 import dz.a2s.a2spreparation.repositories.views.CommandeRepository;
 import dz.a2s.a2spreparation.repositories.views.CommandeZoneRepository;
 import dz.a2s.a2spreparation.services.CommandeService;
@@ -35,6 +42,8 @@ public class CommandeServiceImpl implements CommandeService {
     private final CustomUserDetailsService customUserDetailsService;
     private final CommandeRepository commandeRepository;
     private final CommandeZoneRepository commandeZoneRepository;
+    private final BacRepository bacRepository;
+    private final ColisRepository colisRepository;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
@@ -234,5 +243,78 @@ public class CommandeServiceImpl implements CommandeService {
         log.info("Fetched the colisage from the repo | projection={}", projection);
 
         return new ColisageDto(projection.getColisV(), projection.getColisD(), projection.getColisF(), projection.getPsycho(), projection.getChers(), projection.getSachet());
+    }
+
+    @Override
+    public List<Bac> getListeBacs() {
+        log.info("| Entry | CommandeService.getListeBacs");
+
+        var companyId = this.customUserDetailsService.getCurrentCompanyId();
+        log.info("Company ID fetched from the service {}", companyId);
+
+        var bacs = this.bacRepository.findListeBacs(companyId);
+        log.info("Fetched the bacs from the repo | bacs.size={}", bacs.size());
+        log.trace("Fetched the bacs from the repo | bacs={}", bacs);
+
+        return bacs.stream().peek(bac -> bac.setKey(bac.getCmpId() + "-" + bac.getId() + "-" + bac.getTypeId() + "-" + bac.getCode())).toList();
+    }
+
+    @Transactional
+    @Override
+    public Integer updateColisageGlobal(UpdateColisageRequest request) {
+        log.info("| Entry | CommandeService.updateColisageGlobal | Args | request={}", request);
+
+        try {
+            var updatedRows = this.commandeRepository.updateColisageGlobal(
+                    request.getCmpId(),
+                    request.getId(),
+                    request.getType(),
+                    request.getStkCode(),
+                    request.getColisV() + request.getColisD(),
+                    request.getFrigo(),
+                    request.getPsycho(),
+                    request.getChers(),
+                    request.getSachet(),
+                    request.getBacs(),
+                    request.getPalettes()
+            );
+            log.info("Updated the colisage global from the repo | updatedRows={}", updatedRows);
+
+            if(updatedRows == 0)
+                throw new ResourceNotUpdatedException("La mise à jour du colisage global n'a pas pu être accomplie");
+
+            var deletedRows = this.commandeRepository.deleteEtiquettes(
+                    request.getCmpId(),
+                    request.getId(),
+                    request.getType(),
+                    request.getStkCode()
+            );
+            log.info("Deleted the etiquettes from the repo | deletedRows={}", deletedRows);
+
+            var username = this.customUserDetailsService.getCurrentUserCode();
+
+            this.commandeRepository.generateEtiquette(
+                    request.getCmpId(),
+                    request.getId(),
+                    request.getStkCode(),
+                    request.getType(),
+                    username
+            );
+
+            return updatedRows;
+        } catch (DataAccessException ex) {
+            log.error("Une erreur s'est produite lors de la mise à jour des données du colisage | original message = {}", ex.getMessage());
+            throw new DatabaseErrorException("Une erreur liée à la base de données s'est produite lors de la mise à jour des données du colisage");
+        }
+    }
+
+    @Override
+    public List<Colis> getEtiquettesColis(CmdIdDto id) {
+        log.info("| Entry | CommandeService.getEtiquettesColis | Args | id={}", id);
+
+        var etiquettes = this.colisRepository.getEtiquettesColis(id.getCmpId(), id.getId(), id.getType(), id.getStkCode());
+        log.info("Fetched the etiquettes from the repo | etiquettes.size={}", etiquettes.size());
+
+        return etiquettes.stream().peek(colis -> colis.setKey(colis.getCmpId() + "-" + colis.getId() + "-" + colis.getType() + "-" + colis.getStkCode() + "-" + colis.getCode())).toList();
     }
 }

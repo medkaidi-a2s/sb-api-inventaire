@@ -6,10 +6,12 @@ import dz.a2s.a2spreparation.dto.preparation.CommandeReceiptProjection;
 import dz.a2s.a2spreparation.entities.keys.VenteId;
 import dz.a2s.a2spreparation.entities.views.Commande;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -254,5 +256,55 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
             @Param("start") Integer start,
             @Param("end") Integer end,
             @Param("search") String search);
+
+    @Transactional
+    @Modifying
+    @Query(value = """
+            UPDATE VNT_BONS B
+               SET VNT_COLIS       = :xcolis,
+                   VNT_NBR_FRIGO   = :xfrigo,
+                   VNT_NBR_PSYCHO  = :xpsycho,
+                   VNT_NBR_CHERS   = :xchers,
+                   VNT_NBR_SACHETS = :xsachet,
+                   VNT_BACS        = :xbac,
+                   VNT_PALETTES    = :xpalette,
+                   VNT_PREP_FLAG   = 1
+             WHERE B.VNT_CMP_ID = :cmp_id
+               AND B.VNT_ID = :id
+               AND B.VNT_TYPE = :type
+               AND B.VNT_STK_CODE = :stk_code
+            """, nativeQuery = true)
+    int updateColisageGlobal(
+            @Param("cmp_id") Integer cmpId,
+            @Param("id") Integer id,
+            @Param("type") String type,
+            @Param("stk_code") String stkCode,
+            @Param("xcolis") Integer xcolis,
+            @Param("xfrigo") Integer xfrigo,
+            @Param("xpsycho") Integer xpsycho,
+            @Param("xchers") Integer xchers,
+            @Param("xsachet") Integer xsachet,
+            @Param("xbac") Integer xbac,
+            @Param("xpalette") Integer xpalette);
+
+    @Transactional
+    @Modifying
+    @Query(value = """
+            DELETE FROM VNT_COLIS T
+             WHERE T.VCO_CMP_ID = :cmp_id
+               AND T.VCO_VNT_ID = :id
+               AND T.VCO_VNT_TYPE = :type
+               AND T.VCO_STK_CODE = :stk_code
+            """, nativeQuery = true)
+    int deleteEtiquettes(@Param("cmp_id") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stk_code") String stkCode);
+
+    @Procedure(procedureName = "SETUP_NEW.P_GENERE_ETIQUTE")
+    void generateEtiquette(
+            @Param("P_CMP") Integer cmpId,
+            @Param("P_VNT") Integer id,
+            @Param("P_STK") String stkCode,
+            @Param("P_TYPE") String type,
+            @Param("P_USER") String user
+    );
 
 }

@@ -32,6 +32,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ResourceNotUpdatedException.class)
+    public ResponseEntity<ErrorObject> handleResourceNotUpdatedException(ResourceNotUpdatedException ex) {
+        log.info("Entering ResourceNotUpdatedException handler from the GlobalExceptionsHandler with message {}", ex.getMessage());
+
+        ErrorObject errorObject = ErrorObject.builder()
+                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .timestamp(new Date())
+                .message(ex.getMessage())
+                .build();
+
+        log.error("Returning the following error {}", errorObject.getMessage());
+        return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorObject> handleBadCredentialsException(BadCredentialsException ex) {
         log.info("Entering handleBadCredentialsException from the GloablHandleExceptions with message {}", ex.getMessage());

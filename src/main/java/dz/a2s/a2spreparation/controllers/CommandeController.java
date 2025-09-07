@@ -8,10 +8,13 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.commande.request.CommandeColisageRequest;
+import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
+import dz.a2s.a2spreparation.entities.Bac;
+import dz.a2s.a2spreparation.entities.Colis;
 import dz.a2s.a2spreparation.services.CheckingService;
 import dz.a2s.a2spreparation.services.CommandeService;
 import lombok.RequiredArgsConstructor;
@@ -179,6 +182,54 @@ public class CommandeController implements CommandeApi {
                 200,
                 "Colisage récupéré avec succès",
                 colisage
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<List<Bac>>> getListeBacs() {
+        log.info("| Entry | CommandeController.getListeBacs");
+
+        var bacs = this.commandeService.getListeBacs();
+        log.info("Fetched the bacs from the service | bacs.size={}", bacs.size());
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Liste des bacs récupérée avec succès",
+                bacs
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> updateColisageGlobal(@RequestBody UpdateColisageRequest request) {
+        log.info("| Entry | CommandeController.updateColisageGlobal | Args | request={}", request);
+
+        var updatedRows = this.commandeService.updateColisageGlobal(request);
+        log.info("Updated rows in the service | updatedRows={}", updatedRows);
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Colisage mis à jour avec succès",
+                updatedRows
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<List<Colis>>> getEtiquettesColisage(@RequestBody CmdIdDto id) {
+        log.info("| Entry | CommandeController.getEtiquettesColisage | Args | id={}", id);
+
+        var etiquettes = this.commandeService.getEtiquettesColis(id);
+        log.info("Fetched the etiquettes from the service | etiquettes.size={}", etiquettes.size());
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Etiquettes récupérées avec succès",
+                etiquettes
         );
 
         return ResponseEntity.ok(response);

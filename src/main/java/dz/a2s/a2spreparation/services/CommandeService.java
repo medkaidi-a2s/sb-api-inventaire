@@ -6,9 +6,12 @@ import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
+import dz.a2s.a2spreparation.entities.Bac;
+import dz.a2s.a2spreparation.entities.Colis;
 
 import java.util.List;
 
@@ -23,5 +26,8 @@ public interface CommandeService {
     Integer saisirColisageZone(CmdZoneColisageDto cmdZoneColisageDto);
     ColisageDto getColisageZone(CmdZoneIdDto id);
     ColisageDto getColisageCommande(CmdIdDto id);
+    List<Bac> getListeBacs();
+    Integer updateColisageGlobal(UpdateColisageRequest request);
+    List<Colis> getEtiquettesColis(CmdIdDto id);
 
 }
