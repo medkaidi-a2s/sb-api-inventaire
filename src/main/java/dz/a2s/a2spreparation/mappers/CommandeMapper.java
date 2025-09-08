@@ -73,7 +73,7 @@ public class CommandeMapper {
                 projection.getVntTotalColis(),
                 projection.getVntBacs(),
                 projection.getNbrEtiquete(),
-                projection.getVntPrepFlag() == 1,
+                projection.getVntPrepFlag() != null && projection.getVntPrepFlag() == 1,
                 projection.getVntCmpId() + "-" + projection.getVntId() + "-" + projection.getVntType() + "-" + projection.getVntStkCode() + "-" + projection.getVntReference()
         );
     }

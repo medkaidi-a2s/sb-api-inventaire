@@ -209,40 +209,54 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
     ColisageProjection getColisageCommande(@Param("cmpId") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stkCode") String stkCode);
 
     @Query(value = """
+            WITH VNT_COLIS_COUNT AS
+             (
+              -- PRÉ-CALCUL DES COMPTAGES POUR ÉVITER LA SOUS-REQUÊTE CORRÉLÉE
+              SELECT VCO_CMP_ID,
+                      VCO_VNT_ID,
+                      VCO_STK_CODE,
+                      VCO_VNT_TYPE,
+                      COUNT(*) AS NBR_ETIQUETE
+                FROM VNT_COLIS
+               WHERE VCO_CMP_ID = :cmp_id
+               GROUP BY VCO_CMP_ID, VCO_VNT_ID, VCO_STK_CODE, VCO_VNT_TYPE)
+            
             SELECT *
-              FROM (SELECT COUNT(*) OVER() AS TOTAL_RECORDS,
-                           VNT_CMP_ID,
-                           VNT_ID,
-                           VNT_TYPE,
-                           VNT_DATE,
-                           VNT_STK_CODE,
-                           VNT_REFERENCE,
-                           VNT_TOTAL_TTC,
-                           R.TER_NOM LIBELLE_TIER,
-                           TER_REGION_LIB REGION,
-                           VNT_TOTAL_COLIS,
-                           VNT_BACS,
-                           (SELECT COUNT(*)
-                              FROM VNT_COLIS
-                             WHERE VCO_CMP_ID = VNT_CMP_ID
-                               AND VCO_VNT_ID = VNT_ID
-                               AND VCO_STK_CODE = VNT_STK_CODE
-                               AND VCO_VNT_TYPE = VNT_TYPE) NBR_ETIQUETE,
-                           NVL(VNT_PREP_FLAG, 0) VNT_PREP_FLAG,
-                           ROW_NUMBER() OVER(ORDER BY VNT_ID) AS RNUM
-                      FROM VNT_BONS T, STP_TIERS R
-                     WHERE VNT_CMP_ID = :cmp_id
-                       AND VNT_TYPE = 1
-                       AND VNT_CMP_ID = TER_CMP_ID
-                       AND VNT_TER_ID = TER_ID
-                       AND VNT_TER_TYPE = TER_TYPE
-                       AND NVL(VNT_ETAT_FLAG, 0) = 1
-                       AND NVL(VNT_AVOIR_FLAG, 0) = 0
-                       AND NVL(VNT_ANNULE_FLAG, 0) = 0
-                       AND TO_DATE(VNT_DATE, 'DD/MM/RRRR') BETWEEN
-                           TO_DATE(:date_debut, 'DD/MM/RRRR') AND
-                           TO_DATE(:date_fin, 'DD/MM/RRRR')
-                       AND NVL(NVL(VNT_PREP_FLAG, 0), 0) IN (0, NVL(:statut_prepare, 0))
+              FROM (SELECT /*+ LEADING(T) USE_NL(R) INDEX(T IDX_VNT_BONS_COMPOSITE) */
+                     COUNT(*) OVER() AS TOTAL_RECORDS,
+                     T.VNT_CMP_ID,
+                     T.VNT_ID,
+                     T.VNT_TYPE,
+                     T.VNT_DATE,
+                     T.VNT_STK_CODE,
+                     T.VNT_REFERENCE,
+                     T.VNT_ATT3 ROTATION,
+                     T.VNT_TOTAL_TTC,
+                     R.TER_NOM AS LIBELLE_TIER,
+                     R.TER_REGION_LIB AS REGION,
+                     T.VNT_TOTAL_COLIS,
+                     T.VNT_BACS,
+                     NVL(VC.NBR_ETIQUETE, 0) AS NBR_ETIQUETE,
+                     NVL(T.VNT_PREP_FLAG, 0) AS VNT_PREP_FLAG,
+                     ROW_NUMBER() OVER(ORDER BY VNT_ID) AS RNUM
+                      FROM VENTES_CA T
+                     INNER JOIN STP_TIERS R
+                        ON R.TER_CMP_ID = T.VNT_CMP_ID
+                       AND R.TER_ID = T.VNT_TER_ID
+                       AND R.TER_TYPE = T.VNT_TER_TYPE
+                      LEFT JOIN VNT_COLIS_COUNT VC
+                        ON VC.VCO_CMP_ID = T.VNT_CMP_ID
+                       AND VC.VCO_VNT_ID = T.VNT_ID
+                       AND VC.VCO_STK_CODE = T.VNT_STK_CODE
+                       AND VC.VCO_VNT_TYPE = T.VNT_TYPE
+                     WHERE T.VNT_CMP_ID = :cmp_id
+                       AND T.VNT_TYPE = 1
+                       AND NVL(T.VNT_ETAT_FLAG, 0) = 1
+                       AND NVL(T.VNT_AVOIR_FLAG, 0) = 0
+                       AND NVL(T.VNT_ANNULE_FLAG, 0) = 0
+                       AND T.VNT_DATE >= TO_DATE(:date_debut, 'DD/MM/RRRR')
+                       AND T.VNT_DATE < TO_DATE(:date_fin, 'DD/MM/RRRR') + 1
+                       AND NVL(T.VNT_PREP_FLAG, 0) IN (0, NVL(:statut_prepare, 0))
                        AND (:search IS NULL OR
                            LOWER(VNT_REFERENCE || ' ' || R.TER_NOM || ' ' ||
                                   TER_REGION_LIB) LIKE LOWER('%' || :search || '%')))
@@ -257,11 +271,53 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
             @Param("end") Integer end,
             @Param("search") String search);
 
+    @Query(value = """
+            WITH vnt_colis_count AS
+             (
+              -- Pré-calcul des comptages pour éviter la sous-requête corrélée
+              SELECT vco_cmp_id,
+                      vco_vnt_id,
+                      vco_stk_code,
+                      vco_vnt_type,
+                      COUNT(*) as nbr_etiquete
+                FROM vnt_colis
+               WHERE vco_cmp_id = :cmp_id
+               GROUP BY vco_cmp_id, vco_vnt_id, vco_stk_code, vco_vnt_type)
+            SELECT /*+ LEADING(T) USE_NL(R) INDEX(T IDX_VNT_BONS_COMPOSITE) */
+             T.vnt_cmp_id,
+             T.VNT_ID,
+             T.VNT_TYPE,
+             T.VNT_STK_CODE,
+             T.VNT_TOTAL_COLIS,
+             T.VNT_BACS,
+             NVL(VC.nbr_etiquete, 0) AS nbr_etiquete
+              FROM ventes_ca T
+              LEFT JOIN vnt_colis_count VC
+                ON VC.vco_cmp_id = T.VNT_cmp_id
+               AND VC.vco_vnt_id = T.vnt_id
+               AND VC.vco_stk_code = T.VNT_stk_code
+               AND VC.vco_vnt_type = T.vnt_type
+             WHERE T.VNT_CMP_ID = :cmp_id
+               AND T.VNT_ID = :id
+               AND T.VNT_TYPE = :type
+               AND T.VNT_STK_CODE = :stk_code
+               AND T.VNT_TYPE = 1
+               AND NVL(T.VNT_ETAT_FLAG, 0) = 1
+               AND NVL(T.VNT_AVOIR_FLAG, 0) = 0
+               AND NVL(T.vnt_annule_flag, 0) = 0
+            """, nativeQuery = true)
+    CommandeColisageProjection getCommandeColisageGlobal(
+            @Param("cmp_id") Integer cmpId,
+            @Param("id") Integer id,
+            @Param("type") String type,
+            @Param("stk_code") String stkCode);
+
     @Transactional
     @Modifying
     @Query(value = """
             UPDATE VNT_BONS B
                SET VNT_COLIS       = :xcolis,
+                   VNT_COLIS_VRAG  = :xcolis_v,
                    VNT_NBR_FRIGO   = :xfrigo,
                    VNT_NBR_PSYCHO  = :xpsycho,
                    VNT_NBR_CHERS   = :xchers,
@@ -280,6 +336,7 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
             @Param("type") String type,
             @Param("stk_code") String stkCode,
             @Param("xcolis") Integer xcolis,
+            @Param("xcolis_v") Integer xcolis_v,
             @Param("xfrigo") Integer xfrigo,
             @Param("xpsycho") Integer xpsycho,
             @Param("xchers") Integer xchers,

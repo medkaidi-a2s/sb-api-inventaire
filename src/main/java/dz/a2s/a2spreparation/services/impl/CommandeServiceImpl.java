@@ -9,6 +9,7 @@ import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
+import dz.a2s.a2spreparation.dto.commande.response.ListeEtiquettesResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
 import dz.a2s.a2spreparation.entities.Bac;
 import dz.a2s.a2spreparation.entities.Colis;
@@ -16,6 +17,7 @@ import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.views.Commande;
 import dz.a2s.a2spreparation.exceptions.DatabaseErrorException;
 import dz.a2s.a2spreparation.exceptions.ResourceNotUpdatedException;
+import dz.a2s.a2spreparation.exceptions.RessourceNotFoundException;
 import dz.a2s.a2spreparation.mappers.CommandeMapper;
 import dz.a2s.a2spreparation.mappers.CommandeZoneMapper;
 import dz.a2s.a2spreparation.repositories.BacRepository;
@@ -32,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -74,7 +77,7 @@ public class CommandeServiceImpl implements CommandeService {
     public List<CommandeResponseDto> getAllCommandes(String search, String date) {
         log.info("| Entry | CommandeService.getAllCommandes | Args | date : {}, search : {}", date, search);
 
-        if(search == null || search.isEmpty()) return List.of();
+        if (search == null || search.isEmpty()) return List.of();
 
         var cmpId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Company ID fetched from the service {}", cmpId);
@@ -92,7 +95,7 @@ public class CommandeServiceImpl implements CommandeService {
     public List<CommandeZoneResponseDto> getAllCommandesZone(String search, String date) {
         log.info("| Entry | CommandeService.getAllCommandesZone | Args | date : {}, search : {}", date, search);
 
-        if(search == null || search.isEmpty()) return List.of();
+        if (search == null || search.isEmpty()) return List.of();
 
         var cmpId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Company ID fetched from the service {}", cmpId);
@@ -161,13 +164,13 @@ public class CommandeServiceImpl implements CommandeService {
                     null,
                     1
             );
-        } catch(DataAccessException ex) {
+        } catch (DataAccessException ex) {
             log.error("Une erreur s'est produite lors de l'exécution de la procédure stocké  saisirColisageCommande | original message = {}", ex.getMessage());
             throw new RuntimeException("Une erreur s'est produite lors de l'exécution de la procédure");
         }
         log.info("Reponse of the stored proceudre saisirColisagecommande | response={}", response);
 
-        if(response != 0)
+        if (response != 0)
             throw new RuntimeException("L'action n'a pas pu été accomplie");
 
         return response;
@@ -200,13 +203,13 @@ public class CommandeServiceImpl implements CommandeService {
                     null,
                     2
             );
-        } catch(DataAccessException ex) {
+        } catch (DataAccessException ex) {
             log.error("Une erreur s'est produite lors de l'exécution de la procédure stocké  saisirColisageZone | original message = {}", ex.getMessage());
             throw new RuntimeException("Une erreur s'est produite lors de l'exécution de la procédure");
         }
         log.info("Reponse of the stored proceudre saisirColisageZone | response={}", response);
 
-        if(response != 0)
+        if (response != 0)
             throw new RuntimeException("L'action n'a pas pu été accomplie");
 
         return response;
@@ -261,7 +264,7 @@ public class CommandeServiceImpl implements CommandeService {
 
     @Transactional
     @Override
-    public Integer updateColisageGlobal(UpdateColisageRequest request) {
+    public CommandeColisageResponse updateColisageGlobal(UpdateColisageRequest request) {
         log.info("| Entry | CommandeService.updateColisageGlobal | Args | request={}", request);
 
         try {
@@ -270,7 +273,8 @@ public class CommandeServiceImpl implements CommandeService {
                     request.getId(),
                     request.getType(),
                     request.getStkCode(),
-                    request.getColisV() + request.getColisD(),
+                    request.getColisD(),
+                    request.getColisV(),
                     request.getFrigo(),
                     request.getPsycho(),
                     request.getChers(),
@@ -280,7 +284,7 @@ public class CommandeServiceImpl implements CommandeService {
             );
             log.info("Updated the colisage global from the repo | updatedRows={}", updatedRows);
 
-            if(updatedRows == 0)
+            if (updatedRows == 0)
                 throw new ResourceNotUpdatedException("La mise à jour du colisage global n'a pas pu être accomplie");
 
             var deletedRows = this.commandeRepository.deleteEtiquettes(
@@ -301,7 +305,15 @@ public class CommandeServiceImpl implements CommandeService {
                     username
             );
 
-            return updatedRows;
+            var colisage = this.commandeRepository.getCommandeColisageGlobal(
+                    request.getCmpId(),
+                    request.getId(),
+                    request.getType(),
+                    request.getStkCode()
+            );
+            log.info("Fetched the colisage from the repo | colisage={}", colisage);
+
+            return CommandeMapper.toCommandeColisageResponse(colisage);
         } catch (DataAccessException ex) {
             log.error("Une erreur s'est produite lors de la mise à jour des données du colisage | original message = {}", ex.getMessage());
             throw new DatabaseErrorException("Une erreur liée à la base de données s'est produite lors de la mise à jour des données du colisage");
@@ -309,12 +321,23 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public List<Colis> getEtiquettesColis(CmdIdDto id) {
+    public ListeEtiquettesResponse getEtiquettesColis(CmdIdDto id) {
         log.info("| Entry | CommandeService.getEtiquettesColis | Args | id={}", id);
 
         var etiquettes = this.colisRepository.getEtiquettesColis(id.getCmpId(), id.getId(), id.getType(), id.getStkCode());
         log.info("Fetched the etiquettes from the repo | etiquettes.size={}", etiquettes.size());
 
-        return etiquettes.stream().peek(colis -> colis.setKey(colis.getCmpId() + "-" + colis.getId() + "-" + colis.getType() + "-" + colis.getStkCode() + "-" + colis.getCode())).toList();
+        if(!etiquettes.isEmpty()) {
+            var firstRecord = etiquettes.stream().findFirst().get();
+
+            return new ListeEtiquettesResponse(
+                    firstRecord.getReference(),
+                    firstRecord.getClient(),
+                    firstRecord.getAdresse(),
+                    firstRecord.getRegion(),
+                    etiquettes.stream().map(colis -> new ListeEtiquettesResponse.EtiquetteResponse(colis.getCode(), colis.getCmpId() + "-" + colis.getId() + "-" + colis.getType() + "-" + colis.getStkCode() + "-" + colis.getCode())).toList()
+            );
+        } else
+            throw new RessourceNotFoundException("Aucune étiquette n'a été générée pour cette commande");
     }
 }

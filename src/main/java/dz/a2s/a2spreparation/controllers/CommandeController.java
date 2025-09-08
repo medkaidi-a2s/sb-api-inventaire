@@ -11,6 +11,7 @@ import dz.a2s.a2spreparation.dto.commande.request.CommandeColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
+import dz.a2s.a2spreparation.dto.commande.response.ListeEtiquettesResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.Bac;
@@ -204,7 +205,7 @@ public class CommandeController implements CommandeApi {
     }
 
     @Override
-    public ResponseEntity<SuccessResponseDto<Integer>> updateColisageGlobal(@RequestBody UpdateColisageRequest request) {
+    public ResponseEntity<SuccessResponseDto<CommandeColisageResponse>> updateColisageGlobal(@RequestBody UpdateColisageRequest request) {
         log.info("| Entry | CommandeController.updateColisageGlobal | Args | request={}", request);
 
         var updatedRows = this.commandeService.updateColisageGlobal(request);
@@ -220,16 +221,16 @@ public class CommandeController implements CommandeApi {
     }
 
     @Override
-    public ResponseEntity<SuccessResponseDto<List<Colis>>> getEtiquettesColisage(@RequestBody CmdIdDto id) {
+    public ResponseEntity<SuccessResponseDto<ListeEtiquettesResponse>> getEtiquettesColisage(@RequestBody CmdIdDto id) {
         log.info("| Entry | CommandeController.getEtiquettesColisage | Args | id={}", id);
 
-        var etiquettes = this.commandeService.getEtiquettesColis(id);
-        log.info("Fetched the etiquettes from the service | etiquettes.size={}", etiquettes.size());
+        var etiquettesResponse = this.commandeService.getEtiquettesColis(id);
+        log.info("Fetched the etiquettes from the service | etiquettes.size={}", etiquettesResponse.getData().size());
 
         var response = new SuccessResponseDto<>(
                 200,
                 "Etiquettes récupérées avec succès",
-                etiquettes
+                etiquettesResponse
         );
 
         return ResponseEntity.ok(response);

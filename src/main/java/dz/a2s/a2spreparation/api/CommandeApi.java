@@ -10,6 +10,7 @@ import dz.a2s.a2spreparation.dto.commande.request.CommandeColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
+import dz.a2s.a2spreparation.dto.commande.response.ListeEtiquettesResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
 import dz.a2s.a2spreparation.dto.response.SuccessResponseDto;
 import dz.a2s.a2spreparation.entities.Bac;
@@ -81,11 +82,11 @@ public interface CommandeApi {
     @ApiResponse(responseCode = "200", description = "Colisage mis à jour avec succès")
     @ApiResponse(responseCode = "422", description = "Colisage non mis à jour")
     @PostMapping("/update-colisage")
-    ResponseEntity<SuccessResponseDto<Integer>> updateColisageGlobal(UpdateColisageRequest request);
+    ResponseEntity<SuccessResponseDto<CommandeColisageResponse>> updateColisageGlobal(UpdateColisageRequest request);
 
     @Operation(summary = "Récupération des étiquettes générées", description = "Récupération des étiquettes générées d'une commande")
     @ApiResponse(responseCode = "200", description = "Etiquettes récupérées avec succès")
     @PostMapping("/get-etiquettes")
-    ResponseEntity<SuccessResponseDto<List<Colis>>> getEtiquettesColisage(CmdIdDto id);
+    ResponseEntity<SuccessResponseDto<ListeEtiquettesResponse>> getEtiquettesColisage(CmdIdDto id);
 
 }
