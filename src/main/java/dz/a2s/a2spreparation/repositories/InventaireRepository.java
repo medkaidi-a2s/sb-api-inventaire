@@ -85,6 +85,7 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Inventai
                              WHERE TER_CMP_ID = IND_CMP_ID
                                AND TER_ID = IND_TER_ID
                                AND TER_TYPE = IND_TER_TYPE) LABO,
+                           T.IND_ATTRIBUT5 AS QTE_STOCK,
                            (SELECT T.ZNS_NOM FROM STP_ZONES T WHERE T.ZNS_ID = MED_ZNS_ID) ZONE_PRODUIT,
                            IND_ATTRIBUT3 MOTIF_SAISIE,
                            (SELECT SUM(D.INS_QTE)

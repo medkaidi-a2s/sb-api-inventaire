@@ -13,6 +13,7 @@ import dz.a2s.a2spreparation.dto.commande.response.ListeEtiquettesResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
 import dz.a2s.a2spreparation.entities.Bac;
 import dz.a2s.a2spreparation.entities.Colis;
+import dz.a2s.a2spreparation.entities.VntBonBacs;
 import dz.a2s.a2spreparation.entities.enums.TIER_TYPES;
 import dz.a2s.a2spreparation.entities.views.Commande;
 import dz.a2s.a2spreparation.exceptions.DatabaseErrorException;
@@ -22,6 +23,7 @@ import dz.a2s.a2spreparation.mappers.CommandeMapper;
 import dz.a2s.a2spreparation.mappers.CommandeZoneMapper;
 import dz.a2s.a2spreparation.repositories.BacRepository;
 import dz.a2s.a2spreparation.repositories.ColisRepository;
+import dz.a2s.a2spreparation.repositories.VntBonBacsRepository;
 import dz.a2s.a2spreparation.repositories.views.CommandeRepository;
 import dz.a2s.a2spreparation.repositories.views.CommandeZoneRepository;
 import dz.a2s.a2spreparation.services.CommandeService;
@@ -47,6 +49,7 @@ public class CommandeServiceImpl implements CommandeService {
     private final CommandeZoneRepository commandeZoneRepository;
     private final BacRepository bacRepository;
     private final ColisRepository colisRepository;
+    private final VntBonBacsRepository vntBonBacsRepository;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
@@ -268,20 +271,52 @@ public class CommandeServiceImpl implements CommandeService {
         log.info("| Entry | CommandeService.updateColisageGlobal | Args | request={}", request);
 
         try {
-            var updatedRows = this.commandeRepository.updateColisageGlobal(
-                    request.getCmpId(),
-                    request.getId(),
-                    request.getType(),
-                    request.getStkCode(),
-                    request.getColisD(),
-                    request.getColisV(),
-                    request.getFrigo(),
-                    request.getPsycho(),
-                    request.getChers(),
-                    request.getSachet(),
-                    request.getBacs(),
-                    request.getPalettes()
-            );
+            var updatedRows = 0;
+
+            if (request.getBacs() == 0)
+                updatedRows = this.commandeRepository.updateColisageGlobal(
+                        request.getCmpId(),
+                        request.getId(),
+                        request.getType(),
+                        request.getStkCode(),
+                        request.getColisD(),
+                        request.getColisV(),
+                        request.getFrigo(),
+                        request.getPsycho(),
+                        request.getChers(),
+                        request.getSachet(),
+                        request.getBacs(),
+                        request.getPalettes()
+                );
+            else {
+                updatedRows = this.commandeRepository.updateColisageGlobal(
+                        request.getCmpId(),
+                        request.getId(),
+                        request.getType(),
+                        request.getStkCode(),
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        request.getBacs(),
+                        0
+                );
+
+                var savedBacs = this.vntBonBacsRepository.saveAll(request.getBacsIds().stream().map(bacId -> new VntBonBacs(
+                        request.getCmpId(),
+                        request.getId(),
+                        request.getType(),
+                        request.getStkCode(),
+                        bacId.getId(),
+                        bacId.getTypeId()
+                )).toList());
+                log.info("Saved the bacs from the repo | savedBacs.size={}", savedBacs.size());
+                if (savedBacs.size() != request.getBacs() || savedBacs.size() != request.getBacsIds().size())
+                    throw new DatabaseErrorException("Le nombre de bacs sauvegardé ne correspond pas au nombre de bacs fourni");
+            }
+
             log.info("Updated the colisage global from the repo | updatedRows={}", updatedRows);
 
             if (updatedRows == 0)
@@ -327,7 +362,7 @@ public class CommandeServiceImpl implements CommandeService {
         var etiquettes = this.colisRepository.getEtiquettesColis(id.getCmpId(), id.getId(), id.getType(), id.getStkCode());
         log.info("Fetched the etiquettes from the repo | etiquettes.size={}", etiquettes.size());
 
-        if(!etiquettes.isEmpty()) {
+        if (!etiquettes.isEmpty()) {
             var firstRecord = etiquettes.stream().findFirst().get();
 
             return new ListeEtiquettesResponse(

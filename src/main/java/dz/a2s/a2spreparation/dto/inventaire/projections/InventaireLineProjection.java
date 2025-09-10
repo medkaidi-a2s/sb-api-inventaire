@@ -20,6 +20,7 @@ public interface InventaireLineProjection {
     BigDecimal getShp();
     String getForme();
     String getLabo();
+    Integer getQteStock();
     String getZoneProduit();
     String getMotifSaisie();
     Integer getQteSaisie();

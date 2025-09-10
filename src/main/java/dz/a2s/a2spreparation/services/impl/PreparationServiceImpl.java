@@ -359,7 +359,9 @@ public class PreparationServiceImpl implements PreparationService {
         var receiptProjection = this.commandeRepository.getReceiptData(id.getCmpId(), id.getId(), id.getType(), id.getStkCode());
         log.info("Fetched the receipt data from the repo | receiptData={}", receiptProjection);
 
-        return CommandeMapper.toReceiptData(receiptProjection);
+        String username = this.customUserDetailsService.getCurrentUserCode();
+
+        return CommandeMapper.toReceiptData(receiptProjection, username);
     }
 
     @Override
@@ -368,8 +370,10 @@ public class PreparationServiceImpl implements PreparationService {
 
         var receiptProjection = this.commandeZoneRepository.getReceiptData(id.getCmpId(), id.getId(), id.getType(), id.getStkCode(), id.getZone());
         log.info("Fetched the receipt data from the repo | receptData={}", receiptProjection);
+        String username = this.customUserDetailsService.getCurrentUserCode();
 
-        return CommandeMapper.toReceiptData(receiptProjection);
+
+        return CommandeMapper.toReceiptData(receiptProjection, username);
     }
 
     @Transactional

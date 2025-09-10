@@ -46,7 +46,7 @@ public class CommandeMapper {
         return dto;
     }
 
-    public static CommandeReceiptData toReceiptData(CommandeReceiptProjection projection) {
+    public static CommandeReceiptData toReceiptData(CommandeReceiptProjection projection, String userContext) {
         return new CommandeReceiptData(
                 projection.getVntReference(),
                 projection.getVntDate(),
@@ -55,7 +55,8 @@ public class CommandeMapper {
                 projection.getTerRegionLib(),
                 projection.getXtable(),
                 projection.getZone() != null ? projection.getZone() : null,
-                projection.getNbr() != null ? projection.getNbr() : 0
+                projection.getNbr() != null ? projection.getNbr() : 0,
+                userContext
         );
     }
 

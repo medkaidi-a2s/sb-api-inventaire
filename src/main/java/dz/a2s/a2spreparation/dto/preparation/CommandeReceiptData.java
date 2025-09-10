@@ -2,5 +2,14 @@ package dz.a2s.a2spreparation.dto.preparation;
 
 import java.time.LocalDateTime;
 
-public record CommandeReceiptData(String reference, LocalDateTime date, String client, String adresse, String region, String table, String zone, Integer nbr) {
+public record CommandeReceiptData(
+        String reference,
+        LocalDateTime date,
+        String client,
+        String adresse,
+        String region,
+        String table,
+        String zone,
+        Integer nbr,
+        String user) {
 }
