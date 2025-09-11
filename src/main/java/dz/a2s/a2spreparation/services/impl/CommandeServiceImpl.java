@@ -362,6 +362,8 @@ public class CommandeServiceImpl implements CommandeService {
         var etiquettes = this.colisRepository.getEtiquettesColis(id.getCmpId(), id.getId(), id.getType(), id.getStkCode());
         log.info("Fetched the etiquettes from the repo | etiquettes.size={}", etiquettes.size());
 
+        var username = this.customUserDetailsService.getCurrentUserCode();
+
         if (!etiquettes.isEmpty()) {
             var firstRecord = etiquettes.stream().findFirst().get();
 
@@ -370,6 +372,7 @@ public class CommandeServiceImpl implements CommandeService {
                     firstRecord.getClient(),
                     firstRecord.getAdresse(),
                     firstRecord.getRegion(),
+                    username,
                     etiquettes.stream().map(colis -> new ListeEtiquettesResponse.EtiquetteResponse(colis.getCode(), colis.getCmpId() + "-" + colis.getId() + "-" + colis.getType() + "-" + colis.getStkCode() + "-" + colis.getCode())).toList()
             );
         } else
