@@ -199,7 +199,9 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
                     NVL(T.VNT_NBR_PSYCHO, 0) AS PSYCHO,
                     NVL(T.VNT_COLIS_VRAG, 0) AS COLIS_V,
                     NVL(T.VNT_NBR_CHERS, 0) AS CHERS,
-                    NVL(T.VNT_NBR_SACHETS, 0) AS SACHET
+                    NVL(T.VNT_NBR_SACHETS, 0) AS SACHET,
+                    NVL(T.VNT_BACS, 0) AS BACS,
+                    NVL(T.VNT_PALETTES, 0) AS PALETTES
                FROM VNT_BONS T
               WHERE VNT_CMP_ID = :cmpId
                 AND VNT_ID = :id

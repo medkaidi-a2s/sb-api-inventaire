@@ -237,7 +237,9 @@ public class CommandeServiceImpl implements CommandeService {
                 projection.getColisF(),
                 projection.getPsycho(),
                 projection.getChers(),
-                projection.getSachet()
+                projection.getSachet(),
+                projection.getBacs(),
+                projection.getPalettes()
         );
     }
 
@@ -248,7 +250,15 @@ public class CommandeServiceImpl implements CommandeService {
         var projection = this.commandeRepository.getColisageCommande(id.getCmpId(), id.getId(), id.getType(), id.getStkCode());
         log.info("Fetched the colisage from the repo | projection={}", projection);
 
-        return new ColisageDto(projection.getColisV(), projection.getColisD(), projection.getColisF(), projection.getPsycho(), projection.getChers(), projection.getSachet());
+        return new ColisageDto(
+                projection.getColisV(),
+                projection.getColisD(),
+                projection.getColisF(),
+                projection.getPsycho(),
+                projection.getChers(),
+                projection.getSachet(),
+                projection.getBacs(),
+                projection.getPalettes());
     }
 
     @Override
@@ -273,7 +283,6 @@ public class CommandeServiceImpl implements CommandeService {
         try {
             var updatedRows = 0;
 
-            if (request.getBacs() == 0)
                 updatedRows = this.commandeRepository.updateColisageGlobal(
                         request.getCmpId(),
                         request.getId(),
@@ -288,21 +297,6 @@ public class CommandeServiceImpl implements CommandeService {
                         request.getBacs(),
                         request.getPalettes()
                 );
-            else {
-                updatedRows = this.commandeRepository.updateColisageGlobal(
-                        request.getCmpId(),
-                        request.getId(),
-                        request.getType(),
-                        request.getStkCode(),
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        request.getBacs(),
-                        0
-                );
 
                 var savedBacs = this.vntBonBacsRepository.saveAll(request.getBacsIds().stream().map(bacId -> new VntBonBacs(
                         request.getCmpId(),
@@ -315,7 +309,6 @@ public class CommandeServiceImpl implements CommandeService {
                 log.info("Saved the bacs from the repo | savedBacs.size={}", savedBacs.size());
                 if (savedBacs.size() != request.getBacs() || savedBacs.size() != request.getBacsIds().size())
                     throw new DatabaseErrorException("Le nombre de bacs sauvegardé ne correspond pas au nombre de bacs fourni");
-            }
 
             log.info("Updated the colisage global from the repo | updatedRows={}", updatedRows);
 

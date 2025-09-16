@@ -6,6 +6,8 @@ public record ColisageDto(
         Integer frigo,
         Integer psycho,
         Integer chers,
-        Integer sachet
+        Integer sachet,
+        Integer bacs,
+        Integer palettes
 ) {
 }

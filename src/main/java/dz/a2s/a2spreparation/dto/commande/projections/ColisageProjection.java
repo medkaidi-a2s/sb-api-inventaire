@@ -8,5 +8,7 @@ public interface ColisageProjection {
     Integer getSachet();
     Integer getPsycho();
     Integer getChers();
+    Integer getBacs();
+    Integer getPalettes();
 
 }
