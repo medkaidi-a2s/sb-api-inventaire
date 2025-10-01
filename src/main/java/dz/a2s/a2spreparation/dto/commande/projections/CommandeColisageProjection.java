@@ -12,6 +12,7 @@ public interface CommandeColisageProjection {
     String getVntStkCode();
     Date getVntDate();
     String getVntReference();
+    String getRotation();
     BigDecimal getVntTotalTtc();
     String getLibelleTier();
     String getRegion();

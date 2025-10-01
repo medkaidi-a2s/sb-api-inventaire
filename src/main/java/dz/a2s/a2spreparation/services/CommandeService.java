@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface CommandeService {
 
-    PaginatedDataDto<CommandeColisageResponse> getCommandesColisage(String dateDebut, String dateFin, Integer statutPrepare, Integer page, String search);
+    PaginatedDataDto<CommandeColisageResponse> getCommandesColisage(String dateDebut, String dateFin, Integer statutPrepare, String rotation, Integer page, String search);
     List<CommandeResponseDto> getAllCommandes(String search, String date);
     List<CommandeZoneResponseDto> getAllCommandesZone(String search, String date);
     List<CommandeResponseDto> getControlledCommandes(String date);

@@ -45,6 +45,7 @@ public class CommandeController implements CommandeApi {
                 request.getDateDebut(),
                 request.getDateFin(),
                 request.getStatutPrepare() ? 1 : 0,
+                request.getRotation(),
                 request.getPage(),
                 request.getSearch()
         );

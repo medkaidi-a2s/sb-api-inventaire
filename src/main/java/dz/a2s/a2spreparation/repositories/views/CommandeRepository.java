@@ -258,6 +258,7 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
                        AND NVL(T.VNT_ANNULE_FLAG, 0) = 0
                        AND T.VNT_DATE >= TO_DATE(:date_debut, 'DD/MM/RRRR')
                        AND T.VNT_DATE < TO_DATE(:date_fin, 'DD/MM/RRRR') + 1
+                       AND (:rotation IS NULL OR T.VNT_ATT3 = :rotation)
                        AND NVL(T.VNT_PREP_FLAG, 0) IN (0, NVL(:statut_prepare, 0))
                        AND (:search IS NULL OR
                            LOWER(VNT_REFERENCE || ' ' || R.TER_NOM || ' ' ||
@@ -271,6 +272,7 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
             @Param("statut_prepare") Integer statutPrepare,
             @Param("start") Integer start,
             @Param("end") Integer end,
+            @Param("rotation") String rotation,
             @Param("search") String search);
 
     @Query(value = """

@@ -19,6 +19,7 @@ public class CommandeColisageRequest {
     private String dateDebut;
     private String dateFin;
     private Boolean statutPrepare;
+    private String rotation;
     private Integer page;
     private String search;
 

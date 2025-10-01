@@ -53,8 +53,14 @@ public class CommandeServiceImpl implements CommandeService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
-    public PaginatedDataDto<CommandeColisageResponse> getCommandesColisage(String dateDebut, String dateFin, Integer statutPrepare, Integer page, String search) {
-        log.info("| Entry | CommandeService.getCommandesColisage | Args | dateDebut : {}, dateFin : {}, statutPrepare : {}, page : {}", dateDebut, dateFin, statutPrepare, page);
+    public PaginatedDataDto<CommandeColisageResponse> getCommandesColisage(
+            String dateDebut,
+            String dateFin,
+            Integer statutPrepare,
+            String rotation,
+            Integer page,
+            String search) {
+        log.info("| Entry | CommandeService.getCommandesColisage | Args | dateDebut : {}, dateFin : {}, statutPrepare : {}, page : {}, rotation: {}", dateDebut, dateFin, statutPrepare, page, rotation);
 
         var size = 10;
 
@@ -64,7 +70,7 @@ public class CommandeServiceImpl implements CommandeService {
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Company ID fetched from the service {}", companyId);
 
-        var projections = this.commandeRepository.getListeCommandesColisage(companyId, dateDebut, dateFin, statutPrepare, start, end, search);
+        var projections = this.commandeRepository.getListeCommandesColisage(companyId, dateDebut, dateFin, statutPrepare, start, end, rotation, search);
         log.info("Fetched the orders from the repo | projections.size={}", projections.size());
 
         var totalRecords = projections.isEmpty() ? 0 : projections.stream().findFirst().get().getTotalRecords();

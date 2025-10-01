@@ -68,6 +68,7 @@ public class CommandeMapper {
                 projection.getVntStkCode(),
                 projection.getVntDate(),
                 projection.getVntReference(),
+                projection.getRotation(),
                 projection.getVntTotalTtc(),
                 projection.getLibelleTier(),
                 projection.getRegion(),

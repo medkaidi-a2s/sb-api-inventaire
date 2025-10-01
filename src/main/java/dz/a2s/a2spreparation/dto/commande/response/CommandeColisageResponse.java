@@ -10,6 +10,7 @@ public record CommandeColisageResponse(
         String stkCode,
         Date date,
         String reference,
+        String rotation,
         BigDecimal totalTtc,
         String client,
         String region,
