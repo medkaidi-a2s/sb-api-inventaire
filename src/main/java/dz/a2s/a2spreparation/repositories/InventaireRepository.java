@@ -2,6 +2,7 @@ package dz.a2s.a2spreparation.repositories;
 
 import dz.a2s.a2spreparation.dto.common.ListProjection;
 import dz.a2s.a2spreparation.dto.inventaire.projections.ComptageAccessProjection;
+import dz.a2s.a2spreparation.dto.inventaire.projections.EcartLineProjection;
 import dz.a2s.a2spreparation.dto.inventaire.projections.InventaireLineProjection;
 import dz.a2s.a2spreparation.dto.inventaire.projections.InventaireProjection;
 import dz.a2s.a2spreparation.entities.Inventaire;
@@ -118,6 +119,50 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Inventai
             @Param("search") String search,
             @Param("start") Integer start,
             @Param("end") Integer end);
+
+    @Query(value = """
+            SELECT *
+              FROM (SELECT COUNT(*) OVER() AS TOTAL_RECORDS,
+                           T.INV_CMP_ID AS SITE,
+                           T.INV_ID AS INV_ID,
+                           T.IND_STK_CODE AS STK_CODE,
+                           T.IND_MED_ID AS MED_ID,
+                           T.IND_ID AS DETAIL_ID,
+                           T.IND_LIGNE AS LIGNE,
+                           T.INV_DATE AS DATE_INVENTAIRE,
+                           T.ZONE AS MED_ZONE,
+                           T.MED_ZNS_ID AS ZONE,
+                           T.PRD_STK_CODE AS PRD_STK_CODE,
+                           T.MED_COMMERCIAL_NAME AS COMMERCIAL_NAME,
+                           T.PRD_NLOT AS NLOT,
+                           T.PRD_DATE_PEREMPTION AS DATE_PEREMPTION,
+                           T.PRD_PRIX_PPA AS PPA,
+                           T.PRD_PRIX_SHP AS SHP,
+                           T.PRD_COLIS AS COLIS,
+                           T.STOCK AS STOCK,
+                           T.FOURNISSEUR AS FOURNISSEUR,
+                           T.ZONE_PRODUIT AS LIBELLE_ZONE,
+                           T.CMP3 AS COMPTAGE3,
+                           T.CMP1 AS COMPTAGE1,
+                           T.CMP2 AS COMPTAGE2,
+                           ROW_NUMBER() OVER(ORDER BY T.MED_COMMERCIAL_NAME) AS RNUM
+                      FROM PRP_INVENTAIRES T
+                     WHERE T.INV_CMP_ID = :cmp_id
+                       AND T.INV_ID = :inv_id
+                       AND (:search IS NULL OR
+                           LOWER(T.MED_COMMERCIAL_NAME || ' ' || T.PRD_NLOT) LIKE
+                           LOWER('%' || :search || '%'))
+                       AND (:is_ecart = 0 OR T.CMP1 <> T.CMP2))
+             WHERE RNUM BETWEEN :start AND :end
+            """, nativeQuery = true)
+    List<EcartLineProjection> getEcartLines(
+            @Param("cmp_id") Integer cmpId,
+            @Param("inv_id") Integer invId,
+            @Param("search") String search,
+            @Param("is_ecart") Integer isEcart,
+            @Param("start") Integer start,
+            @Param("end") Integer end
+    );
 
     @Procedure(procedureName = "stocks_new.saisie_inv")
     void saisirInventaire(

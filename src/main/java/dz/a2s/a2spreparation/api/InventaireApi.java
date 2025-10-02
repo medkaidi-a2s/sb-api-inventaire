@@ -4,6 +4,7 @@ import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.request.InventaireLineRequest;
 import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.EcartLineResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.SaisiResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
@@ -48,6 +49,11 @@ public interface InventaireApi {
     @ApiResponse(responseCode = "200", description = "Produits récupérés avec succès")
     @PostMapping("/details")
     public ResponseEntity<PaginatedResponse<InventaireLineResponse>> getInventaireLines(InventaireLineRequest request);
+
+    @Operation(summary = "Récupération des produits pour le traitement des écarts", description = "Récupération des produits pour le traitement des écarts")
+    @ApiResponse(responseCode = "200", description = "Produits récupérés avec succès")
+    @PostMapping("/traitement-ecarts")
+    public ResponseEntity<PaginatedResponse<EcartLineResponse>> getEcartLines(InventaireLineRequest request);
 
     @Operation(summary = "Saisir une ligne d'inventaire", description = "Saisir la quantité et le motif d'un produit pour l'inventaire")
     @ApiResponse(responseCode = "200", description = "Inventaire saisi avec succès")

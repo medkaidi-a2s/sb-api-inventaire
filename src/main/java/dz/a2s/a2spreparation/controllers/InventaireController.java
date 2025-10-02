@@ -5,6 +5,7 @@ import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.request.InventaireLineRequest;
 import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.EcartLineResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.SaisiResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedResponse;
@@ -110,7 +111,31 @@ public class InventaireController implements InventaireApi {
 
         var response = new PaginatedResponse<>(
                 200,
-                "Stocks récupéré avec succès - page = " + request.getPage() + " - size = " + 10,
+                "Produits récupérés avec succès - page = " + request.getPage() + " - size = " + 10,
+                lines.data(),
+                lines.totalRecords(),
+                lines.totalPages(),
+                lines.currentPage(),
+                lines.pageSize()
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<PaginatedResponse<EcartLineResponse>> getEcartLines(@RequestBody InventaireLineRequest request) {
+        log.info("| Entry | InventaireController.getEcartLines | Args | request={}", request);
+
+        var lines = this.inventaireService.getEcartLines(
+                request.getInvId(),
+                request.getIsEcart(),
+                request.getSearch(),
+                request.getPage()
+        );
+        log.info("Fetched the ecart lines from the service | lines.size={}", lines.data().size());
+
+        var response = new PaginatedResponse<>(
+                200,
+                "Produits récupéré avec succès - page = " + request.getPage() + " - size = " + 10,
                 lines.data(),
                 lines.totalRecords(),
                 lines.totalPages(),

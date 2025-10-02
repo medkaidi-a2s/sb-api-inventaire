@@ -3,6 +3,7 @@ package dz.a2s.a2spreparation.services.impl;
 import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.EcartLineResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.SaisiResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
@@ -130,6 +131,28 @@ public class InventaireServiceImpl implements InventaireService {
 
         var lines = projections.stream().map(InventaireMappers::fromInventaireLineProjection).toList();
         log.info("Mapped projections to inventaire line responses | lines.size={}", lines.size());
+
+        return new PaginatedDataDto<>(lines, totalRecords, (totalRecords + size - 1) / size, page, size);
+    }
+
+    @Override
+    public PaginatedDataDto<EcartLineResponse> getEcartLines(Integer invId, Integer isEcart, String search, Integer page) {
+        log.info("| Entry | InventaireService.getEcartLines() | Args | invId={}, isEcart={}, search={}, page={}", invId, isEcart, search, page);
+
+        Integer cmpId = this.customUserDetailsService.getCurrentCompanyId();
+
+        var size = 10;
+        int start = (page * size) - size + 1;
+        int end = page * size;
+
+        var projections = this.inventaireRepository.getEcartLines(cmpId, invId, search, isEcart, start, end);
+        log.info("Fetched the list of ecart lines from the repo | projections.size={}", projections.size());
+
+        var totalRecords = projections.isEmpty() ? 0 : projections.stream().findFirst().get().getTotalRecords();
+        log.info("Fetched the total records from the projections | totalRecords={}", totalRecords);
+
+        var lines = projections.stream().map(InventaireMappers::fromEcartLineProjection).toList();
+        log.info("Mapped projections to ecart line responses | lines.size={}", lines.size());
 
         return new PaginatedDataDto<>(lines, totalRecords, (totalRecords + size - 1) / size, page, size);
     }

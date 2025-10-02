@@ -15,6 +15,7 @@ public class InventaireLineRequest {
     private Integer comptage;
     private String emplacement;
     private Integer stockZero;
+    private Integer isEcart;
     private String search;
     private Integer page;
 

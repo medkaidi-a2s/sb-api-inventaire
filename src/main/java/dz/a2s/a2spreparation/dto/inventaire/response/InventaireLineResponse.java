@@ -18,6 +18,7 @@ public record InventaireLineResponse(
         BigDecimal shp,
         String forme,
         String labo,
+        Integer qteStock,
         String zoneProduit,
         String motifSaisie,
         Integer qteSaisie,

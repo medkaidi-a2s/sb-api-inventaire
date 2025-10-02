@@ -3,9 +3,11 @@ package dz.a2s.a2spreparation.mappers;
 import dz.a2s.a2spreparation.dto.common.ListProjection;
 import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.projections.ComptageAccessProjection;
+import dz.a2s.a2spreparation.dto.inventaire.projections.EcartLineProjection;
 import dz.a2s.a2spreparation.dto.inventaire.projections.InventaireLineProjection;
 import dz.a2s.a2spreparation.dto.inventaire.projections.InventaireProjection;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.EcartLineResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
 import dz.a2s.a2spreparation.entities.Inventaire;
 
@@ -51,11 +53,38 @@ public class InventaireMappers {
                 projection.getShp(),
                 projection.getForme(),
                 projection.getLabo(),
+                projection.getQteStock(),
                 projection.getZoneProduit(),
                 projection.getMotifSaisie(),
                 projection.getQteSaisie(),
-                projection.getCode() + "-" + projection.getNlot() + "-" + projection.getNlotInterne() + "-" + projection.getNumLigne() + "-" + projection.getNumProduit() + "-" + (projection.getZoneProduit() != null ? projection.getZoneProduit() : null)
+                projection.getSite() + "-" + projection.getDepot() + "-" + projection.getCode() + "-" + projection.getNlot() + "-" + projection.getNlotInterne() + "-" + projection.getNumLigne() + "-" + projection.getNumProduit() + "-" + (projection.getZoneProduit() != null ? projection.getZoneProduit() : null)
         );
     }
 
+    public static EcartLineResponse fromEcartLineProjection(EcartLineProjection projection) {
+        return new EcartLineResponse(
+                projection.getSite(),
+                projection.getInvId(),
+                projection.getStkCode(),
+                projection.getMedId(),
+                projection.getDetailId(),
+                projection.getLigne(),
+                projection.getDateInventaire(),
+                projection.getMedZone(),
+                projection.getZone(),
+                projection.getPrdStkCode(),
+                projection.getCommercialName(),
+                projection.getNlot(),
+                projection.getDatePeremption(),
+                projection.getPpa(),
+                projection.getShp(),
+                projection.getColis(),
+                projection.getStock(),
+                projection.getFournisseur(),
+                projection.getLibelleZone(),
+                projection.getComptage3(),
+                projection.getComptage1(),
+                projection.getComptage2()
+        );
+    }
 }

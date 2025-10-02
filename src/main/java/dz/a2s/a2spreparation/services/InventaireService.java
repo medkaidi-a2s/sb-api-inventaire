@@ -3,6 +3,7 @@ package dz.a2s.a2spreparation.services;
 import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
+import dz.a2s.a2spreparation.dto.inventaire.response.EcartLineResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.InventaireLineResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.SaisiResponse;
 import dz.a2s.a2spreparation.dto.response.PaginatedDataDto;
@@ -17,6 +18,7 @@ public interface InventaireService {
     ComptageAccessResponse getComptageAccess(Integer invId);
     String checkEmplacement(String emplacement);
     PaginatedDataDto<InventaireLineResponse> getInventaireLines(Integer invId, Integer comptage, String emplacement, Integer stockZero, String search, Integer page);
+    PaginatedDataDto<EcartLineResponse> getEcartLines(Integer invId, Integer isEcart, String search, Integer page);
     SaisiResponse saisirInventaire(SaisiRequest request);
 
 }
