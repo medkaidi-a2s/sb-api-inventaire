@@ -7,7 +7,7 @@ public record InventaireLineResponse(
         Integer cmpId,
         Integer invId,
         String depot,
-        Integer numProduit,
+        Integer medId,
         Integer nlotInterne,
         Integer numLigne,
         String code,

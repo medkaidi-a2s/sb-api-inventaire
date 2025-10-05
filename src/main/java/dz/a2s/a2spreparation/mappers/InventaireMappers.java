@@ -65,15 +65,17 @@ public class InventaireMappers {
         return new EcartLineResponse(
                 projection.getSite(),
                 projection.getInvId(),
-                projection.getStkCode(),
+                projection.getDepot(),
                 projection.getMedId(),
-                projection.getDetailId(),
+                projection.getNlotInterne(),
                 projection.getLigne(),
                 projection.getDateInventaire(),
                 projection.getMedZone(),
                 projection.getZone(),
-                projection.getPrdStkCode(),
+                projection.getStkCode(),
                 projection.getCommercialName(),
+                projection.getCode(),
+                projection.getForme(),
                 projection.getNlot(),
                 projection.getDatePeremption(),
                 projection.getPpa(),
@@ -84,7 +86,8 @@ public class InventaireMappers {
                 projection.getLibelleZone(),
                 projection.getComptage3(),
                 projection.getComptage1(),
-                projection.getComptage2()
+                projection.getComptage2(),
+                projection.getSite() + "-" + projection.getDepot() + "-" + projection.getStkCode() + "-" + projection.getMedId() + "-" + projection.getNlotInterne() + "-" + projection.getLigne() + "-" + projection.getZone()
         );
     }
 }

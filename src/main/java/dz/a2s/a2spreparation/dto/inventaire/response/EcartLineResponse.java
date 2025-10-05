@@ -4,27 +4,30 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public record EcartLineResponse(
-        Integer site,
+        Integer cmpId,
         Integer invId,
-        String stkCode,
+        String depot,
         Integer medId,
-        Integer detailId,
+        Integer nlotInterne,
         Integer ligne,
         Date dateInventaire,
-        String medZone,
+        String libelleZone,
         Integer zone,
-        String prdStkCode,
-        String commercialName,
+        String stkCode,
+        String nomProduit,
+        String code,
+        String forme,
         String nlot,
         Date datePeremption,
         BigDecimal ppa,
         BigDecimal shp,
         BigDecimal colis,
-        Integer stock,
-        String fournisseur,
-        String libelleZone,
+        Integer qteStock,
+        String labo,
+        String zoneProduit,
         Integer comptage3,
         Integer comptage1,
-        Integer comptage2
+        Integer comptage2,
+        String key
 ) {
 }
