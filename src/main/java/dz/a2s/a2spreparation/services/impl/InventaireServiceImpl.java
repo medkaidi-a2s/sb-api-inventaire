@@ -1,6 +1,7 @@
 package dz.a2s.a2spreparation.services.impl;
 
 import dz.a2s.a2spreparation.dto.common.ListResponse;
+import dz.a2s.a2spreparation.dto.inventaire.request.SaisiEcartRequest;
 import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.EcartLineResponse;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -210,5 +212,31 @@ public class InventaireServiceImpl implements InventaireService {
             log.error("Failed to save the inventaire line to the repo | error={}", ex.getMessage());
             throw new DatabaseErrorException("Une erreur est survenue lors de la saisie de la ligne d'inventaire");
         }
+    }
+
+    @Transactional
+    @Override
+    public int updateEcartLine(SaisiEcartRequest request) {
+        log.info("| Entry | InventaireService.updateEcartLine() | Args | request={}", request);
+
+        var companyId = this.customUserDetailsService.getCurrentCompanyId();
+
+        var rowsNumber = this.inventaireRepository.updateEcartLine(
+                companyId,
+                request.getInvId(),
+                request.getNlotInterne(),
+                request.getMedId(),
+                request.getDepot(),
+                request.getQuantite(),
+                request.getNoLigne()
+        );
+        log.info("Updated rows number = {}", rowsNumber);
+
+        if(rowsNumber == 0)
+            throw new DatabaseErrorException("La correction de l’écart n’a pas pu être effectuée.");
+
+        if(rowsNumber != 1)
+            throw new DatabaseErrorException("Erreur de mise à jour, plusieurs enregistrements ont été affectés.");
+        return rowsNumber;
     }
 }

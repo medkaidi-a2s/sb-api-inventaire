@@ -3,6 +3,7 @@ package dz.a2s.a2spreparation.controllers;
 import dz.a2s.a2spreparation.api.InventaireApi;
 import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.request.InventaireLineRequest;
+import dz.a2s.a2spreparation.dto.inventaire.request.SaisiEcartRequest;
 import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.EcartLineResponse;
@@ -156,6 +157,22 @@ public class InventaireController implements InventaireApi {
                 200,
                 "Inventaire saisi avec succès",
                 data
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponseDto<Integer>> updateEcartLine(@RequestBody @Valid SaisiEcartRequest request) {
+        log.info("| Entry | InventaireController.updateEcartLine | Args | request={}", request);
+
+        var rowsNumber = this.inventaireService.updateEcartLine(request);
+        log.info("Updated rows number = {}", rowsNumber);
+
+        var response = new SuccessResponseDto<>(
+                200,
+                "Quantité saisie avec succès",
+                rowsNumber
         );
 
         return ResponseEntity.ok(response);

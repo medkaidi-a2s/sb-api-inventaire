@@ -9,7 +9,7 @@ public record EcartLineResponse(
         String depot,
         Integer medId,
         Integer nlotInterne,
-        Integer ligne,
+        Integer numLigne,
         Date dateInventaire,
         String libelleZone,
         Integer zone,

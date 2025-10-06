@@ -8,6 +8,7 @@ import dz.a2s.a2spreparation.dto.inventaire.projections.InventaireProjection;
 import dz.a2s.a2spreparation.entities.Inventaire;
 import dz.a2s.a2spreparation.entities.keys.InventaireId;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
@@ -179,6 +180,27 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Inventai
             @Param("XUSER") String emplacement,
             @Param("P_LIGNE") Integer noLigne,
             @Param("P_USR") String username
+    );
+
+    @Modifying
+    @Query(value = """
+            UPDATE STP_INVENTAIRE_DETAILS
+               SET IND_QTE_UG = :P_QTE
+             WHERE IND_CMP_ID = :P_CMP
+               AND IND_INV_ID = :P_INV
+               AND IND_STK_CODE = :P_DEPOT
+               AND IND_MED_ID = :P_MED_ID
+               AND IND_ID = :P_PRD_ID
+               AND IND_LIGNE = :P_LIGNE
+            """, nativeQuery = true)
+    int updateEcartLine(
+            @Param("P_CMP") Integer cmpId,
+            @Param("P_INV") Integer invId,
+            @Param("P_PRD_ID") Integer nlotInterne,
+            @Param("P_MED_ID") Integer medId,
+            @Param("P_DEPOT") String depot,
+            @Param("P_QTE") Integer quantite,
+            @Param("P_LIGNE") Integer noLigne
     );
 
 }

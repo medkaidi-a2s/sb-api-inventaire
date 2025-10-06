@@ -2,6 +2,7 @@ package dz.a2s.a2spreparation.api;
 
 import dz.a2s.a2spreparation.dto.common.ListResponse;
 import dz.a2s.a2spreparation.dto.inventaire.request.InventaireLineRequest;
+import dz.a2s.a2spreparation.dto.inventaire.request.SaisiEcartRequest;
 import dz.a2s.a2spreparation.dto.inventaire.request.SaisiRequest;
 import dz.a2s.a2spreparation.dto.inventaire.response.ComptageAccessResponse;
 import dz.a2s.a2spreparation.dto.inventaire.response.EcartLineResponse;
@@ -59,5 +60,10 @@ public interface InventaireApi {
     @ApiResponse(responseCode = "200", description = "Inventaire saisi avec succès")
     @PostMapping("/saisir")
     public ResponseEntity<SuccessResponseDto<SaisiResponse>> saisirInventaire(SaisiRequest request);
+
+    @Operation(summary = "Rectification de l'écart", description = "Rectification de la quantité présentant un écart entre comptage 1 et 2")
+    @ApiResponse(responseCode = "200", description = "Ecart réctifié avec succès")
+    @PostMapping("/update-ecart")
+    public ResponseEntity<SuccessResponseDto<Integer>> updateEcartLine(SaisiEcartRequest request);
 
 }
