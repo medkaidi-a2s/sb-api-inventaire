@@ -356,8 +356,9 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
                AND T.VCO_VNT_ID = :id
                AND T.VCO_VNT_TYPE = :type
                AND T.VCO_STK_CODE = :stk_code
+               AND (:zone IS NULL OR T.VBZ_ZONE = :zone)
             """, nativeQuery = true)
-    int deleteEtiquettes(@Param("cmp_id") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stk_code") String stkCode);
+    int deleteEtiquettes(@Param("cmp_id") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stk_code") String stkCode, @Param("zone") Integer zone);
 
     @Procedure(procedureName = "SETUP_NEW.P_GENERE_ETIQUTE")
     void generateEtiquette(
@@ -368,4 +369,13 @@ public interface CommandeRepository extends JpaRepository<Commande, VenteId> {
             @Param("P_USER") String user
     );
 
+    @Procedure(procedureName = "SETUP_NEW.P_GENERE_ETIQUTE_ZONE")
+    void generateEtiquetteZone(
+            @Param("P_CMP") Integer cmpId,
+            @Param("P_VNT") Integer id,
+            @Param("P_STK") String stkCode,
+            @Param("P_TYPE") String type,
+            @Param("P_ZONE") Integer zone,
+            @Param("P_USER") String user
+    );
 }

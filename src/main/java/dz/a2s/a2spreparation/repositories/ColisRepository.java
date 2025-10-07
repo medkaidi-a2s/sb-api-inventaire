@@ -34,7 +34,8 @@ public interface ColisRepository extends JpaRepository<Colis, ColisId> {
                AND T.VCO_VNT_ID = :id
                AND T.VCO_VNT_TYPE = :type
                AND T.VCO_STK_CODE = :stk_code
+               AND (:zone IS NULL OR T.VBZ_ZONE = :zone)
             """, nativeQuery = true)
-    List<Colis> getEtiquettesColis(@Param("cmp_id") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stk_code") String stkCode);
+    List<Colis> getEtiquettesColis(@Param("cmp_id") Integer cmpId, @Param("id") Integer id, @Param("type") String type, @Param("stk_code") String stkCode, @Param("zone") Integer zone);
 
 }

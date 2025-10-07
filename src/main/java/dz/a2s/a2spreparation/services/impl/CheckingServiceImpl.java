@@ -299,6 +299,16 @@ public class CheckingServiceImpl implements CheckingService {
             throw new RuntimeException("Le contrôle de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
         }
 
+        log.info("Generating labels for this order par zone");
+        this.commandeRepository.generateEtiquetteZone(
+                data.getCmpId(),
+                data.getId(),
+                data.getStkCode(),
+                data.getType(),
+                data.getZone(),
+                username
+        );
+
         return response;
     }
 

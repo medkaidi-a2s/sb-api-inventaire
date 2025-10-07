@@ -6,6 +6,7 @@ import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.commande.request.ListeEtiquetteRequest;
 import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
@@ -29,6 +30,6 @@ public interface CommandeService {
     ColisageDto getColisageCommande(CmdIdDto id);
     List<Bac> getListeBacs();
     CommandeColisageResponse updateColisageGlobal(UpdateColisageRequest request);
-    ListeEtiquettesResponse getEtiquettesColis(CmdIdDto id);
+    ListeEtiquettesResponse getEtiquettesColis(ListeEtiquetteRequest request);
 
 }

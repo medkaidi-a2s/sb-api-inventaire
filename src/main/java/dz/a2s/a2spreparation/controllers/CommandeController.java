@@ -8,6 +8,7 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.commande.request.CommandeColisageRequest;
+import dz.a2s.a2spreparation.dto.commande.request.ListeEtiquetteRequest;
 import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
@@ -222,10 +223,10 @@ public class CommandeController implements CommandeApi {
     }
 
     @Override
-    public ResponseEntity<SuccessResponseDto<ListeEtiquettesResponse>> getEtiquettesColisage(@RequestBody CmdIdDto id) {
-        log.info("| Entry | CommandeController.getEtiquettesColisage | Args | id={}", id);
+    public ResponseEntity<SuccessResponseDto<ListeEtiquettesResponse>> getEtiquettesColisage(@RequestBody ListeEtiquetteRequest request) {
+        log.info("| Entry | CommandeController.getEtiquettesColisage | Args | request={}", request);
 
-        var etiquettesResponse = this.commandeService.getEtiquettesColis(id);
+        var etiquettesResponse = this.commandeService.getEtiquettesColis(request);
         log.info("Fetched the etiquettes from the service | etiquettes.size={}", etiquettesResponse.getData().size());
 
         var response = new SuccessResponseDto<>(

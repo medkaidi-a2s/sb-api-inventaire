@@ -6,6 +6,7 @@ import dz.a2s.a2spreparation.dto.affectation.CmdColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
+import dz.a2s.a2spreparation.dto.commande.request.ListeEtiquetteRequest;
 import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
@@ -191,6 +192,7 @@ public class CommandeServiceImpl implements CommandeService {
         log.info("| Entry | CommandeService.saisirColisageZone | Args | cmdZoneColisageDto={}", cmdZoneColisageDto);
 
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
+        var username = this.customUserDetailsService.getCurrentUserCode();
         log.info("Company ID fetched from the service {}", companyId);
 
         Integer response = 0;
@@ -211,6 +213,25 @@ public class CommandeServiceImpl implements CommandeService {
                     cmdZoneColisageDto.getSachet(),
                     null,
                     2
+            );
+
+            var deletedRows = this.commandeRepository.deleteEtiquettes(
+                    companyId,
+                    cmdZoneColisageDto.getId(),
+                    cmdZoneColisageDto.getType(),
+                    cmdZoneColisageDto.getStkCode(),
+                    cmdZoneColisageDto.getZone()
+            );
+            log.info("Deleted the etiquettes from the repo | deletedRows={}", deletedRows);
+
+            log.info("Generating labels for this order par zone");
+            this.commandeRepository.generateEtiquetteZone(
+                    companyId,
+                    cmdZoneColisageDto.getId(),
+                    cmdZoneColisageDto.getStkCode(),
+                    cmdZoneColisageDto.getType(),
+                    cmdZoneColisageDto.getZone(),
+                    username
             );
         } catch (DataAccessException ex) {
             log.error("Une erreur s'est produite lors de l'exécution de la procédure stocké  saisirColisageZone | original message = {}", ex.getMessage());
@@ -325,7 +346,8 @@ public class CommandeServiceImpl implements CommandeService {
                     request.getCmpId(),
                     request.getId(),
                     request.getType(),
-                    request.getStkCode()
+                    request.getStkCode(),
+                    null
             );
             log.info("Deleted the etiquettes from the repo | deletedRows={}", deletedRows);
 
@@ -355,10 +377,10 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public ListeEtiquettesResponse getEtiquettesColis(CmdIdDto id) {
-        log.info("| Entry | CommandeService.getEtiquettesColis | Args | id={}", id);
+    public ListeEtiquettesResponse getEtiquettesColis(ListeEtiquetteRequest request) {
+        log.info("| Entry | CommandeService.getEtiquettesColis | Args | request={}", request);
 
-        var etiquettes = this.colisRepository.getEtiquettesColis(id.getCmpId(), id.getId(), id.getType(), id.getStkCode());
+        var etiquettes = this.colisRepository.getEtiquettesColis(request.getCmpId(), request.getId(), request.getType(), request.getStkCode(), request.getZone());
         log.info("Fetched the etiquettes from the repo | etiquettes.size={}", etiquettes.size());
 
         var username = this.customUserDetailsService.getCurrentUserCode();

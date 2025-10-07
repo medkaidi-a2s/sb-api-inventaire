@@ -7,6 +7,7 @@ import dz.a2s.a2spreparation.dto.affectation.CmdIdDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneColisageDto;
 import dz.a2s.a2spreparation.dto.affectation.CmdZoneIdDto;
 import dz.a2s.a2spreparation.dto.commande.request.CommandeColisageRequest;
+import dz.a2s.a2spreparation.dto.commande.request.ListeEtiquetteRequest;
 import dz.a2s.a2spreparation.dto.commande.request.UpdateColisageRequest;
 import dz.a2s.a2spreparation.dto.commande.response.ColisageDto;
 import dz.a2s.a2spreparation.dto.commande.response.CommandeColisageResponse;
@@ -87,6 +88,6 @@ public interface CommandeApi {
     @Operation(summary = "Récupération des étiquettes générées", description = "Récupération des étiquettes générées d'une commande")
     @ApiResponse(responseCode = "200", description = "Etiquettes récupérées avec succès")
     @PostMapping("/get-etiquettes")
-    ResponseEntity<SuccessResponseDto<ListeEtiquettesResponse>> getEtiquettesColisage(CmdIdDto id);
+    ResponseEntity<SuccessResponseDto<ListeEtiquettesResponse>> getEtiquettesColisage(ListeEtiquetteRequest request);
 
 }
