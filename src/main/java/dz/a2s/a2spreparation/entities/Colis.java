@@ -54,6 +54,9 @@ public class Colis {
     @Column(name = "TER_REGION_LIB")
     private String region;
 
+    @Column(name = "ZONE")
+    private String zone;
+
     @Transient
     private String key;
 

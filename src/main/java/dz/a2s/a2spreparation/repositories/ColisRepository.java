@@ -19,7 +19,8 @@ public interface ColisRepository extends JpaRepository<Colis, ColisId> {
                    s.VNT_REFERENCE,
                    r.TER_NOM,
                    r.TER_ADRESSE,
-                   r.TER_REGION_LIB
+                   r.TER_REGION_LIB,
+                   ZONE.ZNS_NOM AS ZONE
               FROM VNT_COLIS t
               JOIN VNT_BONS s
                 ON t.VCO_CMP_ID = s.VNT_CMP_ID
@@ -30,6 +31,8 @@ public interface ColisRepository extends JpaRepository<Colis, ColisId> {
                 ON s.VNT_CMP_ID = r.TER_CMP_ID
                AND s.VNT_TER_ID = r.TER_ID
                AND s.VNT_TER_TYPE = r.TER_TYPE
+              LEFT JOIN STP_ZONES ZONE
+                ON ZONE.ZNS_ID = T.VBZ_ZONE
              WHERE T.VCO_CMP_ID = :cmp_id
                AND T.VCO_VNT_ID = :id
                AND T.VCO_VNT_TYPE = :type

@@ -15,6 +15,7 @@ public class ListeEtiquettesResponse {
     private String client;
     private String adresse;
     private String region;
+    private String zone;
     private String user;
     private List<EtiquetteResponse> data;
 

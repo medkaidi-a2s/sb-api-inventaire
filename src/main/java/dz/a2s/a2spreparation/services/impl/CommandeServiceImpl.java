@@ -152,6 +152,7 @@ public class CommandeServiceImpl implements CommandeService {
     public Integer saisirColisageCommande(CmdColisageDto cmdColisageDto) {
         log.info("| Entry | CommandeService.saisirColisageCommande | Args | cmdColisageDto={}", cmdColisageDto);
 
+        var username = this.customUserDetailsService.getCurrentUserCode();
         Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
         log.info("Company ID fetched from the service {}", companyId);
 
@@ -173,6 +174,24 @@ public class CommandeServiceImpl implements CommandeService {
                     cmdColisageDto.getSachet(),
                     null,
                     1
+            );
+
+            var deletedRows = this.commandeRepository.deleteEtiquettes(
+                    companyId,
+                    cmdColisageDto.getId(),
+                    cmdColisageDto.getType(),
+                    cmdColisageDto.getStkCode(),
+                    null
+            );
+            log.info("Deleted the etiquettes from the repo | deletedRows={}", deletedRows);
+
+            log.info("Generating labels for this order par zone");
+            this.commandeRepository.generateEtiquette(
+                    companyId,
+                    cmdColisageDto.getId(),
+                    cmdColisageDto.getStkCode(),
+                    cmdColisageDto.getType(),
+                    username
             );
         } catch (DataAccessException ex) {
             log.error("Une erreur s'est produite lors de l'exécution de la procédure stocké  saisirColisageCommande | original message = {}", ex.getMessage());
@@ -393,6 +412,7 @@ public class CommandeServiceImpl implements CommandeService {
                     firstRecord.getClient(),
                     firstRecord.getAdresse(),
                     firstRecord.getRegion(),
+                    firstRecord.getZone(),
                     username,
                     etiquettes.stream().map(colis -> new ListeEtiquettesResponse.EtiquetteResponse(colis.getCode(), colis.getCmpId() + "-" + colis.getId() + "-" + colis.getType() + "-" + colis.getStkCode() + "-" + colis.getCode())).toList()
             );

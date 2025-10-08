@@ -175,6 +175,15 @@ public class CheckingServiceImpl implements CheckingService {
             throw new RuntimeException("Le contrôle de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
         }
 
+        log.info("Generating labels for this order par zone");
+        this.commandeRepository.generateEtiquette(
+                data.getCmpId(),
+                data.getId(),
+                data.getStkCode(),
+                data.getType(),
+                username
+        );
+
         return response;
     }
 
@@ -350,6 +359,15 @@ public class CheckingServiceImpl implements CheckingService {
                 throw new ActionNotAllowedException(AppErrorCodes.PRESENCE_PRODUIT_INVALIDE.getMessage());
             throw new RuntimeException("Le contrôle de la commande n'a pas pu être terminée - [stored procedure return value : " + response + "]");
         }
+
+        log.info("Generating labels for this order par zone");
+        this.commandeRepository.generateEtiquette(
+                data.getCmpId(),
+                data.getId(),
+                data.getStkCode(),
+                data.getType(),
+                username
+        );
 
         return response;
     }
