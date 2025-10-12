@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>dz.a2s</groupId>
-	<artifactId>a2spreparation</artifactId>
+	<artifactId>a2sinventaire</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>a2spreparation</name>
-	<description>APIs for the preparation application</description>
+	<name>a2sinventaire</name>
+	<description>APIs for the inventory application</description>
 	<url/>
 	<licenses>
 		<license/>

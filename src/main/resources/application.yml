@@ -2,7 +2,7 @@ server:
     port: 8080
 spring:
     application:
-        name: a2spreparation
+        name: a2sinventaire
     datasource:
 #        url: jdbc:oracle:thin:@141.94.250.58:1521/xe
 #        username: PHARM2021
@@ -10,7 +10,7 @@ spring:
 #        username: bio
         url: jdbc:oracle:thin:@127.0.0.1:1521/xe
 #        url: jdbc:oracle:thin:@192.168.0.209:1521/xe
-        username: pharm
+        username: pharcos
 #        username: pharmtest93
         password: xeon
         driver-class-name: oracle.jdbc.OracleDriver
