@@ -35,8 +35,8 @@ public interface InventaireApi {
 
     @Operation(summary = "Récupération des droits d'accès au comptage", description = "Récupération des droits d'accès aux comptages des inventaires")
     @ApiResponse(responseCode = "200", description = "Droits récupérés avec succès")
-    @GetMapping("/{id}/comptages-access")
-    public ResponseEntity<SuccessResponseDto<ComptageAccessResponse>> getComptageAccess(Integer invId);
+    @GetMapping("/{id}/{depot}/comptages-access")
+    public ResponseEntity<SuccessResponseDto<ComptageAccessResponse>> getComptageAccess(Integer invId, String depot);
 
     @Operation(summary = "Vérification de l'emplacement d'inventaire", description = "Vérifier si l'emplacement d'un inventaire existe")
     @ApiResponse(responseCode = "200", description = "Emplacement existant")

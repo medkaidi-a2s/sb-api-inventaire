@@ -36,10 +36,8 @@ public class InventaireServiceImpl implements InventaireService {
     public List<Inventaire> getListInventaires() {
         log.info("| Entry | InventaireService.getListInventaires()");
 
-        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
-
         try {
-            var projections = this.inventaireRepository.getListInventaires(companyId);
+            var projections = this.inventaireRepository.getListInventaires();
             log.info("Fetched the list of inventaire from the repo | projections.size={}", projections.size());
 
             var inventaires = projections.stream().map(InventaireMappers::fromInventaireProjection).toList();
@@ -56,10 +54,8 @@ public class InventaireServiceImpl implements InventaireService {
     public List<ListResponse> getListComptages() {
         log.info("| Entry | InventaireService.getListComptage()");
 
-        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
-
         try {
-            var projections = this.inventaireRepository.getListComptage(companyId);
+            var projections = this.inventaireRepository.getListComptage();
             log.info("Fetched the list of comptage from the repo | projections.size={}", projections.size());
 
             var comptages = projections.stream().map(InventaireMappers::fromListProjection).toList();
@@ -73,15 +69,14 @@ public class InventaireServiceImpl implements InventaireService {
     }
 
     @Override
-    public ComptageAccessResponse getComptageAccess(Integer invId) {
-        log.info("| Entry | InventaireService.getComptageAccess() | Args | invId={}", invId);
+    public ComptageAccessResponse getComptageAccess(Integer invId, String depot) {
+        log.info("| Entry | InventaireService.getComptageAccess() | Args | invId={}, depot={}", invId, depot);
 
         var username = this.customUserDetailsService.getCurrentUserCode();
-        var companyId = this.customUserDetailsService.getCurrentCompanyId();
-        log.info("Fetched companyId : {} and username : {}", companyId, username);
+        log.info("Fetched username : {}", username);
 
         try {
-            var projection = this.inventaireRepository.getComptageAccess(companyId, invId, username);
+            var projection = this.inventaireRepository.getComptageAccess(depot, invId, username);
 
             if (projection == null) {
                 log.error("Projection is null | user does not have access to the inventory");
@@ -102,9 +97,7 @@ public class InventaireServiceImpl implements InventaireService {
     public String checkEmplacement(String emplacement) {
         log.info("| Entry | InventaireService.checkEmplacement() | Args | emplacement={}", emplacement);
 
-        var companyId = this.customUserDetailsService.getCurrentCompanyId();
-
-        var response = this.inventaireRepository.checkEmplacement(companyId, emplacement.trim());
+        var response = this.inventaireRepository.checkEmplacement(emplacement.trim());
         log.info("Checked the inventory placement | response = {}", response);
 
         if (response == null) {
@@ -116,16 +109,14 @@ public class InventaireServiceImpl implements InventaireService {
     }
 
     @Override
-    public PaginatedDataDto<InventaireLineResponse> getInventaireLines(Integer invId, Integer comptage, String emplacement, Integer stockZero, String search, Integer page) {
+    public PaginatedDataDto<InventaireLineResponse> getInventaireLines(Integer invId, String depot, Integer comptage, String emplacement, Integer stockZero, String search, Integer page) {
         log.info("| Entry | InventaireService.getInventaireLines() | Args | invId={}, comptage={}, emplacement={}, stockZero={}, search={}, page={}", invId, comptage, emplacement, stockZero, search, page);
-
-        Integer cmpId = this.customUserDetailsService.getCurrentCompanyId();
 
         var size = 10;
         int start = (page * size) - size + 1;
         int end = page * size;
 
-        var projections = this.inventaireRepository.getInventaireLines(cmpId, invId, comptage, emplacement, stockZero, search, start, end);
+        var projections = this.inventaireRepository.getInventaireLines(invId, depot, comptage, emplacement, stockZero, search, start, end);
         log.info("Fetched the list of inventaire lines from the repo | projections.size={}", projections.size());
 
         var totalRecords = projections.isEmpty() ? 0 : projections.stream().findFirst().get().getTotalRecords();
@@ -163,7 +154,7 @@ public class InventaireServiceImpl implements InventaireService {
     public SaisiResponse saisirInventaire(SaisiRequest request) {
         log.info("| Entry | InventaireService.saisirInventaire() | Args | request={}", request);
 
-        var access = this.getComptageAccess(request.getInvId());
+        var access = this.getComptageAccess(request.getInvId(), request.getDepot());
         log.info("Fetched inventaire access rights from the service | access={}", access);
 
         Integer comptageAccess = 0;

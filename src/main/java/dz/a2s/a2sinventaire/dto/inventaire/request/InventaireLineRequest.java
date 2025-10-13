@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class InventaireLineRequest {
 
     private Integer invId;
+    private String depot;
     private Integer comptage;
     private String emplacement;
     private Integer stockZero;

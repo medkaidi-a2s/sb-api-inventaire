@@ -65,10 +65,10 @@ public class InventaireController implements InventaireApi {
     }
 
     @Override
-    public ResponseEntity<SuccessResponseDto<ComptageAccessResponse>> getComptageAccess(@PathVariable("id") Integer invId) {
-        log.info("| Entry | InventaireController.getComptageAccess | Args | invId={}", invId);
+    public ResponseEntity<SuccessResponseDto<ComptageAccessResponse>> getComptageAccess(@PathVariable("id") Integer invId, @PathVariable("depot") String depot) {
+        log.info("| Entry | InventaireController.getComptageAccess | Args | invId={}, depot={}", invId, depot);
 
-        var access = this.inventaireService.getComptageAccess(invId);
+        var access = this.inventaireService.getComptageAccess(invId, depot);
         log.info("Fetched the comptage access from the service | access={}", access);
 
         var response = new SuccessResponseDto<>(
@@ -102,6 +102,7 @@ public class InventaireController implements InventaireApi {
 
         var lines = this.inventaireService.getInventaireLines(
                 request.getInvId(),
+                request.getDepot(),
                 request.getComptage(),
                 request.getEmplacement(),
                 request.getStockZero(),

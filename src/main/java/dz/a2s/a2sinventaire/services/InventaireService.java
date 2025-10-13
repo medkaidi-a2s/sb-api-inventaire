@@ -16,9 +16,9 @@ public interface InventaireService {
 
     List<Inventaire> getListInventaires();
     List<ListResponse> getListComptages();
-    ComptageAccessResponse getComptageAccess(Integer invId);
+    ComptageAccessResponse getComptageAccess(Integer invId, String depot);
     String checkEmplacement(String emplacement);
-    PaginatedDataDto<InventaireLineResponse> getInventaireLines(Integer invId, Integer comptage, String emplacement, Integer stockZero, String search, Integer page);
+    PaginatedDataDto<InventaireLineResponse> getInventaireLines(Integer invId, String depot, Integer comptage, String emplacement, Integer stockZero, String search, Integer page);
     PaginatedDataDto<EcartLineResponse> getEcartLines(Integer invId, Integer isEcart, String search, Integer page);
     SaisiResponse saisirInventaire(SaisiRequest request);
     int updateEcartLine(SaisiEcartRequest request);

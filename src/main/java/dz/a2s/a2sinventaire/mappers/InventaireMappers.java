@@ -15,8 +15,9 @@ public class InventaireMappers {
 
     public static Inventaire fromInventaireProjection(InventaireProjection projection) {
         return new Inventaire(
-                projection.getCmpId(),
                 projection.getId(),
+                projection.getCmpId(),
+                projection.getDepot(),
                 projection.getInvDate(),
                 projection.getRemarque()
         );

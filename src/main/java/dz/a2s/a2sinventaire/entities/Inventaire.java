@@ -19,16 +19,17 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "STP_INVENTAIRES")
-@IdClass(InventaireId.class)
 public class Inventaire {
-
-    @Id
-    @Column(name = "CMP_ID")
-    private Integer cmpId;
 
     @Id
     @Column(name = "ID")
     private Integer id;
+
+    @Column(name = "CMP_ID")
+    private Integer cmpId;
+
+    @Column(name = "DEPOT")
+    private String depot;
 
     @Column(name = "DATE")
     private Date date;

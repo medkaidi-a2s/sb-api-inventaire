@@ -6,6 +6,7 @@ public interface InventaireProjection {
 
     Integer getCmpId();
     Integer getId();
+    String getDepot();
     Date getInvDate();
     String getRemarque();
 

@@ -51,8 +51,7 @@ public class CompanyServiceImpl implements CompanyService {
     public Integer getMethodInventaire() {
         log.info("| Entry | CompanyService.getMethodInventaire");
 
-        Integer companyId = this.customUserDetailsService.getCurrentCompanyId();
-        var methodInventaire = this.paramsRepository.getMethodInventaire(companyId);
+        var methodInventaire = this.paramsRepository.getMethodInventaire();
         log.info("Fetched the inventaire method from the repo | methodInventaire={}", methodInventaire);
 
         return methodInventaire.orElseThrow(() -> new RessourceNotFoundException("Méthode d'inventaire non initialisée"));

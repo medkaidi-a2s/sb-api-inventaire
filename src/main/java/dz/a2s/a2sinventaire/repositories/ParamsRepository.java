@@ -29,22 +29,19 @@ public interface ParamsRepository extends JpaRepository<Params, ParamsId> {
     @Query(value = """
             SELECT PRM_METHODE_INVENTAIRE
               FROM STP_PARAMS
-             WHERE PRM_CMP_ID = :cmp_id
-               AND PRM_TYPE = 1
+             WHERE PRM_TYPE = 1
             """, nativeQuery = true)
-    Optional<Integer> getMethodInventaire(@Param("cmp_id") Integer cmpId);
+    Optional<Integer> getMethodInventaire();
 
     @Query(value = """
             SELECT URL_FORME_CODE AS CODE, NVL(URL_LECTURE, 0) AS VALEUR
               FROM STP_USER_ROLES
-             WHERE URL_CMP_ID = :cmpId
-               AND URL_FORME_CODE IN (:codes)
+             WHERE URL_FORME_CODE IN (:codes)
                AND URL_USR_CODE = (SELECT USR_TYPE
                                      FROM STP_USERS U
-                                    WHERE U.USR_CMP_ID = URL_CMP_ID
-                                      AND LOWER(USR_CODE) = LOWER(:username))
+                                    WHERE LOWER(USR_CODE) = LOWER(:username))
             """, nativeQuery = true)
-    List<AuthorizationProjection> getAuthorizations(@Param("cmpId") Integer cmpId, @Param("codes") List<Integer> codes, @Param("username") String username);
+    List<AuthorizationProjection> getAuthorizations(@Param("codes") List<Integer> codes, @Param("username") String username);
 
     @Procedure(procedureName = "logistiques.p_edit_affcte_cde_prepare", outputParameterName = "p_msg")
     Integer editAffectCommandePrp(

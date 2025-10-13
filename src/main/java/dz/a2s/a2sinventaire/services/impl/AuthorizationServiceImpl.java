@@ -105,13 +105,12 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     public List<AuthorizationDto> getAuthorizations() {
         log.info("| Entry | CompanyService.getAuthorizations");
 
-        var cmpId = this.customUserDetailsService.getCurrentCompanyId();
         var username = this.customUserDetailsService.getCurrentUserCode();
         var codes = this.paramsProperties.getAuthorizations().values().stream().toList();
-        log.info("Fetching authorizations for cmpId={} and username={} - authorizations list : {}", cmpId, username, codes);
+        log.info("Fetching authorizations for username={} - authorizations list : {}", username, codes);
 
-        var projections = this.paramsRepository.getAuthorizations(cmpId, codes, username);
-        log.info("Fetched authorizations for cmpId={} and username={} - authorizations size : {}", cmpId, username, projections.size());
+        var projections = this.paramsRepository.getAuthorizations(codes, username);
+        log.info("Fetched authorizations for username={} - authorizations size : {}", username, projections.size());
 
         var authorizations = projections.stream().map(item -> new AuthorizationDto(item.getCode(), item.getValeur())).toList();
         log.info("Mapped authorizations into DTOs : {}", authorizations);

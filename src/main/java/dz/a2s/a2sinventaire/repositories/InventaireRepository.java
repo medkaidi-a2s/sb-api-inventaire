@@ -17,28 +17,27 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface InventaireRepository extends JpaRepository<Inventaire, InventaireId> {
+public interface InventaireRepository extends JpaRepository<Inventaire, Integer> {
 
     @Query(value = """
             SELECT INV_CMP_ID     AS CMP_ID,
                    INV_ID         AS ID,
+                   T.INV_STK_CODE AS DEPOT,
                    INV_DATE       AS INV_DATE,
                    T.INV_REMARQUE AS REMARQUE
               FROM STP_INVENTAIRES T
-             WHERE T.INV_CMP_ID = :cmp_id
-               AND NVL(T.INV_VALIDE_FLAG, 0) = 1
+             WHERE NVL(T.INV_VALIDE_FLAG, 0) = 0
                AND NVL(T.INV_CLOTURE_FLAG, 0) = 0
             """, nativeQuery = true)
-    List<InventaireProjection> getListInventaires(@Param("cmp_id") Integer cmpId);
+    List<InventaireProjection> getListInventaires();
 
     @Query(value = """
             SELECT LVD_ID AS CODE, LVD_NOM1 AS NOM
               FROM GMS_LVD T
-             WHERE LVD_CMP_ID = :cmp_id
-               AND LVD_LVM_ID = 63
+             WHERE LVD_LVM_ID = 63
                AND LVD_ACTIVE_FLAG = 1
             """, nativeQuery = true)
-    List<ListProjection> getListComptage(@Param("cmp_id") Integer cmpId);
+    List<ListProjection> getListComptage();
 
     @Query(value = """
             SELECT INU_CMP_ID,
@@ -48,72 +47,61 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Inventai
                    NVL(INU_COMPTAGE2, 0) COMPTAGE2,
                    NVL(INU_COMPTAGE3, 0) COMPTAGE3
               FROM STP_INVENTAIRE_USERS T
-             WHERE T.INU_CMP_ID = :cmp_id
+             WHERE T.INU_STK_CODE = :depot
                AND T.INU_INV_ID = :inv_id
                AND LOWER(T.INU_USR_CODE) = LOWER(:username)
             """, nativeQuery = true)
-    ComptageAccessProjection getComptageAccess(@Param("cmp_id") Integer cmpId, @Param("inv_id") Integer invId, @Param("username") String username);
+    ComptageAccessProjection getComptageAccess(@Param("depot") String depot, @Param("inv_id") Integer invId, @Param("username") String username);
 
     @Query(value = """
             SELECT SIE_REFERENCE
               FROM STP_INVENTAIRE_EMPLACEMENTS T
              WHERE SIE_ACTIVE_FLAG = 1
-               AND SIE_CMP_ID = :cmp_id
                AND LOWER(T.SIE_REFERENCE) = LOWER(:emplacement)
             """, nativeQuery = true)
-    String checkEmplacement(@Param("cmp_id") Integer cmpId, @Param("emplacement") String emplacement);
+    String checkEmplacement(@Param("emplacement") String emplacement);
 
     @Query(value = """
             SELECT *
               FROM (SELECT COUNT(*) OVER() AS TOTAL_RECORDS,
-                           IND_CMP_ID SITE,
                            IND_INV_ID INVENTAIRE,
                            IND_STK_CODE DEPOT,
                            IND_MED_ID NUM_PRODUIT,
                            IND_ID NLOT_INTERNE,
-                           IND_LIGNE NUM_LIGNE,
                            MED_AMM CODE,
                            M.MED_COMMERCIAL_NAME NOM_PRODUIT,
                            T.IND_NLOT NLOT,
                            T.IND_DATE_PEREMPTION DATE_PEREMPTION,
                            T.IND_PRIX_PPA PPA,
                            IND_PRIX_SHP SHP,
-                           (SELECT GFM_NOM
-                              FROM STP_GALENICFORMS T
-                             WHERE GFM_CMP_ID = MED_CMP_ID
-                               AND GFM_CODE = MED_GFM_CODE) FORME,
-                           (SELECT TER_NOM
-                              FROM STP_TIERS
-                             WHERE TER_CMP_ID = IND_CMP_ID
-                               AND TER_ID = IND_TER_ID
-                               AND TER_TYPE = IND_TER_TYPE) LABO,
-                           T.IND_ATTRIBUT5 AS QTE_STOCK,
+                           IND_ATTRIBUT5 QTE_STOCK,
+                           M.MED_GFM_LIB FORME,
+                           M.MED_LAB_LIB LABO,
                            (SELECT T.ZNS_NOM FROM STP_ZONES T WHERE T.ZNS_ID = MED_ZNS_ID) ZONE_PRODUIT,
                            IND_ATTRIBUT3 MOTIF_SAISIE,
                            (SELECT SUM(D.INS_QTE)
                               FROM STP_INVENTAIRE_SAISIES D
-                             WHERE T.IND_CMP_ID = D.INS_CMP_ID
-                               AND T.IND_INV_ID = INS_INV_ID
+                             WHERE T.IND_INV_ID = INS_INV_ID
                                AND T.IND_STK_CODE = INS_STK_CODE
                                AND T.IND_MED_ID = INS_MED_ID
+                               AND T.IND_STK_CODE = INS_STK_CODE
                                AND T.IND_ID = D.INS_PRD_ID
-                               AND T.IND_LIGNE = D.INS_IND_LIGNE
                                AND D.INS_TYPE = :comptage
                                AND D.INS_CREER_USER = :emplacement) QTE_SAISIE,
                            ROW_NUMBER() OVER(ORDER BY M.MED_COMMERCIAL_NAME) AS RNUM
                       FROM STP_INVENTAIRE_DETAILS T, STP_MEDICAMENT M
-                     WHERE IND_CMP_ID = M.MED_CMP_ID
+                     WHERE IND_STK_CODE = M.MED_CODE
                        AND IND_MED_ID = M.MED_ID
                        AND IND_INV_ID = :inv_id
-                       AND T.IND_CMP_ID = :cmp_id
+                       AND T.IND_STK_CODE = :depot
                        AND NVL(IND_ATTRIBUT5, 0) > :stock_zero
                        AND LOWER(M.MED_COMMERCIAL_NAME || ' ' || T.IND_NLOT) LIKE
                            LOWER('%' || :search || '%'))
              WHERE RNUM BETWEEN :start AND :end
             """, nativeQuery = true)
     List<InventaireLineProjection> getInventaireLines(
-            @Param("cmp_id") Integer cmpId,
             @Param("inv_id") Integer invId,
+            @Param("depot") String depot,
             @Param("comptage") Integer comptage,
             @Param("emplacement") String emplacement,
             @Param("stock_zero") Integer stockZero,
