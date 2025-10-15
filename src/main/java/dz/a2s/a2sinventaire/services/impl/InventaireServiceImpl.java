@@ -180,11 +180,10 @@ public class InventaireServiceImpl implements InventaireService {
         }
 
         var username = this.customUserDetailsService.getCurrentUserCode();
-        var companyId = this.customUserDetailsService.getCurrentCompanyId();
 
         try {
             this.inventaireRepository.saisirInventaire(
-                    companyId,
+                    request.getDepot(),
                     request.getInvId(),
                     request.getNlotInterne(),
                     request.getMedId(),
@@ -193,7 +192,7 @@ public class InventaireServiceImpl implements InventaireService {
                     request.getQuantite(),
                     request.getMotif(),
                     request.getEmplacement(),
-                    request.getNoLigne(),
+                    0,
                     username
             );
             log.info("Persisted saisi de l'inventaire into the database");

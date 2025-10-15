@@ -155,9 +155,9 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Integer>
             @Param("end") Integer end
     );
 
-    @Procedure(procedureName = "stocks_new.saisie_inv")
+    @Procedure(procedureName = "stocks.saisie_inv")
     void saisirInventaire(
-            @Param("P_CMP") Integer cmpId,
+            @Param("P_STK") String stk,
             @Param("P_INV") Integer invId,
             @Param("P_PRD_ID") Integer nlotInterne,
             @Param("P_MED_ID") Integer medId,
